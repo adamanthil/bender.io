@@ -1,0 +1,109 @@
+html {
+  font-family: 'Raleway', verdana;
+}
+ul {
+  padding: 0;
+  margin: 0;
+}
+ul li {
+  list-style-type: none;
+}
+body {
+  background-image: url("../images/dark-background.png");
+  margin: 0 auto;
+}
+
+a {
+  text-decoration: none;
+  color: #EEE;
+}
+  a:hover {
+    color: #CCC;
+  }
+
+#main {
+  color: #EEE;
+}
+
+#header {
+  margin: 0 auto;
+  width: 820px;
+  padding: 110px 0;
+}
+  #header .nameplate {
+    float: left;
+    width: 470px;
+    height: 120px;
+    padding: 0 20px 0 0;
+    border-right: 1px solid #777;
+  }
+  #header .name {
+    font-size: 68px;
+  }
+  #header .title {
+    color: #333;
+    float: right;
+    font-size: 34px;
+  }
+
+  #header .contact {
+    float: left;
+    width: 200px;
+    padding: 10px 0 0 20px;
+  }
+  
+  #header .contact ul li {
+    padding-top: 10px;
+  }
+  #header .contact ul li a {
+    letter-spacing: 0.05em;
+    font-size: 34px;
+  }
+
+#content {
+  margin: 0 auto;
+  width: 820px;
+  padding: 20px 0;
+}
+  #content .labelplate {
+    width: 470px;
+    height: 200px;
+    float: left;
+    padding: 0 20px 0 0;
+  }
+  #content .label {
+    color: #333;
+    float: right;
+    font-size: 34px;
+  }
+  
+  #content .projects {
+    float: left;
+    padding: 0 0 0 20px;
+    border-left: 1px solid #777;
+  }
+  
+  #content .projects ul li {
+    padding-bottom: 10px;
+  }
+  #content .projects ul li a {
+    letter-spacing: 0.05em;
+    font-size: 26px;
+  }
+
+.separator {
+  background-image: url("../images/light-background.png");
+  height: 120px;
+  width: 100%;
+}
+
+.cf:before, .cf:after {
+  content: "";
+  display: block;
+  overflow: hidden; }
+
+.cf:after {
+  clear: both; }
+
+.cf {
+  zoom: 1; }
