@@ -36,15 +36,23 @@ a {
     height: 120px;
     padding: 0 20px 0 0;
     border-right: 1px solid #777;
+    position: relative;
   }
   #header .name {
+    margin-top: 17px;
     font-size: 68px;
+    line-height: 0.8;
   }
   #header .title {
     color: #333;
     float: right;
     font-size: 34px;
+    position: absolute;
+    right: 24px;
   }
+    #header .title.second {
+      display: none;
+    }
 
   #header .contact {
     float: left;
