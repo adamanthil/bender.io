@@ -32,6 +32,6 @@ $(document).ready(function() {
       }
     };
     
-    setInterval(switchTitle, 3500);
+    setInterval(switchTitle, 3200);
     
  });
