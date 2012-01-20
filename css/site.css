@@ -49,9 +49,10 @@ a {
     font-size: 34px;
     position: absolute;
     right: 24px;
+    display: none;
   }
-    #header .title.second {
-      display: none;
+    #header .title.active {
+      display: block;
     }
 
   #header .contact {
