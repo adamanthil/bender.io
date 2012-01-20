@@ -42,6 +42,7 @@ a {
     margin-top: 17px;
     font-size: 68px;
     line-height: 0.8;
+    text-align: right;
   }
   #header .title {
     color: #333;
