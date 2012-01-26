@@ -45,7 +45,7 @@ a {
     text-align: right;
   }
   #header .title {
-    color: #333;
+    color: #2A2A2A;
     float: right;
     font-size: 34px;
     position: absolute;
@@ -82,7 +82,7 @@ a {
     padding: 0 20px 0 0;
   }
   #content .label {
-    color: #333;
+    color: #2A2A2A;
     float: right;
     font-size: 34px;
   }
