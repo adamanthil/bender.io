@@ -1,0 +1,33 @@
+/* @license
+ * MyFonts Webfont Build ID 2632112, 2013-08-28T15:30:55-0400
+ * 
+ * The fonts listed in this notice are subject to the End User License
+ * Agreement(s) entered into by the website owner. All other parties are 
+ * explicitly restricted from using the Licensed Webfonts(s).
+ * 
+ * You may obtain a valid license at the URLs below.
+ * 
+ * Webfont: Transat Light by Typetanic Fonts
+ * URL: http://www.myfonts.com/fonts/typetanic-fonts/transat/light/
+ * 
+ * Webfont: Transat Standard by Typetanic Fonts
+ * URL: http://www.myfonts.com/fonts/typetanic-fonts/transat/standard/
+ * 
+ * 
+ * License: http://www.myfonts.com/viewlicense?type=web&buildid=2632112
+ * Licensed pageviews: 20,000
+ * Webfonts copyright: Copyright (c) 2011-2013 by Greg Shutters &amp; Typetanic Fonts. All rights reserved.
+ * 
+ * © 2013 MyFonts Inc
+*/
+
+
+/* @import must be at top of file, otherwise CSS will not work */
+@import url("//hello.myfonts.net/count/2829b0");
+
+  
+@font-face {font-family: 'TransatLight';src: url('webfonts/2829B0_0_0.eot');src: url('webfonts/2829B0_0_0.eot?#iefix') format('embedded-opentype'),url('webfonts/2829B0_0_0.woff') format('woff'),url('webfonts/2829B0_0_0.ttf') format('truetype'),url('webfonts/2829B0_0_0.svg#wf') format('svg');}
+ 
+  
+@font-face {font-family: 'TransatStandard';src: url('webfonts/2829B0_1_0.eot');src: url('webfonts/2829B0_1_0.eot?#iefix') format('embedded-opentype'),url('webfonts/2829B0_1_0.woff') format('woff'),url('webfonts/2829B0_1_0.ttf') format('truetype'),url('webfonts/2829B0_1_0.svg#wf') format('svg');}
+ 

@@ -21,14 +21,14 @@ $(document).ready(function() {
     var switchTitle = function() {
       var titleIndex = titleOrder[activeIndex];
       var title = $(titleList[titleIndex]);
-      
+
       activeTitle.fadeToggle(600);
       title.fadeToggle(600);
       activeTitle = title;
-      
+
       activeIndex = activeIndex >= titleList.length - 1 ? 0 : activeIndex + 1;
     };
-    
+
     setInterval(switchTitle, 3200);
-    
+
  });

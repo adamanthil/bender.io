@@ -1,5 +1,7 @@
 html {
-  font-family: 'Raleway', verdana;
+  font-family: TransatLight, verdana;
+  font-weight: normal;
+  font-style: normal;
 }
 ul {
   padding: 0;
@@ -40,7 +42,7 @@ a {
   }
   #header .name {
     margin-top: 17px;
-    font-size: 68px;
+    font-size: 72px;
     line-height: 0.8;
     text-align: right;
   }
