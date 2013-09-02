@@ -9,21 +9,8 @@ require_once ('credentials.php');
 $cb = \Codebird\Codebird::getInstance();
 $cb->setToken(ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
-//retrieve posts
-$q = $_POST['q'];
-$count = $_POST['count'];
-$api = $_POST['api'];
-
-//https://dev.twitter.com/docs/api/1.1/get/statuses/user_timeline
-//https://dev.twitter.com/docs/api/1.1/get/search/tweets
-$params = array(
-	'screen_name' => $q,
-	'q' => $q,
-	'count' => $count
-);
-
 //Make the REST call
-$data = (array) $cb->$api($params);
+$data = (array) $cb->statuses_homeTimeline();
 
 //Output result in JSON, getting it ready for jQuery to process
 echo json_encode($data);
