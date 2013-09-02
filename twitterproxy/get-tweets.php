@@ -5,8 +5,8 @@ require_once ('codebird/src/codebird.php');
 require_once ('credentials.php');
 
 //Get authenticated
-Codebird::setConsumerKey(CONSUMER_KEY, CONSUMER_SECRET);
-$cb = Codebird::getInstance();
+\Codebird\Codebird::setConsumerKey(CONSUMER_KEY, CONSUMER_SECRET);
+$cb = \Codebird\Codebird::getInstance();
 $cb->setToken(ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
 //retrieve posts
