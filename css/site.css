@@ -23,7 +23,8 @@ h1 {
   -moz-osx-font-smoothing: grayscale;
   font-size: 64px;
   color: #666;
-  margin: 12px 5px;
+  margin: 12px 3px;
+  padding-left: 2px;
 }
 
   h1.fixed-title {
