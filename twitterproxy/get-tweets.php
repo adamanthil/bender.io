@@ -22,8 +22,8 @@ $output = array();
 $count = 0;
 foreach($data as $tweet) {
 	$output[] = array(
-		'tweet' => $tweet['text'],
-		'time' => $tweet['created_at']
+		'tweet' => $tweet->text,
+		'time' => $tweet->created_at
 	);
 	$count++;
 
