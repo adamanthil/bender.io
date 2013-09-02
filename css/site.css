@@ -1,15 +1,11 @@
 html {
-  font-family: TransatLight, verdana;
+  font-family: TransatStandard, verdana;
   font-weight: normal;
   font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-ul {
-  padding: 0;
-  margin: 0;
-}
-ul li {
-  list-style-type: none;
-}
+
 body {
   background-image: url("../images/dark-background.png");
   margin: 0 auto;
@@ -17,96 +13,199 @@ body {
 
 a {
   text-decoration: none;
-  color: #EEE;
 }
-  a:hover {
-    color: #CCC;
+
+h1 {
+  font-family: Nori;
+  font-weight: normal;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 64px;
+  color: #666;
+  margin: 12px 5px;
+}
+
+  h1.fixed-title {
+    position: absolute;
+    left: 5px;
+    z-index: 10;
   }
 
-#main {
-  color: #EEE;
+h3 {
+  font-family: TransatBold;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  margin-bottom: 0;
+}
+
+h2 {
+  font-family: TransatBold;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  margin-bottom: 8px;
 }
 
 #header {
+  width: 1000px;
   margin: 0 auto;
-  width: 820px;
-  padding: 110px 0;
+  font-family: TransatLight;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 32px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #f0f0f0;
+  padding-top: 2px;
 }
-  #header .nameplate {
-    float: left;
-    width: 470px;
-    height: 120px;
-    padding: 0 20px 0 0;
-    border-right: 1px solid #777;
-    position: relative;
-  }
-  #header .name {
-    margin-top: 17px;
-    font-size: 72px;
-    line-height: 0.8;
-    text-align: right;
-  }
-  #header .title {
-    color: #2A2A2A;
+  #header .title-name {
     float: right;
-    font-size: 34px;
-    position: absolute;
-    right: 24px;
-    display: none;
+    font-size: 52px;
   }
-    #header .title.active {
-      display: block;
+
+  #header ul {
+    padding: 0;
+    margin: 0;
+    padding-top: 12px;
+  }
+
+    #header ul li {
+      list-style-type: none;
+      display: inline;
+      margin-right: 10px;
     }
 
-  #header .contact {
-    float: left;
-    width: 200px;
-    padding: 10px 0 0 20px;
-  }
-  
-  #header .contact ul li {
-    padding-top: 10px;
-  }
-  #header .contact ul li a {
-    letter-spacing: 0.05em;
-    font-size: 34px;
-  }
+    #header ul li a {
+      color: #f0f0f0;
+    }
+      #header ul li a:hover {
+        color: #ccc;
+      }
 
-#content {
-  margin: 0 auto;
-  width: 820px;
-  padding: 20px 0;
+.main {
+  background-image: url("../images/body-background.jpg");
+  box-shadow: 0px 0px 8px 5px rgba(33, 33, 33, .33);
+  -webkit-box-shadow: 0px 0px 8px 5px rgba(33, 33, 33, .33);
 }
-  #content .labelplate {
-    width: 470px;
-    height: 200px;
-    float: left;
-    padding: 0 20px 0 0;
-  }
-  #content .label {
-    color: #2A2A2A;
-    float: right;
-    font-size: 34px;
-  }
-  
-  #content .projects {
-    float: left;
-    padding: 0 0 0 20px;
-    border-left: 1px solid #777;
-  }
-  
-  #content .projects ul li {
-    padding-bottom: 10px;
-  }
-  #content .projects ul li a {
-    letter-spacing: 0.05em;
-    font-size: 26px;
+
+.content {
+  width: 1000px;
+  margin: 0 auto;
+  padding: 5px 0 40px 0;
+  min-height: 500px;
+  margin-top: 12px;
+  position: relative;
+}
+
+.content .article {
+  background-color: white;
+  border: 1px solid #f0f0f0;
+  margin-top: 105px;
+  padding: 20px 50px 20px 50px;
+  color: #555;
+  top: 110px;
+  z-index: 0;
+}
+
+.article-links {
+  margin-bottom: 25px;
+}
+
+.article-links a {
+  float: right;
+  margin-left: 18px;
+  font-size: 18px;
+  color: #555;
+}
+
+  .article-links a:hover {
+    color: #777;
   }
 
-.separator {
-  background-image: url("../images/light-background.png");
-  height: 120px;
-  width: 100%;
+
+.content-buttons a {
+  display: inline-block;
+  padding: 2px 12px;
+  background-color: white;
+  border: 1px solid #f0f0f0;
+  color: #555;
+  font-size: 24px;
+}
+
+  .content-buttons a:hover {
+    color: #777;
+  }
+
+.date-sub {
+  font-size: 18px;
+  color: #999;
+}
+
+.article-body {
+  font-size: 20px;
+}
+
+.footer {
+  font-size: 20px;
+  color: #f0f0f0;
+  width: 1000px;
+  margin: 0 auto;
+  padding: 40px 0 20px;
+}
+
+  .footer a {
+    color: #bbb;
+  }
+
+    .footer a:hover {
+      color: #f0f0f0;
+    }
+
+.about {
+  margin-bottom: 40px;
+}
+
+.contact-element {
+  float: left;
+  width: 500px;
+}
+
+  .contact-element ul {
+    padding: 0;
+    margin: 0;
+  }
+
+  .contact-element ul li {
+    list-style-type: none;
+  }
+
+.tweet {
+  font-size: 18px;
+  width: 300px;
+}
+
+.tweet-time {
+  font-size: 16px;
+  color: #aaa;
+}
+
+.copyright {
+  margin-top: 80px;
+  color: #aaa;
+}
+
+.fr {
+  float: right;
+}
+
+.fl {
+  float: left;
+}
+
+.no-top-margin {
+  margin-top: 0;
 }
 
 .cf:before, .cf:after {
@@ -119,3 +218,29 @@ a {
 
 .cf {
   zoom: 1; }
+
+.Nori {
+  font-family: Nori;
+  font-weight: normal;
+  font-style: normal;
+}
+.TransatBold {
+  font-family: TransatBold;
+  font-weight: normal;
+  font-style: normal;
+}
+.TransatLight {
+  font-family: TransatLight;
+  font-weight: normal;
+  font-style: normal;
+}
+.TransatStandardOblique {
+  font-family: TransatStandardOblique;
+  font-weight: normal;
+  font-style: normal;
+}
+.TransatStandard {
+  font-family: TransatStandard;
+  font-weight: normal;
+  font-style: normal;
+}
