@@ -182,6 +182,10 @@ h2 {
     list-style-type: none;
   }
 
+#tweets {
+  color: #aaa;
+}
+
 .tweet {
   font-size: 18px;
   width: 300px;
