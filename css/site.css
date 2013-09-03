@@ -186,9 +186,14 @@ h2 {
   color: #aaa;
 }
 
+  #tweets ul li {
+    margin-bottom: 15px;
+  }
+
 .tweet {
   font-size: 18px;
   width: 300px;
+  color: #f0f0f0;
 }
 
 .tweet-time {
