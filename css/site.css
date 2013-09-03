@@ -49,9 +49,7 @@ h2 {
   margin-bottom: 8px;
 }
 
-#header {
-  width: 1000px;
-  margin: 0 auto;
+header {
   font-family: TransatLight;
   font-weight: normal;
   font-style: normal;
@@ -61,27 +59,33 @@ h2 {
   color: #f0f0f0;
   padding-top: 2px;
 }
-  #header .title-name {
+
+  header .center {
+    width: 1000px;
+    margin: 0 auto;
+  }
+
+  header .title-name {
     float: right;
     font-size: 52px;
   }
 
-  #header ul {
+  header ul {
     padding: 0;
     margin: 0;
     padding-top: 12px;
   }
 
-    #header ul li {
+    header ul li {
       list-style-type: none;
       display: inline;
       margin-right: 10px;
     }
 
-    #header ul li a {
+    header ul li a {
       color: #f0f0f0;
     }
-      #header ul li a:hover {
+      header ul li a:hover {
         color: #ccc;
       }
 
@@ -209,10 +213,16 @@ h2 {
   color: #aaa;
 }
 
-.copyright {
+.footer-bottom {
   margin-top: 80px;
   color: #aaa;
 }
+
+.footer-bottom .back-link {
+  float: right;
+  color: #999;
+}
+
 
 .twitter-follow {
   margin-top: 20px;

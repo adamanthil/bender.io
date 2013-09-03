@@ -1,5 +1,14 @@
 $(document).ready(function() {
 
+  /**
+   * NOTE: I use $.localScroll instead of $('#navigation').localScroll() so I
+   * also affect the >> and << links. I want every link in the page to scroll.
+   */
+  $.localScroll({
+    target: '.scroll-target', // could be a selector or a jQuery object too.
+    duration: 700
+  });
+
   $.ajax({
     url: 'twitter-proxy/get-tweets.php?screen_name=adamanthil&count=2'
   }).success(function(data) {
