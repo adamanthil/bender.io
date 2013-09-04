@@ -1,8 +1,3 @@
----
----
-{% assign post = site.posts.first %}
-{% assign content = post.content %}
-
 {% include header.html %}
     <section>
       <div class='main'>
@@ -10,20 +5,20 @@
           <h1 class='fixed-title'>the gradual steep</h1>
           <article>
             <div class='article'>
-              <h3>{{ post.title }}</h3>
-              <div class='date-sub'>{{ post.date | date: "%Y.%m.%d" }}</div>
+              <h3>{{ page.title }}</h3>
+              <div class='date-sub'>{{ page.date | date: "%Y.%m.%d" }}</div>
               <div class='article-body'>
                 {{ content }}
               </div>
             </div>
           </article>
           <div class='article-links cf'>
-            <a href='{{ post.url }}'>0 comments</a>
-            <a href='{{ post.url }}'>permalink</a>
+            <a href='#'>Comments (this is the direct post page)</a>
+            <a href='{{ page.url }}'>permalink</a>
           </div>
           <div class='content-buttons cf'>
-          {% if post.previous %}
-            <a class='fr' href='{{post.previous.url}}'>previous post</a>
+          {% if page.previous %}
+            <a class='fr' href='{{page.previous.url}}'>previous post</a>
           {% endif %}
             <a class='fl' href='/archive'>more posts</a>
           </div>

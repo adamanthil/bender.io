@@ -114,6 +114,56 @@ header {
   z-index: 0;
 }
 
+.content .archive {
+  margin-top: 115px;
+  padding: 40px 5px;
+  color: #555;
+  z-index: 0;
+}
+
+  .archive .year {
+    font-family: TransatStandard;
+    font-weight: normal;
+    font-style: normal;
+    color: #999;
+    font-size: 24px;
+    margin-bottom: 7px;
+  }
+
+  .archive ul {
+    background: url("../images/grey-bar.png") repeat-y;
+    margin: 0 0 0 25px;
+    padding: 0 0 6px;
+    margin-bottom: 10px;
+  }
+
+  .archive ul li {
+    background: url("../images/triangle.png") no-repeat;
+    background-position: 0px 12px;
+    list-style-type: none;
+    padding: 4px 25px;
+    margin-left: 4px;
+  }
+
+  .archive ul li .date {
+    display: inline-block;
+    width: 150px;
+    color: #999;
+    font-size: 18px;
+  }
+
+  .archive ul li a {
+    font-family: TransatBold;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 20px;
+    color: #666;
+  }
+
+    .archive ul li a:hover {
+      color: #999;
+    }
+
 .article-links {
   margin-bottom: 25px;
 }

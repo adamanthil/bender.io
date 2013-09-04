@@ -10,7 +10,7 @@ $(document).ready(function() {
   });
 
   $.ajax({
-    url: 'twitter-proxy/get-tweets.php?screen_name=adamanthil&count=2'
+    url: '/twitter-proxy/get-tweets.php?screen_name=adamanthil&count=2'
   }).success(function(data) {
     if(data && data.length) {
       var html = '<ul class="tweet_list">';
