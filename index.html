@@ -18,7 +18,7 @@
             </div>
           </article>
           <div class='article-links cf'>
-            <a href='{{ post.url }}'>0 comments</a>
+            <a href='{{ post.url }}#disqus_thread'></a>
             <a href='{{ post.url }}'>permalink</a>
           </div>
           <div class='content-buttons cf'>
@@ -30,4 +30,14 @@
         </div>
       </div>
     </section>
+    <script type="text/javascript">
+      var disqus_shortname = 'thegradualsteep'; // required: replace example with your forum shortname
+
+      (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+      }());
+    </script>
 {% include footer.html %}
