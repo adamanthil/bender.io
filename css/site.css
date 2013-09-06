@@ -13,7 +13,11 @@ body {
 
 a {
   text-decoration: none;
+  color: #999;
 }
+  a:hover {
+    color: #555;
+  }
 
 h1 {
   font-family: Nori;
@@ -47,6 +51,11 @@ h2 {
   font-style: normal;
   font-size: 24px;
   margin-bottom: 8px;
+}
+
+h4 {
+  font-size: 18px;
+  margin-bottom: 0px;
 }
 
 header {
@@ -199,11 +208,11 @@ header {
 }
 
 .article-body {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .footer {
-  font-size: 20px;
+  font-size: 18px;
   color: #f0f0f0;
   width: 1000px;
   margin: 0 auto;
