@@ -6,7 +6,7 @@ $(document).ready(function() {
    */
   $.localScroll({
     target: '.scroll-target', // could be a selector or a jQuery object too.
-    duration: 700
+    duration: 850
   });
 
   $.ajax({
