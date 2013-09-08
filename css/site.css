@@ -333,6 +333,14 @@ header {
     margin: 0;
   }
 
+  .article-links {
+    margin: 0 20px 25px 20px;
+  }
+
+  .content-buttons {
+    margin: 0 20px;
+  }
+
   .footer {
     width: auto;
     margin: 5px 20px;
@@ -346,5 +354,9 @@ header {
 
   .tweet {
     width: auto;
+  }
+
+  #disqus_thread {
+    margin: 60px 20px;
   }
 }
