@@ -29,13 +29,8 @@ h1 {
   color: #666;
   margin: 12px 3px;
   padding-left: 2px;
+  line-height: 2.4;
 }
-
-  h1.fixed-title {
-    position: absolute;
-    left: 5px;
-    z-index: 10;
-  }
 
 h3 {
   font-family: TransatBold;
@@ -70,7 +65,7 @@ header {
 }
 
   header .center {
-    width: 1000px;
+    width: 980px;
     margin: 0 auto;
   }
 
@@ -104,13 +99,23 @@ header {
   -webkit-box-shadow: 0px 0px 8px 5px rgba(33, 33, 33, .33);
 }
 
+.fixed-title {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  z-index: 10;
+  overflow: visible;
+}
+
 .content {
-  width: 1000px;
+  width: 980px;
   margin: 0 auto;
   padding: 5px 0 40px 0;
   min-height: 500px;
   margin-top: 12px;
   position: relative;
+  top: 0px;
+  left: 0px;
 }
 
 .content .article {
@@ -119,7 +124,6 @@ header {
   margin-top: 105px;
   padding: 20px 50px 20px 50px;
   color: #555;
-  top: 110px;
   z-index: 0;
 }
 
@@ -214,7 +218,7 @@ header {
 .footer {
   font-size: 18px;
   color: #f0f0f0;
-  width: 1000px;
+  width: 980px;
   margin: 0 auto;
   padding: 40px 0 20px;
 }
@@ -233,7 +237,7 @@ header {
 
 .contact-element {
   float: left;
-  width: 500px;
+  width: 490px;
 }
 
   .contact-element ul {
@@ -312,4 +316,35 @@ header {
 
 #disqus_thread {
   margin: 60px 4px;
+}
+
+@media screen and (max-width: 1020px) {
+  header .center {
+    width: auto;
+    margin: 0 20px;
+  }
+
+  header ul {
+    padding: 12px 0;
+  }
+
+  .content {
+    width: auto;
+    margin: 0;
+  }
+
+  .footer {
+    width: auto;
+    margin: 5px 20px;
+  }
+
+  .contact-element {
+    float: none;
+    width: auto;
+    margin: 20px 0;
+  }
+
+  .tweet {
+    width: auto;
+  }
 }
