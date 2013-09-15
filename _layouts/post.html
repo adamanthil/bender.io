@@ -21,7 +21,11 @@
           {% if page.previous %}
             <a class='fr' href='{{page.previous.url}}'>previous post</a>
           {% endif %}
+          {% if page.next %}
+            <a class='fl' href='{{page.next.url}}'>next post</a>
+          {% else %}
             <a class='fl' href='/archive'>more posts</a>
+          {% endif %}
           </div>
           <section>
             <div class='comments'>
