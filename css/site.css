@@ -227,12 +227,16 @@ p {
   font-size: 18px;
 }
 
+#about {
+  margin-top: 50px;
+}
+
 .footer {
   font-size: 18px;
   color: #f0f0f0;
   width: 980px;
   margin: 0 auto;
-  padding: 60px 0 20px;
+  padding: 10px 0 20px;
 }
 
   .footer a {
