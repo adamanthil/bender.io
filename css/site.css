@@ -232,7 +232,7 @@ p {
   color: #f0f0f0;
   width: 980px;
   margin: 0 auto;
-  padding: 40px 0 20px;
+  padding: 60px 0 20px;
 }
 
   .footer a {
@@ -244,7 +244,7 @@ p {
     }
 
 .about {
-  margin: 20px 0px 60px 0px;
+  margin-bottom: 60px;
 }
 
 .contact-element {
