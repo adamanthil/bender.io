@@ -9,6 +9,7 @@ html {
 body {
   background-image: url("../images/dark-background.png");
   margin: 0 auto;
+  line-height: 1.3;
 }
 
 a {
@@ -32,14 +33,6 @@ h1 {
   line-height: 2.4;
 }
 
-h3 {
-  font-family: TransatBold;
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  margin-bottom: 0;
-}
-
 h2 {
   font-family: TransatBold;
   font-weight: normal;
@@ -48,9 +41,21 @@ h2 {
   margin-bottom: 8px;
 }
 
+h3 {
+  font-family: TransatBold;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  margin-bottom: 0;
+}
+
 h4 {
+  font-family: TransatBold;
+  font-weight: normal;
+  font-style: normal;
   font-size: 18px;
-  margin-bottom: 0px;
+  margin: 24px 0 18px 0;
+  color: #606060;
 }
 
 header {
@@ -93,6 +98,10 @@ header {
         color: #ccc;
       }
 
+p {
+  margin: 18px 0;
+}
+
 .main {
   background-image: url("../images/body-background.jpg");
   box-shadow: 0px 0px 8px 5px rgba(33, 33, 33, .33);
@@ -122,7 +131,7 @@ header {
   background-color: white;
   border: 1px solid #f0f0f0;
   margin-top: 105px;
-  padding: 20px 50px 20px 50px;
+  padding: 45px 50px 25px 50px;
   color: #555;
   z-index: 0;
 }
@@ -152,7 +161,7 @@ header {
 
   .archive ul li {
     background: url("../images/triangle.png") no-repeat;
-    background-position: 0px 12px;
+    background-position: 0px 10px;
     list-style-type: none;
     padding: 4px 25px;
     margin-left: 4px;
@@ -232,7 +241,7 @@ header {
     }
 
 .about {
-  margin-bottom: 40px;
+  margin: 20px 0px 60px 0px;
 }
 
 .contact-element {
