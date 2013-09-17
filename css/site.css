@@ -28,9 +28,9 @@ h1 {
   -moz-osx-font-smoothing: grayscale;
   font-size: 64px;
   color: #666;
-  margin: 12px 3px;
+  margin: 0px 3px;
   padding-left: 2px;
-  line-height: 2.4;
+  line-height: 1.8;
 }
 
 h2 {
@@ -111,10 +111,13 @@ p {
 .fixed-title {
   position: absolute;
   left: 5px;
-  top: 5px;
+  top: 38px;
   z-index: 10;
   overflow: visible;
 }
+  .fixed-title.svg {
+    background: url("../images/the-gradual-steep.svg") no-repeat;
+  }
 
 .content {
   width: 980px;
@@ -322,6 +325,10 @@ p {
 
 .cf {
   zoom: 1; }
+
+.transparent {
+  color: rgba(85, 85, 85, 0.0);
+}
 
 #disqus_thread {
   margin: 60px 4px;
