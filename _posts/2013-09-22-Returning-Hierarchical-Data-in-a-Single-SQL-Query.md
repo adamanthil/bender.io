@@ -124,14 +124,14 @@ This query returns the following JSON to our Javascript backend. Note it is filt
       "employee_id": 3,
       "name": "Research the Wights",
       "dateassigned": "2013-09-16",
-      "age": 5
+      "age": 6
     },
     {
       "project_id": 3,
       "employee_id": 2,
       "name": "Send a raven to Kings Landing",
       "dateassigned": "2013-09-21",
-      "age": 0
+      "age": 1
     }]
   }
 ]
