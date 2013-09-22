@@ -92,7 +92,9 @@ INSERT INTO project (project_id, employee_id, name, dateassigned)
 VALUES (4, 2, 'Scout wildling movement', '2013/09/01');
 {% endhighlight %}
 
-This time we are going to reverse the desired results and query for a list of employees and their respective projects. But let's add the age of each project in days in addition to the date assigned. How can we accomplish this? One approach would be to use a subquery to create a new virtual table, and then use `row_to_json` to transform that virtual table row into JSON. We will do essentially the same thing, but use a [common table expression](http://www.postgresql.org/docs/9.3/static/queries-with.html) to redefine the project table with an additional "age" column. Also note that since employee->project is a one-to-many relationship, we are going to use the `json_agg` aggregate function to return a JSON array of objects instead of a single object as we did previously with `row_to_json`.
+This time we are going to reverse the desired results and query for a list of employees and their respective projects. But let's add the age of each project in addition to the date assigned. How can we accomplish this?
+
+One approach would be to use a subquery to create a new virtual table, and then use `row_to_json` to transform that virtual table row into JSON. We will do essentially the same thing, but use a [common table expression](http://www.postgresql.org/docs/9.3/static/queries-with.html) to redefine the project table with an additional "age" column. Also note that since employee->project is a one-to-many relationship, we are going to use the `json_agg` aggregate function to return a JSON array of objects instead of a single object as we did previously with `row_to_json`.
 
 {% highlight sql %}
 WITH project AS (
