@@ -103,7 +103,7 @@ p {
 }
 
 pre, code {
-  font-family: Consolas,Monaco,Menlo,"Courier New",monospace;
+  font-family: Consolas,Menlo,Monaco,"Courier New",monospace;
   font-size: 14px;
   line-height: 1.2;
   border: 1px solid #eee;
