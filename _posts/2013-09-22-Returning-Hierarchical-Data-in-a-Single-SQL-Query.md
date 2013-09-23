@@ -140,7 +140,7 @@ This query returns the following JSON to our Javascript backend. Note it is filt
 {% endhighlight %}
 
 #### Recursive Common Table Expressions
-Your dataset may include more complicated relationships in the form of tree-structured, hierarchical data as well. For example, tracking the management structure of our sample organization, where each "employee" reports to an immediate superior. This forms a tree of employees with the boss as the root node followed by subordinates. Probably the most common way to model such a tree is using the Adjacency List Model. In this representation, each employee record contains a reference to their immediate superior. If they are the head of the organization, this reference is null.
+Your dataset may include more complicated relationships in the form of tree-structured, hierarchical data as well. For example, tracking the management structure of our sample organization, where each "employee" reports to an immediate superior. This forms a tree of employees with the boss as the root node followed by subordinates. Probably the most common way to model such a tree is using the [Adjacency List Model](http://en.wikipedia.org/wiki/Adjacency_list). In this representation, each employee record contains a reference to their immediate superior. If they are the head of the organization, this reference is null.
 
 Let's modify our existing schema once more to reflect this:
 {% highlight sql %}
