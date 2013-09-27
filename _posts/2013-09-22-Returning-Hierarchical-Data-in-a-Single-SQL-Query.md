@@ -158,7 +158,7 @@ INSERT INTO employee (employee_id, name, superior_id)
 VALUES (7, 'Hareth', 6);
 {% endhighlight %}
 
-We can now use a recursive [CTE](http://www.postgresql.org/docs/8.4/static/queries-with.html) (common table expression) to return this tree of data in a single query along with the depth of each node. Recursive CTEs allow you to reference the virtual table within its own definition. They take the form of two queries joined by a union, where one query acts as the terminating condition of the recursion and the other joins to it. Technically they are implemented iteratively in the underlying engine, but it can be useful to think recursively when composing the queries.
+We can now use a recursive [CTE](http://www.postgresql.org/docs/9.3/static/queries-with.html) (common table expression) to return this tree of data in a single query along with the depth of each node. Recursive CTEs allow you to reference the virtual table within its own definition. They take the form of two queries joined by a union, where one query acts as the terminating condition of the recursion and the other joins to it. Technically they are implemented iteratively in the underlying engine, but it can be useful to think recursively when composing the queries.
 {% highlight sql %}
 WITH RECURSIVE employeetree AS (
   SELECT e.*, 0 as depth
