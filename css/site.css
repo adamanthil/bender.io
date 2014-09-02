@@ -114,6 +114,10 @@ pre {
   padding: 15px;
 }
 
+em {
+  font-style: italic;
+}
+
 code {
   padding: 2px;
 }
