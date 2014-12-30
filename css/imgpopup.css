@@ -1,0 +1,14 @@
+.caption {
+    font-style: italic;
+    text-align: center;
+}
+
+div.imgpopup {
+    .caption {
+        margin: 0;
+    }
+}
+
+.ui-icon-closethick {
+    float: right;
+}

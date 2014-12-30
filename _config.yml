@@ -1,5 +1,5 @@
 permalink: pretty
-pygments: true
+highlighter: true
 name: The Gradual Steep
 description: The personal technology blog of Andrew Bender
 url: http://bender.io

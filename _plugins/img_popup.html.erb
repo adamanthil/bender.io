@@ -1,0 +1,45 @@
+<div class="imgpopup screen">
+  <!-- <div class="caption">Click the image for a larger view.</div> -->
+  <a href='javascript:void(0)' style="text-decoration: none" id="image-<%= id %>">
+    <img src="<%= image_small %>" alt="Click to zoom"/>
+  </a>
+  <div id="image-dialog-<%= id %>" style="display:none">
+    <img id="image-full-<%= id %>" src="<%= image_full %>" />
+    <br clear="all"/>
+  </div>
+</div>
+<script type="text/javascript">
+  jQuery(document).ready(function() {
+    var dialogDiv = $("#image-dialog-<%= id %>");
+    var imgFull = $("#image-full-<%= id %>");
+    var img = $("#image-<%= id %>");
+
+    imgFull.load(function() {
+      dialogDiv.data('width', this.width);
+      dialogDiv.data('height', this.height);
+      console.log(dialogDiv.data('width'));
+      console.log(dialogDiv.data('height'));
+
+      dialogDiv.dialog({
+        <% if title -%>
+        title:     "<%= title %>",
+        <% end -%>
+        autoOpen:  false,
+        modal:     true,
+        draggable: false,
+        minWidth: dialogDiv.data('width'),
+        minHeight: dialogDiv.data('height'),
+        open: function() { $('body').bind('click', function() { dialogDiv.dialog('close'); }); },
+        close: function() { $('body').unbind('click'); }
+      });
+
+    });
+
+    dialogDiv.hide();
+
+    $('html').on('click', '#image-<%= id %>', function() {
+      dialogDiv.dialog('open');
+    });
+
+  });
+</script>
