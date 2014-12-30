@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Tabletop Telecast: Live Streaming Sentinel Tactics"
-image: "/images/posts/tactics-board-setup.jpg"
+image: "/images/posts/tactics-table-setup.jpg"
 ---
 This past fall I was brought in to produce live video coverage of a competitive board game tournament by [Greater Than Games](http://greaterthangames.com/) in St. Louis, MO. The goal was to create a quality viewing experience comparable to high level eSports tournaments (think StarCraft II, League of Legends, and Hearthstone) except with a tabletop game on a fraction of the budget. It's been a particularly interesting project because of the assortment of disciplines involved. Everything from computer programming and audio mixing to photography and stage lighting were involved in one way or another. We definitely didn't quite approach the million dollar production values of [The International](http://en.wikipedia.org/wiki/The_International_%28video_gaming%29) or Blizzard's [WCS](http://wiki.teamliquid.net/starcraft2/2014_StarCraft_II_World_Championship_Series), but I believe we were able to create an enjoyable and compelling viewing experience that will continue to improve over time.
 
