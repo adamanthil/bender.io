@@ -15,7 +15,11 @@
     {% endif %}
     <meta name="keywords" content="andrew bender,technology,blog,entrepreneur,software,development,tea,gradual steep" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="http://bender.io" />
+    {% if page.url %}
+      <meta property="og:url" content="{{ site.url }}{{ page.url }}" />
+    {% else %}
+      <meta property="og:url" content="http://bender.io" />
+    {% endif %}
     {% if page.title %}
       <meta property="og:title" content="{{ page.title }} | The Gradual Steep | Andrew Bender" />
     {% else %}
