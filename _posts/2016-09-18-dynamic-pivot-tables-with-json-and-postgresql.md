@@ -108,14 +108,14 @@ Let's unpack this a bit. First, our month_total [CTE](https://www.postgresql.org
 
 {% highlight sql %}
 year |                                  months
------+--------------------------------------------------------------------------------
-2014 | {"Jan": "132", "Feb": "109", "Mar": "118", "Apr": "126", "May": "131", "Jun": "111", ... }
-2015 | {"Jan": "103", "Feb": "115", "Mar": "113", "Apr": "137", "May": "113", "Jun": "128", ... }
-2012 | {"Jan": "110", "Feb": "109", "Mar": "115", "Apr": "109", "May": "126", "Jun": "96", ... }
-2013 | {"Jan": "122", "Feb": "121", "Mar": "120", "Apr": "120", "May": "106", "Jun": "128", ... }
-2011 | {"Jan": "128", "Feb": "121", "Mar": "109", "Apr": "116", "May": "120", "Jun": "104", ... }
-2010 | {"Jan": "124", "Feb": "111", "Mar": "120", "Apr": "111", "May": "115", "Jun": "112", ... }
-2016 | {"Jan": "118", "Feb": "122", "Mar": "116", "Apr": "111", "May": "112", "Jun": "111", ... }
+-----+-------------------------------------------------------------------------------
+2014 | {"Jan": 132, "Feb": 109, "Mar": 118, "Apr": 126, "May": 131, "Jun": 111, ... }
+2015 | {"Jan": 103, "Feb": 115, "Mar": 113, "Apr": 137, "May": 113, "Jun": 128, ... }
+2012 | {"Jan": 110, "Feb": 109, "Mar": 115, "Apr": 109, "May": 126, "Jun": 96, ... }
+2013 | {"Jan": 122, "Feb": 121, "Mar": 120, "Apr": 120, "May": 106, "Jun": 128, ... }
+2011 | {"Jan": 128, "Feb": 121, "Mar": 109, "Apr": 116, "May": 120, "Jun": 104, ... }
+2010 | {"Jan": 124, "Feb": 111, "Mar": 120, "Apr": 111, "May": 115, "Jun": 112, ... }
+2016 | {"Jan": 118, "Feb": 122, "Mar": 116, "Apr": 111, "May": 112, "Jun": 111, ... }
 {% endhighlight %}
 
 Using a library like [node-postgres](https://github.com/brianc/node-postgres) to interface with PostgreSQL will return the data to our javascript code almost identically as the earlier table. In both cases, the results are returned as an array where each row is its own object with the column names as properties. Using PostgreSQL's native JSON functionality, however, allows us to write a more elegant query where the columns (or object properties) are determined dynamically at execution time.
