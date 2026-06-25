@@ -1,111 +1,67 @@
 <!DOCTYPE html>
+<html lang="{{ site.lang | default: 'en' }}">
   <head>
-    <meta charset='utf-8' />
-    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
-    <!-- <meta name=viewport content="width=device-width, initial-scale=1" /> -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="google-site-verification" content="iGXv_f21bV3xObpisoG_V1CC04wfnjc_XuuCssAUOYA" />
+
     {% if page.title %}
-        <title>{{ page.title }} | The Gradual Steep | Andrew Bender</title>
+      {% assign page_title = page.title | append: " | The Gradual Steep | Andrew Bender" %}
     {% else %}
-        <title>The Gradual Steep | Andrew Bender</title>
+      {% assign page_title = "The Gradual Steep | Andrew Bender" %}
     {% endif %}
     {% if page.excerpt %}
-        <meta name="description" content="{{ page.excerpt | strip_html }}" />
+      {% assign page_description = page.excerpt | strip_html | normalize_whitespace | truncate: 200 %}
     {% else %}
-        <meta name="description" content="The technology blog of Andrew Bender" />
+      {% assign page_description = site.description %}
     {% endif %}
+    <title>{{ page_title }}</title>
+    <meta name="description" content="{{ page_description }}" />
     <meta name="keywords" content="andrew bender,technology,blog,entrepreneur,software,development,tea,gradual steep" />
-    <meta property="og:type" content="website" />
-    {% if page.url %}
-      <meta property="og:url" content="{{ site.url }}{{ page.url }}" />
-    {% else %}
-      <meta property="og:url" content="http://bender.io" />
-    {% endif %}
-    {% if page.title %}
-      <meta property="og:title" content="{{ page.title }} | The Gradual Steep | Andrew Bender" />
-    {% else %}
-      <meta property="og:title" content="The Gradual Steep | Andrew Bender" />
-    {% endif %}
-    {% if page.image %}
-      <meta property="og:image" content="http://bender.io{{ page.image }}" />
-    {% endif %}
+    <link rel="canonical" href="{{ page.url | absolute_url }}" />
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}" />
+    <meta property="og:url" content="{{ page.url | absolute_url }}" />
+    <meta property="og:title" content="{{ page_title }}" />
+    <meta property="og:description" content="{{ page_description }}" />
     <meta property="og:site_name" content="The Gradual Steep | Andrew Bender" />
-    <meta property="og:description" content="The technology blog of Andrew Bender" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="https://s3.amazonaws.com/bender.io/static/css/reset.css" />
+    {% if page.image %}
+      <meta property="og:image" content="{{ page.image | absolute_url }}" />
+    {% endif %}
+    <meta name="twitter:card" content="summary{% if page.image %}_large_image{% endif %}" />
+    <meta name="twitter:title" content="{{ page_title }}" />
+    <meta name="twitter:description" content="{{ page_description }}" />
+    {% if page.image %}<meta name="twitter:image" content="{{ page.image | absolute_url }}" />{% endif %}
+
+    <meta name="theme-color" content="#2b2b2b" />
+    <link rel="shortcut icon" href="{{ '/favicon.ico' | relative_url }}" type="image/x-icon" />
+    <link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="{{ '/feed' | relative_url }}" />
+
     <!--
     /* @license
-     * MyFonts Webfont Build ID 2634734, 2013-09-02T02:43:08-0400
-     *
-     * The fonts listed in this notice are subject to the End User License
-     * Agreement(s) entered into by the website owner. All other parties are
-     * explicitly restricted from using the Licensed Webfonts(s).
-     *
-     * You may obtain a valid license at the URLs below.
-     *
-     * Webfont: Nori by Positype
-     * URL: http://www.myfonts.com/fonts/positype/nori/nori/
-     * Copyright: Copyright (c) 2010 by Neil Summerour :: Positype. All rights reserved.
-     *
-     * Webfont: Transat Bold by Typetanic Fonts
-     * URL: http://www.myfonts.com/fonts/typetanic-fonts/transat/bold/
-     * Copyright: Copyright (c) 2011-2013 by Greg Shutters & Typetanic Fonts. All rights
-     * reserved.
-     *
-     * Webfont: Transat Light by Typetanic Fonts
-     * URL: http://www.myfonts.com/fonts/typetanic-fonts/transat/light/
-     * Copyright: Copyright (c) 2011-2013 by Greg Shutters & Typetanic Fonts. All rights
-     * reserved.
-     *
-     * Webfont: Transat Standard Oblique by Typetanic Fonts
-     * URL: http://www.myfonts.com/fonts/typetanic-fonts/transat/standard-oblique/
-     * Copyright: Copyright (c) 2011-2013 by Greg Shutters & Typetanic Fonts. All rights
-     * reserved.
-     *
-     * Webfont: Transat Standard by Typetanic Fonts
-     * URL: http://www.myfonts.com/fonts/typetanic-fonts/transat/standard/
-     * Copyright: Copyright (c) 2011-2013 by Greg Shutters & Typetanic Fonts. All rights
-     * reserved.
-     *
-     *
-     * License: http://www.myfonts.com/viewlicense?type=web&buildid=2634734
-     * Licensed pageviews: 20,000
-     *
-     * © 2013 MyFonts Inc
+     * MyFonts Webfont — Nori (Positype), Transat (Typetanic Fonts).
+     * Licensed under the MyFonts End User License Agreement; all other parties
+     * are restricted from using the licensed webfonts. © MyFonts Inc.
+     * See css/MyFontsWebfontsKit.css for the original build notice.
     */
     -->
-    <link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/bender.io/static/css/MyFontsWebfontsKit.css">
-    <link rel="stylesheet" href="https://s3.amazonaws.com/bender.io/static/css/site.css" />
-    <link rel="stylesheet" href="https://s3.amazonaws.com/bender.io/static/css/imgpopup.css" />
-    <link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="{{ site.url }}/feed" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
-    <script src="https://s3.amazonaws.com/bender.io/static/scripts/jquery.localScroll.min.js"></script>
-    <script src="https://s3.amazonaws.com/bender.io/static/scripts/jquery.scrollTo.min.js"></script>
-    <script src="https://s3.amazonaws.com/bender.io/static/scripts/site.js"></script>
-    <script type="text/javascript">
+    <link rel="stylesheet" href="{{ '/css/reset.css' | relative_url }}" />
+    <link rel="stylesheet" href="{{ '/css/MyFontsWebfontsKit.css' | relative_url }}" />
+    <link rel="stylesheet" href="{{ '/css/site.css' | relative_url }}" />
+    <link rel="stylesheet" href="{{ '/css/imgpopup.css' | relative_url }}" />
 
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-28473214-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
+    <script src="{{ '/scripts/lightbox.js' | relative_url }}" defer></script>
   </head>
-  <body id='top' class='scroll-target'>
+  <body id="top">
     <header>
-      <div class='center'>
-        <div class='title-name'>andrew bender</div>
+      <div class="center">
+        <div class="title-name">andrew bender</div>
         <nav>
           <ul>
-            <li><a href='/'>home</a></li>
-            <li><a href='#about'>about</a></li>
-            <li><a href='/archive'>archive</a></li>
+            <li><a href="{{ '/' | relative_url }}">home</a></li>
+            <li><a href="#about">about</a></li>
+            <li><a href="{{ '/archive' | relative_url }}">archive</a></li>
           </ul>
         </nav>
       </div>

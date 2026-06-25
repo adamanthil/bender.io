@@ -2,8 +2,9 @@
 
 source "https://rubygems.org"
 
-git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
-gem "jekyll"
-gem "erubis"
+gem "jekyll", "~> 4.3"
 
+# webrick is no longer bundled with Ruby 3.0+, but is needed by `jekyll serve`
+gem "webrick", "~> 1.8"

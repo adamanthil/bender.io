@@ -1,11 +1,24 @@
-permalink: pretty
-highlighter: true
+# Site
 name: The Gradual Steep
+title: The Gradual Steep
 description: The personal technology blog of Andrew Bender
 url: https://bender.io
+lang: en
 
-jekyll-press:
-  exclude: 'atom.xml' # Exclude files from processing - file name, glob pattern or array of file names and glob patterns
-  js_options: {}      # js minifier options
-  css_options: {}     # css minifier options
-  html_options: {}    # html minifier options
+# Build
+permalink: pretty          # /YYYY/MM/DD/title/ — must be preserved (links may exist elsewhere)
+highlighter: rouge
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# Files Jekyll should not copy into the build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - README.md
+  - .ruby-version
+  - twitter-proxy
+  - css/webfonts/svg_test.html

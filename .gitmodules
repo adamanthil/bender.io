@@ -1,3 +1,0 @@
-[submodule "twitter-proxy"]
-	path = twitter-proxy
-	url = git@github.com:Adamanthil/php-twitter-proxy.git
