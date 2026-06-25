@@ -1,5 +1,49 @@
+/* ==========================================================================
+   The Gradual Steep — site styles
+   Moderate refresh: preserves the original identity (dark textured ground,
+   paper content panel, overlapping wordmark, grey palette, Nori/Transat type)
+   while becoming fluid, responsive and accessible.
+   ========================================================================== */
+
+:root {
+  /* Font stacks (the Transat/Nori webfonts with system fallbacks) */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  --font-body: TransatStandard, var(--font-sans);
+  --font-bold: TransatBold, var(--font-sans);
+  --font-light: TransatLight, var(--font-sans);
+  --font-display: Nori, Georgia, "Times New Roman", serif;
+
+  /* Palette */
+  --ink: #555;
+  --ink-soft: #777;
+  --muted: #999;
+  --heading: #4a4a4a;
+  --light: #f0f0f0;
+  --light-dim: #bbb;
+  --link: #6f6f6f;
+  --link-hover: #444;
+  --card: #ffffff;
+  --card-border: #ececec;
+  --code-bg: #fafafa;
+
+  /* Layout */
+  --container: 880px; /* keeps the reading measure near the ~66-75 char ideal */
+  --gutter: clamp(1rem, 4vw, 2.25rem);
+
+  /* Wordmark (SVG is 288 x 140) */
+  --wordmark-w: clamp(220px, 38vw, 288px);
+  --wordmark-h: calc(var(--wordmark-w) * 140 / 288);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html {
-  font-family: TransatStandard, verdana;
+  font-family: var(--font-body);
   font-weight: normal;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
@@ -8,416 +52,436 @@ html {
 }
 
 body {
+  margin: 0;
+  line-height: 1.5;
   background-image: url("../images/dark-background.png");
-  margin: 0 auto;
-  line-height: 1.3;
+  color: var(--ink);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
 }
 
 a {
+  color: var(--link);
   text-decoration: none;
-  color: #999;
 }
-  a:hover {
-    color: #555;
-  }
+a:hover {
+  color: var(--link-hover);
+}
+a:focus-visible {
+  outline: 2px solid #888;
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Typography
+   -------------------------------------------------------------------------- */
 
 h1 {
-  font-family: Nori;
+  font-family: var(--font-display);
   font-weight: normal;
   font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: 64px;
-  color: #666;
-  margin: 0px 3px;
-  padding-left: 2px;
-  line-height: 1.8;
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  line-height: 1.4;
+  color: var(--heading);
+  margin: 0 0 0.25rem;
 }
 
 h2 {
-  font-family: TransatBold;
+  font-family: var(--font-bold);
   font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  margin-bottom: 8px;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  margin: 0 0 0.5rem;
 }
 
 h3 {
-  font-family: TransatBold;
+  font-family: var(--font-bold);
   font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  margin-bottom: 0;
+  font-size: clamp(1.3rem, 3.2vw, 1.6rem);
+  margin: 0 0 0.15rem;
 }
 
 h4 {
-  font-family: TransatBold;
+  font-family: var(--font-bold);
   font-weight: normal;
-  font-style: normal;
-  font-size: 18px;
-  margin: 24px 0 18px 0;
+  /* in-post section headings: always >= body text, below h3 */
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  margin: 1.5rem 0 1.125rem;
   color: #606060;
 }
 
-header {
-  font-family: TransatLight;
+/* Deeper levels are unused today; keep them at body size (never smaller) */
+h5,
+h6 {
+  font-family: var(--font-bold);
   font-weight: normal;
-  font-style: normal;
-  font-size: 32px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #f0f0f0;
-  padding-top: 2px;
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  margin: 1.5rem 0 1rem;
+  color: #606060;
 }
-
-  header .center {
-    width: 980px;
-    margin: 0 auto;
-  }
-
-  header .title-name {
-    float: right;
-    font-size: 52px;
-  }
-
-  header ul {
-    padding: 0;
-    margin: 0;
-    padding-top: 12px;
-  }
-
-    header ul li {
-      list-style-type: none;
-      display: inline;
-      margin-right: 10px;
-    }
-
-    header ul li a {
-      color: #f0f0f0;
-    }
-      header ul li a:hover {
-        color: #ccc;
-      }
 
 p {
-  margin: 18px 0;
-}
-
-pre, code {
-  font-family: Consolas,Menlo,Monaco,"Courier New",monospace;
-  font-size: 14px;
-  line-height: 1.2;
-  border: 1px solid #eee;
-  background: #fafafa;
-}
-
-pre {
-  padding: 15px;
+  margin: 1.125rem 0;
 }
 
 em {
   font-style: italic;
 }
 
+/* Code */
+pre,
 code {
-  padding: 2px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Courier New", monospace;
+}
+code {
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  background: #f3f3f3;
+  border: 1px solid var(--card-border);
+  border-radius: 3px;
+}
+pre {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  padding: 1rem 1.1rem;
+  background: var(--code-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
+  overflow-x: auto;
+}
+pre code {
+  font-size: inherit;
+  padding: 0;
+  background: none;
+  border: 0;
 }
 
-  pre code {
-    border: none;
-    padding: 0;
-  }
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
 
-code.sql .k {
-  font-weight: bold;
+header {
+  font-family: var(--font-light);
+  font-size: clamp(1.25rem, 3.5vw, 2rem);
+  color: var(--light);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+header .center {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0.6rem var(--gutter);
+}
+
+header .title-name {
+  font-size: clamp(1.9rem, 5.5vw, 3.25rem);
+}
+
+header nav {
+  order: -1; /* nav on the left, name on the right (original layout) */
+}
+
+header nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+header nav a {
+  color: var(--light);
+}
+header nav a:hover {
+  color: #ccc;
+}
+
+/* --------------------------------------------------------------------------
+   Main / content column
+   -------------------------------------------------------------------------- */
 
 .main {
   background-image: url("../images/body-background.jpg");
-  box-shadow: 0px 0px 8px 5px rgba(33, 33, 33, .33);
-  -webkit-box-shadow: 0px 0px 8px 5px rgba(33, 33, 33, .33);
+  box-shadow: 0 0 8px 5px rgba(33, 33, 33, 0.33);
 }
-
-.fixed-title {
-  position: absolute;
-  left: 5px;
-  top: 38px;
-  z-index: 10;
-  overflow: visible;
-}
-  .fixed-title.svg {
-    background: url("../images/the-gradual-steep.svg") no-repeat;
-  }
 
 .content {
-  width: 980px;
-  margin: 0 auto;
-  padding: 5px 0 40px 0;
-  min-height: 500px;
-  margin-top: 12px;
   position: relative;
-  top: 0px;
-  left: 0px;
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0.5rem var(--gutter) 2.5rem;
+}
+
+/* Wordmark: overlaps the top of the article card via a negative bottom margin
+   so the effect scales with the (fluid) wordmark size. */
+.fixed-title {
+  position: relative;
+  z-index: 10;
+  margin: clamp(1rem, 3vw, 2rem) 0 0 0.3rem;
+}
+.fixed-title.svg {
+  width: var(--wordmark-w);
+  height: var(--wordmark-h);
+  margin-bottom: calc(var(--wordmark-h) * -0.4);
+  background: url("../images/the-gradual-steep.svg") no-repeat center / contain;
+}
+/* The SVG carries the visual; keep the heading text for screen readers / SEO */
+.fixed-title.svg h1 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+article {
+  display: block;
 }
 
 .content .article {
-  background-color: white;
-  border: 1px solid #f0f0f0;
-  margin-top: 105px;
-  padding: 45px 50px 25px 50px;
-  color: #555;
+  position: relative;
   z-index: 0;
+  margin-top: 0;
+  padding: clamp(1.5rem, 4vw, 2.8rem) clamp(1.25rem, 4vw, 3.1rem)
+    clamp(1.25rem, 3vw, 1.75rem);
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 2px;
 }
-
-.content .archive {
-  margin-top: 115px;
-  padding: 40px 5px;
-  color: #555;
-  z-index: 0;
-}
-
-  .archive .year {
-    font-family: TransatStandard;
-    font-weight: normal;
-    font-style: normal;
-    color: #999;
-    font-size: 24px;
-    margin-bottom: 7px;
-  }
-
-  .archive ul {
-    background: url("../images/grey-bar.png") repeat-y;
-    margin: 0 0 0 25px;
-    padding: 0 0 6px;
-    margin-bottom: 10px;
-  }
-
-  .archive ul li {
-    background: url("../images/triangle.png") no-repeat;
-    background-position: 0px 10px;
-    list-style-type: none;
-    padding: 4px 25px;
-    margin-left: 4px;
-  }
-
-  .archive ul li .date {
-    display: inline-block;
-    width: 150px;
-    color: #999;
-    font-size: 18px;
-  }
-
-  .archive ul li a {
-    font-family: TransatBold;
-    font-weight: normal;
-    font-style: normal;
-    font-size: 20px;
-    color: #666;
-  }
-
-    .archive ul li a:hover {
-      color: #999;
-    }
-
-  .archive .rss {
-    font-size: 20px;
-    margin-top: 15px;
-    display: block;
-  }
-
-.article-links {
-  margin: 5px 0 25px;
-}
-
-.article-links a {
-  float: right;
-  margin-left: 18px;
-  font-size: 18px;
-  color: #555;
-}
-
-  .article-links a:hover {
-    color: #777;
-  }
-
-  .article-links a.rss {
-    float: left;
-    margin-left: 2px;
-  }
-
-.content-buttons a {
-  display: inline-block;
-  padding: 2px 12px;
-  background-color: white;
-  border: 1px solid #f0f0f0;
-  color: #555;
-  font-size: 24px;
-}
-
-  .content-buttons a:hover {
-    color: #777;
-  }
 
 .date-sub {
-  font-size: 18px;
-  color: #999;
+  font-size: 1.125rem;
+  color: var(--muted);
 }
 
 .article-body {
-  font-size: 18px;
-  line-height: 1.4;
+  /* 17px on small screens -> 20px on wide ones; rem-based so it still
+     responds to the reader's browser font-size preference */
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  line-height: 1.65;
+}
+.article-body a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
+/* Post navigation / meta links */
+.article-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 1rem 0 1.75rem;
+}
+.article-links a {
+  font-size: 1.125rem;
+  color: var(--ink);
+}
+.article-links a:hover {
+  color: var(--ink-soft);
+}
+.article-links a.rss {
+  margin-right: auto; /* keep RSS at the far left */
+}
+
+.content-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.content-buttons a {
+  padding: 0.15em 0.6em;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 2px;
+}
+.content-buttons a:hover {
+  color: var(--ink-soft);
+}
+.fl {
+  order: 1;
+  margin-right: auto; /* "more / next" on the left */
+}
+.fr {
+  order: 2;
+  margin-left: auto; /* "previous" on the right */
+}
+
+/* --------------------------------------------------------------------------
+   Archive
+   -------------------------------------------------------------------------- */
+
+.fixed-title:not(.svg) h1 {
+  color: var(--heading);
+}
+
+.content .archive {
+  margin-top: 1rem;
+  padding: 1.5rem 0.3rem;
+  color: var(--ink);
+}
+
+.archive .year {
+  font-family: var(--font-body);
+  color: var(--muted);
+  font-size: 1.5rem;
+  margin-bottom: 0.45rem;
+}
+
+.archive ul {
+  margin: 0 0 0.65rem 1.5rem;
+  padding: 0 0 0.4rem;
+  background: url("../images/grey-bar.png") repeat-y;
+  list-style: none;
+}
+.archive ul li {
+  margin-left: 0.25rem;
+  padding: 0.25rem 1.5rem;
+  background: url("../images/triangle.png") no-repeat 0 0.65rem;
+}
+.archive ul li .date {
+  display: inline-block;
+  width: 150px;
+  color: var(--muted);
+  font-size: 1.125rem;
+}
+.archive ul li a {
+  font-family: var(--font-bold);
+  font-size: 1.25rem;
+  color: var(--heading);
+}
+.archive ul li a:hover {
+  color: var(--muted);
+}
+.archive .rss {
+  display: block;
+  margin-top: 1rem;
+  font-size: 1.25rem;
+}
+
+/* On narrow screens stack the date above the title rather than truncating */
+@media (max-width: 480px) {
+  .archive ul li .date {
+    display: block;
+    width: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Comments
+   -------------------------------------------------------------------------- */
+
+#disqus_thread {
+  margin: clamp(2.5rem, 6vw, 3.75rem) 0;
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+
 #about {
-  margin-top: 50px;
+  margin-top: clamp(2.5rem, 6vw, 3.5rem);
 }
 
 .footer {
-  font-size: 18px;
-  color: #f0f0f0;
-  width: 980px;
+  max-width: var(--container);
   margin: 0 auto;
-  padding: 10px 0 20px;
+  padding: clamp(1.5rem, 4vw, 2.5rem) var(--gutter) clamp(1.5rem, 4vw, 2rem);
+  font-size: 1.125rem;
+  color: var(--light);
 }
-
-  .footer a {
-    color: #bbb;
-  }
-
-    .footer a:hover {
-      color: #f0f0f0;
-    }
+.footer a {
+  color: var(--light-dim);
+}
+.footer a:hover {
+  color: var(--light);
+}
 
 .about {
-  margin-bottom: 60px;
+  max-width: 68ch;
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+.about p a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
-.contact-element {
-  float: left;
-  width: 490px;
+.contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
 }
-
-  .contact-element ul {
-    padding: 0;
-    margin: 0;
-  }
-
-  .contact-element ul li {
-    list-style-type: none;
-  }
-
-  .contact-element h2 a {
-    color: #f0f0f0;
-  }
-
-    .contact-element h2 a:hover {
-      color: #aaa;
-    }
-
-#tweets {
-  color: #aaa;
-}
-
-  #tweets ul li {
-    margin-bottom: 15px;
-  }
-
-.tweet {
-  font-size: 18px;
-  width: 300px;
-  color: #f0f0f0;
-}
-
-.tweet-time {
-  font-size: 16px;
-  color: #aaa;
+.contact-element ul {
+  margin: 0;
+  padding: 0;
+  line-height: 1.9;
+  list-style: none;
 }
 
 .footer-bottom {
-  margin-top: 80px;
-  color: #aaa;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+  color: var(--muted);
 }
-
 .footer-bottom .back-link {
-  float: right;
-  color: #999;
-}
-
-
-.twitter-follow {
-  margin-top: 20px;
-}
-
-.fr {
-  float: right;
-}
-
-.fl {
-  float: left;
+  color: var(--muted);
 }
 
 .no-top-margin {
   margin-top: 0;
 }
 
-.cf:before, .cf:after {
-  content: "";
-  display: block;
-  overflow: hidden; }
+/* --------------------------------------------------------------------------
+   Small screens
+   -------------------------------------------------------------------------- */
 
-.cf:after {
-  clear: both; }
-
-.cf {
-  zoom: 1; }
-
-.transparent {
-  color: rgba(85, 85, 85, 0.0);
-}
-
-#disqus_thread {
-  margin: 60px 4px;
-}
-
-@media screen and (max-width: 1000px) {
+@media (max-width: 560px) {
   header .center {
-    width: auto;
-    margin: 0 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
   }
-
-  header ul {
-    padding: 12px 0;
+  header nav {
+    order: 0; /* name on top, nav beneath it */
   }
+}
 
-  .content {
-    width: auto;
-    margin: 0;
-  }
+/* --------------------------------------------------------------------------
+   Legacy clearfix (templates still apply .cf); harmless with flex layouts
+   -------------------------------------------------------------------------- */
 
-  .article-links {
-    margin: 0 20px 30px 20px;
-  }
+.cf::before,
+.cf::after {
+  content: "";
+  display: table;
+}
+.cf::after {
+  clear: both;
+}
 
-  .content-buttons {
-    margin: 0 20px;
-  }
-
-  .footer {
-    width: auto;
-    margin: 5px 20px;
-  }
-
-  .contact-element {
-    float: none;
-    width: auto;
-    margin: 20px 0;
-  }
-
-  .tweet {
-    width: auto;
-  }
-
-  #disqus_thread {
-    margin: 60px 20px;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
