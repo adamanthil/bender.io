@@ -18,21 +18,21 @@
     <title>{{ page_title }}</title>
     <meta name="description" content="{{ page_description }}" />
     <meta name="keywords" content="andrew bender,technology,blog,entrepreneur,software,development,tea,gradual steep" />
-    <link rel="canonical" href="{{ page.url | absolute_url }}" />
+    <link rel="canonical" href="{{ page.url | prepend: site.url }}" />
 
     <!-- Open Graph / social -->
     <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}" />
-    <meta property="og:url" content="{{ page.url | absolute_url }}" />
+    <meta property="og:url" content="{{ page.url | prepend: site.url }}" />
     <meta property="og:title" content="{{ page_title }}" />
     <meta property="og:description" content="{{ page_description }}" />
     <meta property="og:site_name" content="The Gradual Steep | Andrew Bender" />
     {% if page.image %}
-      <meta property="og:image" content="{{ page.image | absolute_url }}" />
+      <meta property="og:image" content="{{ page.image | prepend: site.url }}" />
     {% endif %}
     <meta name="twitter:card" content="summary{% if page.image %}_large_image{% endif %}" />
     <meta name="twitter:title" content="{{ page_title }}" />
     <meta name="twitter:description" content="{{ page_description }}" />
-    {% if page.image %}<meta name="twitter:image" content="{{ page.image | absolute_url }}" />{% endif %}
+    {% if page.image %}<meta name="twitter:image" content="{{ page.image | prepend: site.url }}" />{% endif %}
 
     <meta name="theme-color" content="#2b2b2b" />
     <link rel="shortcut icon" href="{{ '/favicon.ico' | relative_url }}" type="image/x-icon" />

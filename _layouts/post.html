@@ -15,17 +15,17 @@
             </div>
           </article>
           <div class='article-links cf'>
-            <a class='rss' href='/feed'>RSS</a>
-            <a href='{{ page.url }}'>permalink</a>
+            <a class='rss' href='{{ "/feed" | relative_url }}'>RSS</a>
+            <a href='{{ page.url | relative_url }}'>permalink</a>
           </div>
           <div class='content-buttons cf'>
           {% if page.previous %}
-            <a class='fr' href='{{page.previous.url}}'>previous post</a>
+            <a class='fr' href='{{ page.previous.url | relative_url }}'>previous post</a>
           {% endif %}
           {% if page.next %}
-            <a class='fl' href='{{page.next.url}}'>next post</a>
+            <a class='fl' href='{{ page.next.url | relative_url }}'>next post</a>
           {% else %}
-            <a class='fl' href='/archive'>more posts</a>
+            <a class='fl' href='{{ "/archive" | relative_url }}'>more posts</a>
           {% endif %}
           </div>
           <section>

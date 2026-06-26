@@ -20,15 +20,15 @@
             </div>
           </article>
           <div class='article-links cf'>
-            <a class='rss' href='/feed'>RSS</a>
-            <a href='{{ post.url }}#disqus_thread'></a>
-            <a href='{{ post.url }}'>permalink</a>
+            <a class='rss' href='{{ "/feed" | relative_url }}'>RSS</a>
+            <a href='{{ post.url | relative_url }}#disqus_thread'></a>
+            <a href='{{ post.url | relative_url }}'>permalink</a>
           </div>
           <div class='content-buttons cf'>
           {% if post.previous %}
-            <a class='fr' href='{{post.previous.url}}'>previous post</a>
+            <a class='fr' href='{{ post.previous.url | relative_url }}'>previous post</a>
           {% endif %}
-            <a class='fl' href='/archive'>more posts</a>
+            <a class='fl' href='{{ "/archive" | relative_url }}'>more posts</a>
           </div>
         </div>
       </div>
