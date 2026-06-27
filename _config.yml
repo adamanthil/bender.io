@@ -5,6 +5,15 @@ description: The personal technology blog of Andrew Bender
 url: https://bender.io
 lang: en
 
+# Comments (giscus — GitHub Discussions). Old Disqus threads live in _data/comments.yml.
+# repo_id / category_id are filled from the GitHub GraphQL API once the giscus
+# app is installed; the comment form only renders when repo_id is set.
+giscus:
+  repo: adamanthil/bender.io
+  repo_id: "MDEwOlJlcG9zaXRvcnkzMjE5MTc4"
+  category: Announcements
+  category_id: "DIC_kwDOADEe6s4C_8-m"
+
 # Build
 permalink: pretty          # /YYYY/MM/DD/title/ — must be preserved (links may exist elsewhere)
 highlighter: rouge

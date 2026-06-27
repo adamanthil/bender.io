@@ -21,7 +21,6 @@
           </article>
           <div class='article-links cf'>
             <a class='rss' href='{{ "/feed" | relative_url }}'>RSS</a>
-            <a href='{{ post.url | relative_url }}#disqus_thread'></a>
             <a href='{{ post.url | relative_url }}'>permalink</a>
           </div>
           <div class='content-buttons cf'>
@@ -33,14 +32,4 @@
         </div>
       </div>
     </section>
-    <script type="text/javascript">
-      var disqus_shortname = 'thegradualsteep'; // required: replace example with your forum shortname
-
-      (function () {
-        var s = document.createElement('script'); s.async = true;
-        s.type = 'text/javascript';
-        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
-        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-      }());
-    </script>
 {% include footer.html %}

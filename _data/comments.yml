@@ -1,0 +1,171 @@
+# Archived Disqus comments (read-only), keyed by post URL.
+# Generated from the Disqus export on migration; new comments use giscus.
+"/2013/09/22/returning-hierarchical-data-in-a-single-sql-query/":
+- name: boriscy
+  date: '2013-09-25T13:58:39Z'
+  message: "<p>Great article I use a lot tree structures and using this would help
+    a lot, I didn't know that you could create columns like **employee id**.</p>"
+- name: Slobodan Miskovic
+  date: '2013-09-27T14:03:52Z'
+  message: "<p>Code sure balloons up in complexity. Are you aware of any contrib modules
+    that would make writing queries such as these more pleasant?</p>"
+  replies:
+  - name: Andrew Bender
+    date: '2013-09-27T15:53:46Z'
+    message: "<p>That's a good question. Unfortunately I think much of what makes
+      it longer and harder to read is related to the syntax for recursive CTEs since
+      you are essentially defining the same query twice. You also aren't allowed to
+      use aggregates in them, which makes the other CTE more complicated than it would
+      otherwise have to be as well (compare to the earlier example). That is one downside,
+      but I think the benefits are worth it.</p>"
+- name: Jason Weathered
+  date: '2013-09-28T09:52:43Z'
+  message: "<p>Great post. Thanks for showing the power of PostgreSQL’s JSON support.</p><p>One
+    note: <code>date_part('day', age(now(), dateassigned::timestamp)) as age</code>
+    will give the wrong answer when the range is larger than a month. For whole days
+    with a date field, you probably want something <code>current_date - dateassigned
+    as age</code>. If something like hours was required, <code>date_part('epoch',
+    …) / 3600</code> works well.</p>"
+  replies:
+  - name: Andrew Bender
+    date: '2013-09-28T19:38:24Z'
+    message: "<p>Thanks! Yeah good call on the age calculation. Those options are
+      definitely better in a real situation.</p>"
+- name: Travis Kaufman
+  date: '2015-05-05T02:22:21Z'
+  message: "<p>Saved my life right here with `row_to_json` thank you so much for the
+    awesome post!</p>"
+  replies:
+  - name: Andrew Bender
+    date: '2015-05-06T02:44:14Z'
+    message: "<p>Glad to hear it!</p>"
+- name: Ruslan Talpa
+  date: '2015-08-05T08:09:04Z'
+  message: '<p>Hi.<br>Any pointers on how to combine in the same query row_to_json
+    and json_agg. The idea is to include the parent (client) and the children (tasks)
+    of the current item (project). For the query bellow i an error.<br>Thank you</p><p>---<br>ERROR:  column
+    "clients.*" must appear in the GROUP BY clause or be used in an aggregate function<br>LINE
+    10:   row_to_json(clients.*) as client,<br>^<br>********** Error **********<br>ERROR:
+    column "clients.*" must appear in the GROUP BY clause or be used in an aggregate
+    function<br>SQL state: 42803<br>Character: 169<br>---</p><p>WITH clients AS (<br>  SELECT
+    id, name FROM clients<br>), tasks AS (<br>  SELECT id, project_id, name FROM tasks<br>)</p><p>SELECT<br>  projects.*,<br>  --clients.*,<br>  --tasks.*<br>  row_to_json(clients.*)
+    as client,<br>  json_agg(tasks.*) as tasks<br>FROM projects<br>INNER JOIN clients
+    ON projects.client_id = <a href="http://clients.id" rel="nofollow noopener" target="_blank"
+    title="clients.id">clients.id</a><br>INNER JOIN tasks ON <a href="http://projects.id"
+    rel="nofollow noopener" target="_blank" title="projects.id">projects.id</a> =
+    tasks.project_id<br>GROUP BY <a href="http://projects.id" rel="nofollow noopener"
+    target="_blank" title="projects.id">projects.id</a></p>'
+  replies:
+  - name: Ruslan Talpa
+    date: '2015-08-05T08:36:58Z'
+    message: "<p>Found a solution like this, not sure if it's the most optimal considering
+      that it might be needed to fetch multiple parents and multiple types of children
+      at the same time.</p><p></p><pre><code><br><br>SELECT<br><br>  pg_catalog.count(t),<br><br>
+      \ array_to_json(array_agg(row_to_json(t)))::CHARACTER VARYING AS json<br><br>FROM
+      (<br><br>    WITH clients AS (<br><br>      SELECT id, name FROM clients<br><br>
+      \   )<br><br>    SELECT<br><br>        p.id, p.name, p.client_id, (<br><br>
+      \           SELECT array_to_json(array_agg(row_to_json(d)))<br><br>            FROM
+      (<br><br>                SELECT id, name, project_id<br><br>                FROM
+      tasks<br><br>                WHERE project_id = p.id<br><br>            ) d<br><br>
+      \       ) AS tasks,<br><br>        row_to_json(c.*) AS client<br><br>    FROM
+      projects AS p<br><br>    INNER JOIN clients AS c ON p.client_id = c.id<br><br>)
+      t;<br><br></code></pre>"
+- name: Tom
+  date: '2016-02-19T22:17:09Z'
+  message: '<p>How to get recursive json with employee #4 in array at top ? - "select
+    * from <br>employee where superior_id is null", so any element will have <br>"inferiors"
+    array instead "superior" employee object - but how to do it ?</p>'
+- name: sri
+  date: '2016-03-10T07:05:59Z'
+  message: "<p>Can this be done using Mysql workbench? Please let me know soon.<br>Thanks,<br>Sri</p>"
+- name: Daniel Bigham
+  date: '2017-04-29T01:52:17Z'
+  message: "<p>Woah, it's been a while since I've been in SQL land.  I'm super impressed
+    that database queries can return recursive structures like this nowadays.  Thanks
+    for sharing!</p>"
+- name: vijay k
+  date: '2018-02-12T06:19:19Z'
+  message: "<p>--&gt; Here I am getting <br>could not identify an equality operator
+    for type json<br>LINE 46: GROUP BY MONTH_OR_YEAR,DETAILS</p><p>error.<br>please
+    can you find the solution for this</p><p>SELECT array_to_json(array_agg(result))<br>FROM<br>(<br>SELECT
+    * FROM <br>(<br>SELECT <br>    (<br>SELECT MIN(to_char(eCPService_date_from ,
+    'MON YYYY')) FROM tbl_eCPServiceline <br>    WHERE eCPClaim_key = C1.eCPClaim_key<br>)
+    AS MONTH_OR_YEAR ,  <br>(<br>select row_to_json(row) AS DETAILS<br>from<br>(<br>SELECT
+    CLAIM_TYPE,COUNT(CLAIM_COUNT) AS CLAIM_COUNT ,SUM(TOTAL_BILLABLE) AS TOTAL_BILLABLE
+    <br>FROM (<br>SELECT                         <br>( <br> SELECT eCPClaim_Custom_Value1
+    <br> FROM tbl_eCPClaim_Custom <br> WHERE eCPClaim_Key = C.eCPClaim_Key <br> AND
+    eCPClaim_Custom_Field_Config_ID = 'dropdown2'  LIMIT 1<br>) AS CLAIM_TYPE ,<br>COUNT(*)
+    \ AS CLAIM_COUNT ,<br>SUM(eCPClaim_payer_billable_amount) AS TOTAL_BILLABLE <br>FROM
+    tbl_eCPClaim C<br>WHERE C.ecpclaim_key=C1.ecpclaim_key<br>GROUP BY C.eCPClaim_Key
+    <br>LIMIT 1<br>)AS V<br>GROUP BY CLAIM_TYPE<br>)row<br>)<br>FROM tbl_eCPClaim
+    C1</p><p>WHERE   C1.eCPClaim_Key  IN  (<br>SELECT RES.eCPClaim_Key FROM tbl_eCPRemit
+    TR, tbl_eCPClaimResponseSummary RES<br>                                WHERE TR.eCPRemit_Key
+    = RES.ecpclaimresponsesummary_response_key<br>                                AND
+    TR.eCPResponseBatch_Key='0169334867' <br>AND RES.ecpclaimresponsesummary_response_type=205<br>AND
+    \ TR.eCPRemit_Claim_Status_Code &lt;&gt; '4'<br>                    )<br>GROUP
+    BY   <br>C1.eCPClaim_key<br>)AS VV<br>GROUP BY MONTH_OR_YEAR,DETAILS</p><p>)result</p>"
+"/2016/09/18/dynamic-pivot-tables-with-json-and-postgresql/":
+- name: Damian Rossney
+  date: '2016-10-08T22:57:39Z'
+  message: <p>Hi, Andrew.  This is a really great discussion of a novel solution to
+    a thorny problem (dynamic generation of crosstab queries).  I am curious to know
+    what the speed difference would be for a non-trivial dataset.  I expanded your
+    sample data for the sale table to 10 million rows (and indexed sale_date) and
+    the jsonb_object_agg approach seemed to be a little faster than the crosstab function
+    (subjectively speaking, I didn't generate objective data).</p><p>I have two suggestions
+    that I think will improve your examples.  First, I would re-use the labels you
+    create in your SELECT clauses in your GROUP BY clauses to improve readability.  For
+    example, your JSONB example could read:</p><p></p><pre><code><br>WITH month_total
+    AS (<br>  SELECT<br>    date_part('year', sale_date) AS year,<br>    to_char(sale_date,
+    'Mon') AS month,<br>  COUNT(*) AS total<br>  FROM sale<br>  GROUP BY year, month<br>)<br><br>SELECT<br>  year,<br>  jsonb_object_agg(month,total)
+    AS months<br>FROM month_total<br>GROUP BY year<br>ORDER BY year;<br></code></pre><p></p><p>Second,
+    I find it distracting that the crosstab and JSONB examples return different numerical
+    results.  I think this is just a typo in the GROUP BY clause of the crosstab example.  I
+    think the crosstab example would generate more consistent results if written as:</p><p></p><pre><code><br>SELECT
+    * FROM crosstab(<br>  $$<br>  SELECT<br>    date_part('year', sale_date) AS year,<br>    date_part('month',
+    sale_date) AS month,<br>  COUNT(*)<br>  FROM sale<br>  GROUP BY year, month<br>  ORDER
+    BY 1<br>  $$,<br>  $$ SELECT m FROM generate_series(1,12) m $$<br>) AS (<br>  year
+    int,<br>  "Jan" int,<br>  "Feb" int,<br>  "Mar" int,<br>  "Apr" int,<br>  "May"
+    int,<br>  "Jun" int,<br>  "Jul" int,<br>  "Aug" int,<br>  "Sep" int,<br>  "Oct"
+    int,<br>  "Nov" int,<br>  "Dec" int<br>);<br></code></pre><p></p><p>Anyway, great
+    post!  I am looking at your approach for a current project.  I think this technique
+    has great potential for returning structured data to applications.  If i use it,
+    I will definitely link back here with full credit! :)</p>
+- name: harshal lagwankar
+  date: '2016-10-31T12:03:48Z'
+  message: '<p>How can I generate pivot table dynamically in Redshift?</p><p>I have
+    following two tables (which may contain varying segment,type and values)</p><p>user_fact<br>-----------<br>Id                                       Type       value<br>9a24cf6f-443c-43dd-abcb-c6c867bde5c7    Site        <a
+    href="http://nypost.com" rel="nofollow noopener" target="_blank" title="nypost.com">nypost.com</a><br>2e0c6c42-68ac-43e0-b130-1b986f61a463    device      mobile<br>2e0c6c42-68ac-43e0-b130-1b986f61a463    site        <a
+    href="http://realtor.com" rel="nofollow noopener" target="_blank" title="realtor.com">realtor.com</a></p><p>segments<br>2e0c6c42-68ac-43e0-b130-1b986f61a462    segA<br>2e0c6c42-68ac-43e0-b130-1b986f61a463    segA<br>2e0c6c42-68ac-43e0-b130-1b986f61a463    segC<br>2e0c6c42-68ac-43e0-b130-1b986f61a463    segB<br>I
+    want my output to look like</p><p>Id                                      SegA
+    SegB SegC <a href="http://nypost.com" rel="nofollow noopener" target="_blank"
+    title="nypost.com">nypost.com</a> mobile <a href="http://realtor.com" rel="nofollow
+    noopener" target="_blank" title="realtor.com">realtor.com</a><br>2e0c6c42-68ac-43e0-b130-1b986f61a463    1    1    0    0          1       1<br>Where
+    1 &amp; 0 indicates that particular Id is present in which Segment (binary representation)</p><p>So
+    far I created two files with distinct values from both tables for columns Segment,
+    Type and Value Segment file contains segB segA segC</p><p>Feature file contains
+    <a href="http://nypost.com" rel="nofollow noopener" target="_blank" title="nypost.com">nypost.com</a>
+    <a href="http://realtor.com" rel="nofollow noopener" target="_blank" title="realtor.com">realtor.com</a>
+    mobile</p><p>Using these two file I want to create query that will treat these
+    values as columns and generate pivoted result. Something like</p><p>Select segA,segB....,<a
+    href="http://realtor.com" rel="nofollow noopener" target="_blank" title="realtor.com">realtor.com</a>,mobile,...
+    from tableA a, tableB b where b.Id = a.Id</p><p>Is there any way where I can use
+    Scala or python to generate query dynamically?</p><p>Note: Number of sites can
+    be different each time for e.g. today I can have 10 site whereas tomorrow 50 Sites.
+    So each time query should generate appropriate number of columns.</p>'
+- name: chris marx
+  date: '2018-03-01T20:04:41Z'
+  message: "<p>Ha, this is brilliant, for most of us, of course all we care about
+    is what the response will look like once it's serialized to json. This is perfect!!</p>"
+  replies:
+  - name: Vikas Prasad
+    date: '2020-04-16T05:52:50Z'
+    message: '<p>There is just one catch when it comes to json serialisation: the
+      ordering of the pivoted items.<br>Although the same can of course be controlled
+      as long as we are "inside" DB by using `order by` inside jsonb_obj_agg. The
+      problem is, if we serialise this json as it is from application layer as a response
+      to some end-point, there is no guarantee that the order would still be maintained,
+      because json specification doesn''t guarantee the order inside `{}`</p>'
+- name: Sam Coorg
+  date: '2019-05-28T12:46:40Z'
+  message: "<p>It's awesome solution..thanks a lot for the nice explanation :)</p>"

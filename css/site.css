@@ -389,8 +389,70 @@ article {
    Comments
    -------------------------------------------------------------------------- */
 
-#disqus_thread {
-  margin: clamp(2.5rem, 6vw, 3.75rem) 0;
+.comments {
+  margin-top: clamp(2.5rem, 6vw, 3.75rem);
+  padding-top: clamp(1.5rem, 4vw, 2.5rem);
+  border-top: 1px solid var(--card-border);
+}
+
+.comments-heading {
+  font-family: var(--font-bold);
+  color: var(--heading);
+  margin-bottom: 0.35rem;
+}
+
+.comments-note {
+  margin-top: 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.comment-list,
+.comment-replies {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.comment {
+  margin: 1.5rem 0;
+}
+
+.comment-replies {
+  margin-top: 1.25rem;
+  padding-left: clamp(1rem, 4vw, 2rem);
+  border-left: 2px solid var(--card-border);
+}
+
+.comment-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.35rem;
+}
+.comment-author {
+  font-family: var(--font-bold);
+  color: var(--heading);
+}
+.comment-meta time {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.comment-body {
+  color: var(--ink);
+}
+.comment-body p:first-child {
+  margin-top: 0;
+}
+.comment-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* giscus iframe spacing */
+.comments .giscus {
+  margin-top: 1.5rem;
 }
 
 /* --------------------------------------------------------------------------

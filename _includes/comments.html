@@ -1,0 +1,53 @@
+<section class="comments">
+  {% assign archived = site.data.comments[page.url] %}
+  {% if archived %}
+    <h4 class="comments-heading">Archived comments</h4>
+    <p class="comments-note">Imported from the previous Disqus thread and preserved here read-only.</p>
+    <ol class="comment-list">
+      {% for comment in archived %}
+        <li class="comment">
+          <div class="comment-meta">
+            <span class="comment-author">{{ comment.name }}</span>
+            <time datetime="{{ comment.date }}">{{ comment.date | date: "%B %-d, %Y" }}</time>
+          </div>
+          <div class="comment-body">{{ comment.message }}</div>
+          {% if comment.replies %}
+            <ol class="comment-replies">
+              {% for reply in comment.replies %}
+                <li class="comment">
+                  <div class="comment-meta">
+                    <span class="comment-author">{{ reply.name }}</span>
+                    <time datetime="{{ reply.date }}">{{ reply.date | date: "%B %-d, %Y" }}</time>
+                  </div>
+                  <div class="comment-body">{{ reply.message }}</div>
+                </li>
+              {% endfor %}
+            </ol>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+  {% endif %}
+
+  {% if site.giscus.repo_id and site.giscus.repo_id != "" %}
+    <h4 class="comments-heading">{% if archived %}Add to the discussion{% else %}Comments{% endif %}</h4>
+    <script src="https://giscus.app/client.js"
+      data-repo="{{ site.giscus.repo }}"
+      data-repo-id="{{ site.giscus.repo_id }}"
+      data-category="{{ site.giscus.category }}"
+      data-category-id="{{ site.giscus.category_id }}"
+      data-mapping="specific"
+      data-term="{{ page.url }}"
+      data-strict="1"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="top"
+      data-theme="light"
+      data-lang="en"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async>
+    </script>
+    <noscript>Please enable JavaScript to view and post comments.</noscript>
+  {% endif %}
+</section>
