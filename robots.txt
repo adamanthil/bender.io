@@ -1,0 +1,7 @@
+---
+---
+# All crawlers welcome, including AI search and training bots.
+User-agent: *
+Allow: /
+
+Sitemap: {{ "/sitemap.xml" | prepend: site.url }}

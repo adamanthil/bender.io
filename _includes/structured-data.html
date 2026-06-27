@@ -1,0 +1,37 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "{{ site.url }}/#website",
+      "url": "{{ site.url }}/",
+      "name": {{ site.title | jsonify }},
+      "description": {{ site.description | jsonify }},
+      "publisher": { "@id": "{{ site.url }}/#person" },
+      "inLanguage": "{{ site.lang | default: 'en' }}"
+    },
+    {
+      "@type": "Person",
+      "@id": "{{ site.url }}/#person",
+      "name": {{ site.author.name | jsonify }},
+      "url": "{{ site.url }}/",
+      "sameAs": {{ site.social | jsonify }}
+    }{% if page.layout == 'post' %},
+    {
+      "@type": "BlogPosting",
+      "@id": "{{ page.url | prepend: site.url }}#article",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "{{ page.url | prepend: site.url }}" },
+      "url": "{{ page.url | prepend: site.url }}",
+      "headline": {{ page.title | jsonify }},
+      "description": {{ page_description | jsonify }},
+      "image": "{{ page_image }}",
+      "datePublished": "{{ page.date | date_to_xmlschema }}",
+      "dateModified": "{{ page.last_modified_at | default: page.date | date_to_xmlschema }}",
+      "author": { "@id": "{{ site.url }}/#person" },
+      "publisher": { "@id": "{{ site.url }}/#person" },
+      "inLanguage": "{{ site.lang | default: 'en' }}"
+    }{% endif %}
+  ]
+}
+</script>

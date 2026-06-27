@@ -4,6 +4,24 @@ title: The Gradual Steep
 description: The personal technology blog of Andrew Bender
 url: https://bender.io
 lang: en
+locale: en_US
+
+# Author / identity (used for meta tags + schema.org JSON-LD)
+author:
+  name: Andrew Bender
+  twitter: adamanthil          # X/Twitter handle, no @
+social:                        # profile URLs -> schema.org Person.sameAs
+  - https://twitter.com/adamanthil
+  - https://github.com/adamanthil
+  - https://www.linkedin.com/pub/andrew-bender/20/248/a1
+  - https://soundcloud.com/adamanthil
+  - https://www.youtube.com/channel/UCqJqpOeoQCyUSL-bswKtRqQ
+
+# Default social-share image (1200x630) for pages without their own
+og_image: /images/og-default.png
+
+plugins:
+  - jekyll-sitemap
 
 # Comments (giscus — GitHub Discussions). Old Disqus threads live in _data/comments.yml.
 # repo_id / category_id are filled from the GitHub GraphQL API once the giscus
