@@ -21,4 +21,3 @@ exclude:
   - README.md
   - .ruby-version
   - twitter-proxy
-  - css/webfonts/svg_test.html
