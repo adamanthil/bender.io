@@ -77,6 +77,11 @@
     <link rel="stylesheet" href="{{ '/css/imgpopup.css' | relative_url }}" />
 
     <script src="{{ '/assets/js/lightbox.js' | relative_url }}" defer></script>
+
+    {% if jekyll.environment == "production" and site.goatcounter %}
+      <script data-goatcounter="https://{{ site.goatcounter }}.goatcounter.com/count"
+              async src="//gc.zgo.at/count.js"></script>
+    {% endif %}
   </head>
   <body id="top">
     <header>

@@ -21,6 +21,10 @@ social:                        # profile URLs -> schema.org Person.sameAs
 # Default social-share image (1200x630) for pages without their own
 og_image: /images/og-default.png
 
+# Analytics (GoatCounter). Loaded only in production builds; the value is the
+# GoatCounter site code -> https://<code>.goatcounter.com
+goatcounter: adamanthil
+
 plugins:
   - jekyll-sitemap
 
