@@ -15,7 +15,13 @@
     {% else %}
       {% assign page_description = site.description %}
     {% endif %}
-    {% assign page_image = page.image | default: site.og_image | prepend: site.url %}
+    {% if page.image %}
+      {% assign page_image = page.image | prepend: site.url %}
+    {% elsif page.layout == 'post' %}
+      {% assign page_image = '/images/og/' | append: page.slug | append: '.jpg' | prepend: site.url %}
+    {% else %}
+      {% assign page_image = site.og_image | prepend: site.url %}
+    {% endif %}
     <title>{{ page_title }}</title>
     <meta name="description" content="{{ page_description }}" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />

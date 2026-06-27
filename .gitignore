@@ -5,3 +5,7 @@ _site/
 .jekyll-metadata
 vendor/
 .bundle/
+
+# Generated per-post OG images (built by script/generate-og-images.rb)
+images/og/
+.og-tmp/

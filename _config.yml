@@ -10,6 +10,7 @@ locale: en_US
 author:
   name: Andrew Bender
   twitter: adamanthil          # X/Twitter handle, no @
+  gravatar: adamanthil         # Gravatar username -> avatar for OG cards
 social:                        # profile URLs -> schema.org Person.sameAs
   - https://twitter.com/adamanthil
   - https://github.com/adamanthil

@@ -33,6 +33,13 @@ jobs:
         id: pages
         uses: actions/configure-pages@v6
 
+      # Renders images/og/<slug>.jpg from each post title (Chrome + ImageMagick,
+      # both preinstalled on ubuntu-latest runners).
+      - name: Generate per-post OG images
+        run: ruby script/generate-og-images.rb
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+
       - name: Build with Jekyll
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
