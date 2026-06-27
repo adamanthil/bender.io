@@ -10,7 +10,7 @@ a.imgpopup img {
   height: auto;
 }
 
-/* Full-size overlay opened by scripts/lightbox.js */
+/* Full-size overlay opened by assets/js/lightbox.js */
 .imgpopup-overlay {
   position: fixed;
   inset: 0;

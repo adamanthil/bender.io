@@ -1,5 +1,5 @@
 # A small Liquid tag that renders a thumbnail which opens the full-size image
-# in a lightbox overlay. Behaviour lives in scripts/lightbox.js (vanilla JS);
+# in a lightbox overlay. Behaviour lives in assets/js/lightbox.js (vanilla JS);
 # styling lives in css/imgpopup.css. No jQuery / jQuery UI required.
 #
 # Originally based on Brian M. Clapper's Octopress imgpopup plugin, but
