@@ -40,8 +40,12 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
 
+      # No --baseurl override: the site is served at the root of the custom
+      # domain (bender.io), so baseurl must stay empty. Passing the project
+      # path from configure-pages (/bender.io) would prepend it to every
+      # relative_url asset, e.g. /bender.io/css/reset.css.
       - name: Build with Jekyll
-        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+        run: bundle exec jekyll build
         env:
           JEKYLL_ENV: production
 
