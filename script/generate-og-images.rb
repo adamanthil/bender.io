@@ -33,8 +33,11 @@ CHROME = ENV['CHROME_BIN'] || [
 ].find { |p| File.executable?(p) }
 abort 'No Chrome/Chromium found (set CHROME_BIN)' unless CHROME
 
-# ImageMagick 7 ships `magick`; 6 (still common on CI) ships `convert`.
-MAGICK = ['magick', 'convert'].find { |c| system('command', '-v', c, %i[out err] => File::NULL) }
+# ImageMagick 7 ships `magick`; 6 (still common on CI) ships `convert`. Run the
+# lookup through a shell so `command -v` is the POSIX builtin — the multi-arg
+# `system('command', ...)` form skips the shell and tries to exec a nonexistent
+# `command` binary, which silently fails on Linux even when ImageMagick is present.
+MAGICK = ['magick', 'convert'].find { |c| system("command -v #{c} > /dev/null 2>&1") }
 abort 'No ImageMagick (magick/convert) found' unless MAGICK
 
 FileUtils.mkdir_p(OUT_DIR)
