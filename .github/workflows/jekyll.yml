@@ -33,8 +33,14 @@ jobs:
         id: pages
         uses: actions/configure-pages@v6
 
-      # Renders images/og/<slug>.jpg from each post title (Chrome + ImageMagick,
-      # both preinstalled on ubuntu-latest runners).
+      # ImageMagick was removed from the ubuntu-latest runner image, so install
+      # it explicitly rather than relying on it being preinstalled. (Chrome,
+      # the other dependency, is still preinstalled at /usr/bin/google-chrome.)
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
+
+      # Renders images/og/<slug>.jpg from each post title via headless Chrome,
+      # then encodes the JPEG with ImageMagick.
       - name: Generate per-post OG images
         run: ruby script/generate-og-images.rb
         env:
