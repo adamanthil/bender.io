@@ -2,6 +2,7 @@
 name: The Gradual Steep
 title: The Gradual Steep
 description: The personal technology blog of Andrew Bender
+tagline: Notes on software and side projects.
 url: https://bender.io
 lang: en
 locale: en_US
@@ -9,14 +10,14 @@ locale: en_US
 # Author / identity (used for meta tags + schema.org JSON-LD)
 author:
   name: Andrew Bender
-  twitter: adamanthil          # X/Twitter handle, no @
-  gravatar: adamanthil         # Gravatar username -> avatar for OG cards
-social:                        # profile URLs -> schema.org Person.sameAs
+  twitter: adamanthil # X/Twitter handle, no @
+  gravatar: adamanthil # Gravatar username -> avatar for OG cards
+social: # profile URLs -> schema.org Person.sameAs
   - https://twitter.com/adamanthil
   - https://github.com/adamanthil
   - https://www.linkedin.com/pub/andrew-bender/20/248/a1
   - https://soundcloud.com/adamanthil
-  - https://www.youtube.com/channel/UCqJqpOeoQCyUSL-bswKtRqQ
+  - https://www.youtube.com/@specific.impulse
 
 # Default social-share image (1200x630) for pages without their own
 og_image: /images/og-default.png
