@@ -21,6 +21,9 @@ POSTS_DIR = File.join(ROOT, '_posts')
 OUT_DIR   = File.join(ROOT, 'images', 'og')
 TMP_DIR   = File.join(ROOT, '.og-tmp')
 AVATAR_FILE = File.join(TMP_DIR, 'avatar.jpg')
+# Same Gravatar, also published for the homepage hero (git-ignored, served
+# straight from the build like the OG cards).
+HOME_AVATAR = File.join(ROOT, 'images', 'avatar.jpg')
 
 CONFIG = YAML.safe_load_file(File.join(ROOT, '_config.yml'))
 GRAVATAR_USER = CONFIG.dig('author', 'gravatar') or
@@ -53,6 +56,7 @@ begin
   URI.open("#{avatar_url}?s=512&d=mp") do |io|
     File.binwrite(AVATAR_FILE, io.read)
   end
+  FileUtils.cp(AVATAR_FILE, HOME_AVATAR)
 rescue OpenURI::HTTPError, SocketError, OpenSSL::SSL::SSLError, JSON::ParserError => e
   abort "Could not fetch Gravatar: #{e.message}"
 end

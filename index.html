@@ -1,35 +1,63 @@
 ---
 ---
-{% assign post = site.posts.first %}
-{% assign content = post.content %}
 
 {% include header.html %}
-    <section>
-      <div class='main'>
-        <div class='content'>
-          <div class='fixed-title svg'>
-            <h1 class='transparent'>the gradual steep</h1>
-          </div>
-          <article>
-            <div class='article'>
-              <h3>{{ post.title }}</h3>
-              <div class='date-sub'>{{ post.date | date: "%Y.%m.%d" }}</div>
-              <div class='article-body'>
-                {{ content }}
-              </div>
+<section>
+    <div class="main">
+        <div class="content">
+            <div class="fixed-title svg">
+                <h1 class="transparent">the gradual steep</h1>
             </div>
-          </article>
-          <div class='article-links cf'>
-            <a class='rss' href='{{ "/feed" | relative_url }}'>RSS</a>
-            <a href='{{ post.url | relative_url }}'>permalink</a>
-          </div>
-          <div class='content-buttons cf'>
-          {% if post.previous %}
-            <a class='fr' href='{{ post.previous.url | relative_url }}'>previous post</a>
-          {% endif %}
-            <a class='fl' href='{{ "/archive" | relative_url }}'>more posts</a>
-          </div>
+            <article>
+                <div class="article home">
+                    {% if site.tagline %}
+                    <p class="tagline">{{ site.tagline }}</p>
+                    {% endif %}
+
+                    <div class="intro">
+                        <span class="intro-avatar" aria-hidden="true"></span>
+                        <p class="intro-text">
+                            I’m <strong>Andrew Bender</strong> — a software
+                            developer and entrepreneur in Milwaukee.
+                            <a class="intro-more" href="#about"
+                                >More about me →</a
+                            >
+                        </p>
+                    </div>
+
+                    <section class="recent" aria-label="Recent writing">
+                        <h2 class="recent-heading">Recent writing</h2>
+                        <ul class="recent-list">
+                            {% for post in site.posts limit: 5 %}
+                            <li class="recent-item">
+                                <a
+                                    class="recent-link"
+                                    href="{{ post.url | relative_url }}"
+                                >
+                                    <span class="recent-title"
+                                        >{{ post.title }}</span
+                                    >
+                                    <span class="recent-date"
+                                        >{{ post.date | date: '%Y.%m.%d'
+                                        }}</span
+                                    >
+                                </a>
+                                <p class="recent-excerpt">
+                                    {{ post.excerpt | strip_html |
+                                    normalize_whitespace | truncate: 140 }}
+                                </p>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <a
+                            class="recent-archive"
+                            href='{{ "/archive" | relative_url }}'
+                            >Browse the full archive →</a
+                        >
+                    </section>
+                </div>
+            </article>
         </div>
-      </div>
-    </section>
+    </div>
+</section>
 {% include footer.html %}

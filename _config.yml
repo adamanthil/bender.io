@@ -38,7 +38,7 @@ giscus:
   category_id: "DIC_kwDOADEe6s4C_8-m"
 
 # Build
-permalink: pretty          # /YYYY/MM/DD/title/ — must be preserved (links may exist elsewhere)
+permalink: pretty # /YYYY/MM/DD/title/ — must be preserved (links may exist elsewhere)
 highlighter: rouge
 markdown: kramdown
 kramdown:

@@ -6,6 +6,7 @@ _site/
 vendor/
 .bundle/
 
-# Generated per-post OG images (built by script/generate-og-images.rb)
+# Generated per-post OG images + homepage avatar (script/generate-og-images.rb)
 images/og/
+images/avatar.jpg
 .og-tmp/

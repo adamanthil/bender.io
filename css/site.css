@@ -326,6 +326,112 @@ article {
 }
 
 /* --------------------------------------------------------------------------
+   Home landing (hero + recent writing)
+   -------------------------------------------------------------------------- */
+
+.home .tagline {
+  font-family: var(--font-light);
+  font-size: clamp(1.25rem, 3vw, 1.6rem);
+  line-height: 1.4;
+  color: var(--ink-soft);
+  margin: 0 0 clamp(1.25rem, 3.5vw, 1.75rem);
+}
+
+.home .intro {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 1.5rem);
+  padding-bottom: clamp(1.5rem, 4vw, 2.25rem);
+  margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
+  border-bottom: 1px solid var(--card-border);
+}
+
+/* Avatar is generated at build time (script/generate-og-images.rb) and served
+   from images/avatar.jpg. As a background-image it degrades to a plain circle
+   if that build step hasn't run (e.g. a bare local `jekyll serve`). */
+.intro-avatar {
+  flex: none;
+  width: clamp(72px, 14vw, 92px);
+  height: clamp(72px, 14vw, 92px);
+  border-radius: 50%;
+  background: #ececec url("../images/avatar.jpg") center / cover no-repeat;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+.intro-text {
+  margin: 0;
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--ink);
+}
+.intro-text a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.intro-more {
+  display: inline-block;
+  margin-top: 0.35rem;
+  white-space: nowrap;
+}
+
+.recent-heading {
+  font-family: var(--font-bold);
+  color: var(--heading);
+  margin-bottom: 1rem;
+}
+
+.recent-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.recent-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--card-border);
+}
+.recent-item:first-of-type {
+  padding-top: 0;
+}
+
+.recent-link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.15rem 1rem;
+}
+.recent-title {
+  font-family: var(--font-bold);
+  font-size: clamp(1.2rem, 2.6vw, 1.45rem);
+  color: var(--heading);
+}
+.recent-link:hover .recent-title {
+  color: var(--muted);
+}
+.recent-date {
+  color: var(--muted);
+  font-size: 1rem;
+  white-space: nowrap;
+}
+.recent-excerpt {
+  margin: 0.3rem 0 0;
+  color: var(--ink-soft);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+.recent-archive {
+  display: inline-block;
+  margin-top: 1.5rem;
+  font-family: var(--font-bold);
+  font-size: 1.125rem;
+  color: var(--heading);
+}
+.recent-archive:hover {
+  color: var(--muted);
+}
+
+/* --------------------------------------------------------------------------
    Archive
    -------------------------------------------------------------------------- */
 
@@ -527,19 +633,6 @@ article {
   header nav {
     order: 0; /* name on top, nav beneath it */
   }
-}
-
-/* --------------------------------------------------------------------------
-   Legacy clearfix (templates still apply .cf); harmless with flex layouts
-   -------------------------------------------------------------------------- */
-
-.cf::before,
-.cf::after {
-  content: "";
-  display: table;
-}
-.cf::after {
-  clear: both;
 }
 
 @media (prefers-reduced-motion: reduce) {
