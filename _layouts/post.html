@@ -19,16 +19,42 @@
             <a href='{{ page.url | relative_url }}'>permalink</a>
           </div>
           <div class='content-buttons'>
-          {% if page.previous %}
-            <a class='fr' href='{{ page.previous.url | relative_url }}'>previous post</a>
+          {% comment %}
+            Prev/next skip unlisted posts so a listed post never links to
+            one. site.posts is newest first: previous = index + 1.
+          {% endcomment %}
+          {% assign newer_post = nil %}
+          {% assign older_post = nil %}
+          {% unless page.unlisted %}
+            {% assign listed_posts = site.posts | where_exp: "post", "post.unlisted != true" %}
+            {% for post in listed_posts %}
+              {% if post.url == page.url %}
+                {% assign older_index = forloop.index0 | plus: 1 %}
+                {% assign older_post = listed_posts[older_index] %}
+                {% unless forloop.first %}
+                  {% assign newer_index = forloop.index0 | minus: 1 %}
+                  {% assign newer_post = listed_posts[newer_index] %}
+                {% endunless %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+          {% endunless %}
+          {% if older_post %}
+            <a class='fr' href='{{ older_post.url | relative_url }}'>previous post</a>
           {% endif %}
-          {% if page.next %}
-            <a class='fl' href='{{ page.next.url | relative_url }}'>next post</a>
+          {% if newer_post %}
+            <a class='fl' href='{{ newer_post.url | relative_url }}'>next post</a>
           {% else %}
             <a class='fl' href='{{ "/archive" | relative_url }}'>more posts</a>
           {% endif %}
           </div>
-          {% include comments.html %}
+          {% comment %}
+            giscus would open a public GitHub Discussion (titled with the
+            post URL) on the first comment, so drafts get no comment form.
+          {% endcomment %}
+          {% unless page.unlisted %}
+            {% include comments.html %}
+          {% endunless %}
         </div>
       </div>
     </section>

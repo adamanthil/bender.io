@@ -7,7 +7,8 @@
 		<description>{{ site.description }}</description>
 		<link>{{ site.url }}</link>
 		<atom:link href="{{ site.url }}/feed" rel="self" type="application/rss+xml" />
-		{% for post in site.posts limit:10 %}
+		{% assign listed_posts = site.posts | where_exp: "post", "post.unlisted != true" %}
+		{% for post in listed_posts limit:10 %}
 			<item>
 				<title>{{ post.title }}</title>
 				<description>{{ post.content | xml_escape }}</description>

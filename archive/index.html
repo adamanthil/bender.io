@@ -10,24 +10,20 @@ title: blog archive
           </div>
           <article>
             <div class='archive'>
-                {% for post in site.posts %}
-
-                  {% unless post.next %}
-                    <div class='year'>{{ post.date | date: '%Y' }}</div>
+                {% assign listed_posts = site.posts | where_exp: "post", "post.unlisted != true" %}
+                {% assign current_year = "" %}
+                {% for post in listed_posts %}
+                  {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
+                  {% if year != current_year %}
+                    {% unless forloop.first %}</ul>{% endunless %}
+                    <div class='year'>{{ year }}</div>
                     <ul>
-                  {% else %}
-                    {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
-                    {% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %}
-                    {% if year != nyear %}
-                      </ul>
-                      <div class='year'>{{ post.date | date: '%Y' }}</div>
-                      <ul>
-                    {% endif %}
-                  {% endunless %}
+                    {% assign current_year = year %}
+                  {% endif %}
 
                   <li><span class='date'>{{ post.date | date: "%B %d" }}</span><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
                 {% endfor %}
-                  </ul>
+                {% if listed_posts.size > 0 %}</ul>{% endif %}
               <a class='rss' href='{{ "/feed" | relative_url }}'>RSS Feed</a>
             </div>
           </article>

@@ -24,7 +24,11 @@
     {% endif %}
     <title>{{ page_title }}</title>
     <meta name="description" content="{{ page_description }}" />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    {% if page.unlisted %}
+      <meta name="robots" content="noindex, nofollow" />
+    {% else %}
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    {% endif %}
     <link rel="canonical" href="{{ page.url | prepend: site.url }}" />
 
     <!-- Open Graph / social -->

@@ -28,7 +28,8 @@
                     <section class="recent" aria-label="Recent writing">
                         <h2 class="recent-heading">Recent writing</h2>
                         <ul class="recent-list">
-                            {% for post in site.posts limit: 5 %}
+                            {% assign listed_posts = site.posts | where_exp: "post", "post.unlisted != true" %}
+                            {% for post in listed_posts limit: 5 %}
                             <li class="recent-item">
                                 <a
                                     class="recent-link"
