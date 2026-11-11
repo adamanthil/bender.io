@@ -11,3 +11,7 @@ gem "webrick", "~> 1.8"
 
 # Generates /sitemap.xml for search engines
 gem "jekyll-sitemap", "~> 1.4"
+
+# Server-side KaTeX rendering of $$...$$ math in kramdown (needs a JS
+# runtime via ExecJS; Node is available locally and on the CI runner)
+gem "kramdown-math-katex", "~> 1.0"

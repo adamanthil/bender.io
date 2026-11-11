@@ -45,6 +45,9 @@ markdown: kramdown
 kramdown:
   input: GFM
   syntax_highlighter: rouge
+  # $$...$$ math is rendered to HTML at build time (kramdown-math-katex);
+  # the stylesheet is only loaded on pages that contain math.
+  math_engine: katex
 
 # Files Jekyll should not copy into the build
 exclude:
