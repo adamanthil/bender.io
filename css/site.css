@@ -292,6 +292,34 @@ article {
 }
 
 /* --------------------------------------------------------------------------
+   Linkable headings (see _plugins/heading_anchors.rb)
+   -------------------------------------------------------------------------- */
+
+.article-body .heading-link {
+  color: inherit;
+  text-decoration: none;
+}
+.article-body .heading-link::after {
+  content: "#";
+  margin-left: 0.4em;
+  font-family: var(--font-body);
+  color: var(--light-dim);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.article-body .heading-link:hover::after,
+.article-body .heading-link:focus-visible::after,
+.article-body :target > .heading-link::after {
+  opacity: 1;
+}
+/* Touch screens can't hover: keep the marker faintly visible */
+@media (hover: none) {
+  .article-body .heading-link::after {
+    opacity: 0.6;
+  }
+}
+
+/* --------------------------------------------------------------------------
    Table of contents (posts with `toc: true`)
    Wide screens: a card pinned in the left margin beside the article.
    Narrower screens: collapsible "contents" bar that sticks to the top of
