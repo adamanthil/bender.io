@@ -1,14 +1,25 @@
 {% include header.html %}
     <section>
       <div class='main'>
-        <div class='content'>
+        {% if page.toc %}
+          {% assign toc_items = content | toc_list %}
+        {% else %}
+          {% assign toc_items = "" %}
+        {% endif %}
+        <div class='content{% if toc_items != "" %} has-toc{% endif %}'>
           <div class='fixed-title svg'>
             <h1 class='transparent'>the gradual steep</h1>
           </div>
+          {% if toc_items != "" %}
+            {% include toc.html variant="sidebar" items=toc_items %}
+          {% endif %}
           <article>
             <div class='article'>
               <h3>{{ page.title }}</h3>
               <div class='date-sub'>{{ page.date | date: "%Y.%m.%d" }}</div>
+              {% if toc_items != "" %}
+                {% include toc.html variant="inline" items=toc_items %}
+              {% endif %}
               <div class='article-body'>
                 {{ content }}
               </div>

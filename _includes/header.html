@@ -84,6 +84,9 @@
     {% endif %}
 
     <script src="{{ '/assets/js/lightbox.js' | relative_url }}" defer></script>
+    {% if page.toc %}
+      <script src="{{ '/assets/js/toc.js' | relative_url }}" defer></script>
+    {% endif %}
 
     {% if jekyll.environment == "production" and site.goatcounter %}
       <script data-goatcounter="https://{{ site.goatcounter }}.goatcounter.com/count"

@@ -1,0 +1,22 @@
+{% comment %}
+  Table of contents for posts with `toc: true`. Pass the rendered list as
+  `items` and `variant` as "sidebar" (pinned beside the article on wide
+  screens) or "inline" (collapsible bar that sticks to the top of the
+  article on narrower screens). CSS shows only one variant at a time.
+{% endcomment %}
+{% if include.variant == "sidebar" %}
+  <nav class="toc toc-sidebar" aria-label="Contents">
+    <div class="toc-sticky">
+      <p class="toc-heading">contents</p>
+      {{ include.items }}
+      <a class="toc-top" href="#top">back to top</a>
+    </div>
+  </nav>
+{% else %}
+  <nav class="toc toc-inline" aria-label="Contents">
+    <details>
+      <summary><span class="toc-label">contents</span><span class="toc-current"></span></summary>
+      {{ include.items }}
+    </details>
+  </nav>
+{% endif %}
