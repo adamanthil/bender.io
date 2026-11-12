@@ -281,6 +281,16 @@ article {
   text-underline-offset: 2px;
 }
 
+/* Asides / disclaimers in posts: add `{: .note}` on the line after a
+   paragraph in Markdown to set it smaller and muted, with a left rule */
+.article-body .note {
+  font-size: 0.85em;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--card-border);
+}
+
 /* Post navigation / meta links */
 .article-links {
   display: flex;
