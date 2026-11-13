@@ -298,6 +298,25 @@ article {
   text-underline-offset: 2px;
 }
 
+/* reset.css strips list markers and indentation; restore them in posts */
+.article-body ol,
+.article-body ul {
+  margin: 1.125rem 0;
+  padding-left: 1.5em;
+}
+.article-body ol {
+  list-style: decimal;
+}
+.article-body ul {
+  list-style: disc;
+}
+.article-body li + li {
+  margin-top: 0.4em;
+}
+.article-body li > :is(ol, ul) {
+  margin: 0.4em 0 0;
+}
+
 /* Asides / disclaimers in posts: add `{: .note}` on the line after a
    paragraph in Markdown to set it smaller and muted, with a left rule */
 .article-body .note {
