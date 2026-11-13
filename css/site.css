@@ -685,16 +685,17 @@ article {
    if that build step hasn't run (e.g. a bare local `jekyll serve`). */
 .intro-avatar {
   flex: none;
-  width: clamp(72px, 14vw, 92px);
-  height: clamp(72px, 14vw, 92px);
+  width: clamp(72px, 14vw, 84px);
+  height: clamp(72px, 14vw, 84px);
   border-radius: 50%;
   background: #ececec url("../images/avatar.jpg") center / cover no-repeat;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
 }
 
+/* Sized so the intro sentence fits on one line at full column width */
 .intro-text {
   margin: 0;
-  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.2rem);
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.125rem);
   line-height: 1.6;
   color: var(--ink);
 }
@@ -702,8 +703,10 @@ article {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+/* Always on its own line below the sentence */
 .intro-more {
-  display: inline-block;
+  display: block;
+  width: fit-content;
   margin-top: 0.35rem;
   white-space: nowrap;
 }
