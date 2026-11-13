@@ -271,10 +271,27 @@ article {
 }
 
 .article-body {
-  /* 17px on small screens -> 20px on wide ones; rem-based so it still
+  /* ~17px on phones, scaling up to 768px; rem-based so it still
      responds to the reader's browser font-size preference */
   font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
   line-height: 1.65;
+}
+/* Tablet and desktop: larger type keeps lines near 70 characters in the
+   ~640-720px text column, with headings stepped clearly above body text */
+@media (min-width: 768px) {
+  .article-body {
+    font-size: 1.34375rem; /* 21.5px */
+  }
+  .article > h3 {
+    font-size: 1.6875rem; /* 27px post title */
+    text-wrap: balance;
+  }
+  .article-body h4 {
+    font-size: 1.625rem; /* 26px */
+  }
+  .article-body :is(h5, h6) {
+    font-size: 1em; /* keep subsections at body size */
+  }
 }
 .article-body a {
   text-decoration: underline;
