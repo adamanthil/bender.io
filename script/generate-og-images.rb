@@ -78,6 +78,7 @@ def card_html(title)
   <<~HTML
     <!DOCTYPE html><html><head><meta charset="utf-8">
     <link rel="stylesheet" href="#{file_uri(File.join(ROOT, 'css', 'MyFontsWebfontsKit.css'))}">
+    <link rel="stylesheet" href="#{file_uri(File.join(ROOT, 'css', 'TransatTextWebfonts.css'))}">
     <style>
       * { margin:0; padding:0; box-sizing:border-box; }
       html, body { width:1200px; height:630px; }
@@ -85,7 +86,7 @@ def card_html(title)
         position:relative; display:flex; flex-direction:column;
         padding:80px 90px 76px;
         background:#f5f3ef url("#{file_uri(File.join(ROOT, 'images', 'body-background.jpg'))}") repeat;
-        font-family:TransatStandard, -apple-system, sans-serif;
+        font-family:TransatText, -apple-system, sans-serif;
         color:#4a4a4a; overflow:hidden;
       }
       body::after {            /* grounding accent bar in the theme colour */

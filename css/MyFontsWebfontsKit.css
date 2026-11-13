@@ -35,20 +35,10 @@
   font-display: swap;
 }
 @font-face {
-  font-family: "TransatStandard";
-  src: url('webfonts/TransatStandard/font.woff2') format('woff2'),
-       url('webfonts/TransatStandard/font.woff') format('woff');
-  font-display: swap;
-}
-@font-face {
   font-family: "TransatBold";
   src: url('webfonts/TransatBold/font.woff2') format('woff2'),
        url('webfonts/TransatBold/font.woff') format('woff');
   font-display: swap;
 }
-@font-face {
-  font-family: "TransatMediumOblique";
-  src: url('webfonts/TransatMediumOblique/font.woff2') format('woff2'),
-       url('webfonts/TransatMediumOblique/font.woff') format('woff');
-  font-display: swap;
-}
+/* Transat Standard and Transat Medium Oblique from this build are no longer
+   used: body text is set in Transat Text (see TransatTextWebfonts.css). */

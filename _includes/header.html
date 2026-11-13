@@ -67,16 +67,20 @@
 
     <!--
     /* @license
-     * MyFonts Webfont — Nori (Positype), Transat (Typetanic Fonts).
-     * Licensed under the MyFonts End User License Agreement; all other parties
-     * are restricted from using the licensed webfonts. © MyFonts Inc.
+     * MyFonts Webfont — Nori (Positype), Transat Light and Bold (Typetanic
+     * Fonts). Licensed under the MyFonts End User License Agreement; all other
+     * parties are restricted from using the licensed webfonts. © MyFonts Inc.
      * See css/MyFontsWebfontsKit.css for the original build notice.
+     *
+     * Transat Text (Typetanic Fonts), © The Type Founders, LLC. Licensed under
+     * the Typetanic Fonts web license; see css/TransatTextWebfonts.css.
     */
     -->
-    <link rel="preload" href="{{ '/css/webfonts/TransatStandard/font.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="{{ '/css/webfonts/TransatText/TransatText-Regular.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="{{ '/css/webfonts/Nori/font.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="{{ '/css/reset.css' | relative_url }}" />
     <link rel="stylesheet" href="{{ '/css/MyFontsWebfontsKit.css' | relative_url }}" />
+    <link rel="stylesheet" href="{{ '/css/TransatTextWebfonts.css' | relative_url }}" />
     <link rel="stylesheet" href="{{ '/css/site.css' | relative_url }}" />
     <link rel="stylesheet" href="{{ '/css/imgpopup.css' | relative_url }}" />
     {% if page.content contains 'class="katex' %}

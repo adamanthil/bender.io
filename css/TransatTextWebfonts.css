@@ -1,0 +1,37 @@
+/**
+ * @license
+ * Webfont: Transat Text by Typetanic Fonts
+ * Copyright © 2013, 2023 by The Type Founders, LLC. All rights reserved.
+ * URL: https://typetanic.com/fonts/transat/
+ *
+ * Licensed to bender.io under the Typetanic Fonts web license
+ * (https://typetanic.com/licensing/web/). All other parties are restricted
+ * from using these webfonts. The font files must be used as provided.
+ */
+
+/* One family with real styles, so <em> uses the oblique and <strong> the
+   bold instead of the browser synthesizing them. */
+@font-face {
+  font-family: "TransatText";
+  font-style: normal;
+  font-weight: 400;
+  src: url('webfonts/TransatText/TransatText-Regular.woff2') format('woff2'),
+       url('webfonts/TransatText/TransatText-Regular.woff') format('woff');
+  font-display: swap;
+}
+@font-face {
+  font-family: "TransatText";
+  font-style: italic;
+  font-weight: 400;
+  src: url('webfonts/TransatText/TransatText-RegularOblique.woff2') format('woff2'),
+       url('webfonts/TransatText/TransatText-RegularOblique.woff') format('woff');
+  font-display: swap;
+}
+@font-face {
+  font-family: "TransatText";
+  font-style: normal;
+  font-weight: 700;
+  src: url('webfonts/TransatText/TransatText-Bold.woff2') format('woff2'),
+       url('webfonts/TransatText/TransatText-Bold.woff') format('woff');
+  font-display: swap;
+}

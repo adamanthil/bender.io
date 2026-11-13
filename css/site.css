@@ -9,7 +9,7 @@
   /* Font stacks (the Transat/Nori webfonts with system fallbacks) */
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;
-  --font-body: TransatStandard, var(--font-sans);
+  --font-body: TransatText, var(--font-sans);
   --font-bold: TransatBold, var(--font-sans);
   --font-light: TransatLight, var(--font-sans);
   --font-display: Nori, Georgia, "Times New Roman", serif;
@@ -126,8 +126,15 @@ p {
   margin: 1.125rem 0;
 }
 
-em {
+em,
+i {
   font-style: italic;
+}
+
+/* reset.css zeroes these; Transat Text has a real bold for body copy */
+strong,
+b {
+  font-weight: 700;
 }
 
 /* Code */
