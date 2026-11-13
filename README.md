@@ -36,6 +36,30 @@ $$
 - A single `$` is plain text, and `$$` inside code is left alone.
 - Write `\$$` for a literal `$$` in prose.
 
+For a key formula, an equation box sets the equation large with its
+terms defined in a smaller list underneath (two pairs per row on wide
+screens, stacked on phones). Write a blockquote holding a display
+equation and a kramdown definition list, then `{: .equation}`:
+
+```
+> $$
+> \hat{a}_a = \gamma\, y_a + (1 - \gamma)\, m_a
+> $$
+>
+> $$\gamma$$
+> : the weight on the node's own search vs the advantage model
+>
+> $$y_a$$
+> : the search label for action $$a$$
+{: .equation}
+```
+
+- Each term is a line of its own, followed by a line starting with `: `
+  for its definition, with a blank `>` line between pairs.
+- Keep definitions out of the `$$` block itself: math never wraps, so
+  text inside an equation forces a horizontal scrollbar.
+- `data-title="..."` adds a small label, as with callouts.
+
 # Quotes and Callouts
 
 Pull quotes and callouts are Markdown blockquotes with a class added on

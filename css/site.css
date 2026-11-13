@@ -407,6 +407,84 @@ article {
   color: var(--ink-soft);
 }
 
+/* Equation box: a key formula set large, with its terms defined
+   underneath in a smaller two-column list. Markdown: a blockquote holding
+   a $$ display equation and a kramdown definition list, then
+   `{: .equation}` (optionally with data-title like a callout). */
+.article-body blockquote.equation {
+  margin: 2rem 0;
+  padding: 1.25rem 1.5rem 1.4rem;
+  border: 1px solid #e9e6e1;
+  background: #fdfcfb;
+  color: var(--ink);
+}
+.article-body blockquote.equation[data-title]::before {
+  content: attr(data-title);
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: var(--font-bold);
+  font-size: 0.8em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.article-body blockquote.equation .katex-display {
+  margin: 0.5rem 0 0;
+  font-size: 1.05em;
+}
+.article-body blockquote.equation dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.45rem 0.9rem;
+  align-items: baseline;
+  margin: 1.1rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid #ece9e4;
+  font-size: 0.85em;
+  line-height: 1.5;
+}
+.article-body blockquote.equation dt {
+  text-align: right;
+  white-space: nowrap;
+}
+.article-body blockquote.equation dd {
+  margin: 0;
+  color: var(--ink-soft);
+}
+.article-body blockquote.equation dd > p {
+  margin: 0;
+}
+/* Two term/definition pairs per row on wider screens */
+@media (min-width: 1024px) {
+  .article-body blockquote.equation dl {
+    grid-template-columns: auto 1fr auto 1fr;
+    column-gap: 0.9rem;
+  }
+  .article-body blockquote.equation dt:nth-of-type(even) {
+    padding-left: 1rem;
+  }
+  .article-body blockquote.equation .katex-display {
+    font-size: 1.2em;
+  }
+}
+/* Phones: stack each term above its definition */
+@media (max-width: 599px) {
+  .article-body blockquote.equation {
+    padding: 1rem 1rem 1.1rem;
+  }
+  .article-body blockquote.equation dl {
+    grid-template-columns: 1fr;
+    row-gap: 0.1rem;
+  }
+  .article-body blockquote.equation dt {
+    text-align: left;
+  }
+  .article-body blockquote.equation dd {
+    margin-bottom: 0.5rem;
+    padding-left: 1rem;
+  }
+}
+
 /* Asides / disclaimers in posts: add `{: .note}` on the line after a
    paragraph in Markdown to set it smaller and muted, with a left rule */
 .article-body .note {
