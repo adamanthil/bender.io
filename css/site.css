@@ -432,6 +432,20 @@ article {
   margin: 0.5rem 0 0;
   font-size: 1.05em;
 }
+/* A heading written as the box's first line becomes its title, styled
+   like a callout label (it stays a real heading, so it keeps its TOC
+   entry and anchor link) */
+.article-body blockquote.equation > :is(h4, h5, h6):first-child {
+  margin: 0 0 0.6rem;
+  font-size: 0.8em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+/* .long: a wide formula set ~10% smaller so it fits on one line */
+.article-body blockquote.equation.long .katex-display {
+  font-size: 0.95em;
+}
 .article-body blockquote.equation dl {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -465,6 +479,9 @@ article {
   }
   .article-body blockquote.equation .katex-display {
     font-size: 1.2em;
+  }
+  .article-body blockquote.equation.long .katex-display {
+    font-size: 1.08em;
   }
 }
 /* Phones: stack each term above its definition */

@@ -183,10 +183,10 @@ The clearest example is the called suit lead convention. On the first trick, lea
 
 Pooling advantages across many similar decisions fixes this and produces a much cleaner signal. When averaged across ~1,100 first trick defender leads, the advantage of leading called suit carries a standard error of only 0.0006 Q (0.0072 game points) against the ~0.3 Q signal— much clearer! To use classic statistical terminology, this is "borrowing strength" from related data to improve our accuracy and precision. But pooling in itself is not a complete solution. This particular example case uses a hand-defined pool of decisions where the agent is a defender and holds the called suit on the first trick. The numbers look different on other tricks and play states. And I did not want to hand-define classes for pooling, but instead build a general method that would use the data itself to define the pools. This was done by building an advantage model (which is itself a neural network) that learns to predict the search committee's advantage value for each node. In addition to this pooled model, we also want to lean on the direct search measurement at each node for cases where it is reliable and more informative than the pooled estimate.
 
-> Borrowed-Strength Search Distillation (BSSD) pools over similar situations, as the network itself sees them, and lets each node's own search override the pooled estimate in proportion to the precision of the search measurement. Decision nodes with confident searches learn primarily from the search labels themselves, and nodes with noisy searches or weak signals lean on the model.
+> Borrowed-Strength Search Distillation (BSSD) pools action advantages over similar situations, as the network itself sees them, and lets each node's own search override the pooled estimate in proportion to the precision of the search measurement. Decision nodes with confident searches learn primarily from the search labels themselves, and nodes with noisy searches or weak signals lean on the model.
 {: .callout data-title="The core idea"}
 
-BSSD uses the foundational Fay-Herriot method from survey statistics to blend the pooled advantage model with the direct search measurements at each node. This is a seminal technique for small area estimation that combines noisy but direct measurements with a clean but indirect, modeled estimate of the same value. In our case, each decision node is a "small area", with its direct measurements being the relative search Q values for each action. A pooled advantage model trained via supervised learning then provides the cleaner indirect estimate at each decision node. And the two are combined via the following formula:
+BSSD uses the foundational [Fay-Herriot method](https://en.wikipedia.org/wiki/Fay%E2%80%93Herriot_model) from survey statistics to blend the pooled advantage model with the direct search measurements at each node. This is a seminal technique for small area estimation that combines noisy but direct measurements with a clean but indirect, modeled estimate of the same value. In our case, each decision node is a "small area", with its direct measurements being the relative search Q values for each action. A pooled advantage model trained via supervised learning then provides the cleaner indirect estimate at each decision node. And the two are combined via the following formula:
 
 > $$
 > \hat{a}_a = \gamma\, y_a + (1 - \gamma)\, m_a
@@ -209,7 +209,7 @@ Here, $$\gamma$$ is the weight of the advantage estimate given to the average of
 
 The advantage model itself is trained from the encoder network's own frozen outputs using supervised learning to predict the "centered" advantage of every legal card. Advantage centering subtracts the average estimated advantage of all legal actions from each individual advantage estimate, so that we are predicting the _relative_ strength of each play instead of the absolute strength. That makes model training cleaner by focusing only on the relative value difference between cards and canceling much of the search noise.
 
-The advantage model is itself a neural network that mirrors the actor network exactly in inputs and network shape, taking the post-attention hand tokens and query readout as inputs and predicting the relative advantage of every legal card in reward units (Q) from the other search labels. In order to ensure this model prediction is statistically independent from the search results at any given decision node, the search labels are split into 5 folds, each using 4/5 of the data.
+The advantage model is itself a neural network that mirrors the actor network exactly in inputs and network shape, taking the post-attention hand tokens and query readout as inputs and predicting the relative advantage of every legal card in reward units (Q) from the other search labels. In order to ensure this model prediction is statistically independent from the search results at any given decision node, the search labels are split into 5 folds, each using 4/5 of the data. This results in 5 separate advantage models. At any given node the model that was not trained on that node's search values is used for the pooled estimate.
 
 The value for the blend between the direct search measurements and the advantage model ($$\gamma$$) is set using the variance of the search committee values and the error estimate of the model at that node via the following formula:
 
@@ -217,16 +217,22 @@ $$
 \gamma = \frac{\sigma_u^2}{\sigma_u^2 + s^2}
 $$
 
-Here $$\sigma_u^2$$ is the model error variance and $$s^2$$ is the search noise variance. This allows a confident search result to get more weight relative to a noisy model and vice versa. In the case of the called suit convention, the model was highly confident at those nodes and the search results were noisier. The value for $$\gamma$$ ended up around 0.3 for most of those nodes in the first ExIt iteration, meaning the pooled model got 70% of the weight.
+Here $$\sigma_u^2$$ is the model error variance and $$s^2$$ is the search noise variance. This allows a confident search result to get more weight relative to a noisy model and vice versa. In the case of the called suit convention, the model was highly confident at those nodes and the search results were noisier. The value for $$\gamma$$ ended up around 0.3 for most of those nodes in the first ExIt iteration, meaning the pooled model got 70% of the weight. Exactly what we hoped for! For late trick decision on the other hand, especially for the picker, $$\gamma$$ is over 0.9. There is not much determinization noise left and search has a clear answer for what the right play is at those nodes.
 
-##### The whole step in one line
-
+> ##### The whole step in one line
+>
 > $$
-> t(a) \;\propto\; p_{\theta_k}(a)\,\exp\!\Big(\operatorname{clip}\Big(\tfrac{\gamma\, y_a \;+\; (1-\gamma)\, m_a}{\eta},\;\pm 8\Big)\Big)
+> t(a) \;\propto\; p_{\theta_k}(a)\,\exp\!\Big(\operatorname{clip}\Big(\dfrac{\overbrace{\gamma\, y_a \;+\; (1-\gamma)\, m_a}^{\hat a\text{: the blended advantage}}}{\eta},\;\pm 8\Big)\Big)
 > $$
+>
+> $$t(a)$$
+> : the training target. The network's own policy, shifted toward cards with positive blended advantage.
 >
 > $$p_{\theta_k}(a)$$
 > : the frozen network's own probability for card $$a$$ at this decision.
+>
+> $$\gamma$$
+> : how much to trust this node's search over the model, from the two error variances.
 >
 > $$y_a$$
 > : this node's search value for $$a$$, centered over the legal cards.
@@ -234,14 +240,16 @@ Here $$\sigma_u^2$$ is the model error variance and $$s^2$$ is the search noise 
 > $$m_a$$
 > : the advantage model's estimate, pooled across similar decisions and fit without this game.
 >
-> $$\gamma$$
-> : how much to trust this node's search over the model, from the two error variances.
 >
 > $$\eta = 0.0097$$
-> : one temperature for every row, in reward units (about 0.12 game points per nat).
-{: .equation}
+> : one temperature for every row, in reward units.
+{: .equation .long}
 
-The network is then trained with cross-entropy toward $$t$$ on every searched play row. The unsearched decision nodes (all pick/partner/bury decisions, plus play for leasters) are pinned to the values the network already produces with 10x weight in the loss.
+The blended advantage $$\hat a$$ that pulls the trained network toward better play behavior is divided by a constant [tilt temperature](https://en.wikipedia.org/wiki/Softmax_function) ($$\eta$$) that was configured to calibrate the dose to a value that worked in practice. The contribution of each decision is clipped at a separate constant of 8 [nats](https://en.wikipedia.org/wiki/Nat_%28unit%29)—units of natural-log probability to ensure no sample pulls the distribution too far in one direction. The clip binds at an advantage of approximately 1 Sheepshead game point. This is similar conceptually to the PPO clip discussed in the [bootstrap phase](#bootstrap-phase), and helps keep learning stable.
+
+The network is then trained with cross-entropy toward $$t$$ on every searched play row. The unsearched decision nodes (all pick/partner/bury decisions, plus play for leasters) are pinned to the values the network already produces with 10x weight so they stay fixed through each iteration.
+
+Borrowed-Strength Search Distillation improves the model significantly on all of the Sheepshead play conventions while simultaneously boosting overall skill measurably. It is an especially useful technique on a limited compute budget, where running many searches is too slow or costly. But it also improves on raw search labels by efficiently reducing noise via pooling and setting the tilt only as far as the blended evidence supports in each case. It is also self-tuning. Trust is set automatically, node by node, based on the noise and quality of the model's prediction. And it scales cleanly with additional compute. As search noise shrinks, for example with more independent searches per decision, $$\gamma \to 1$$ and BSSD reduces exactly to plain search distillation. I think it would be a valuable technique in other domains as well.
 
 #### Next Steps
 
