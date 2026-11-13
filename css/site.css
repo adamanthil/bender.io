@@ -317,6 +317,89 @@ article {
   margin: 0.4em 0 0;
 }
 
+/* Quotes and callouts (usage in README). All are Markdown blockquotes
+   (`> ...`) with a class on the line right after the quote:
+   `{: .pullquote}`, `{: .pullquote .right}`, `{: .callout}`, or
+   `{: .callout data-title="Key idea"}` for a labeled callout. */
+.article-body blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1.1rem;
+  border-left: 3px solid #ddd;
+  color: var(--ink-soft);
+}
+.article-body blockquote > :first-child {
+  margin-top: 0;
+}
+.article-body blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* Pull quote: a key line from the text, repeated large to break up long
+   stretches of prose */
+.article-body blockquote.pullquote {
+  margin: 2.5rem 0;
+  padding: 1.6rem 0 1.5rem;
+  border-left: 0;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  position: relative;
+  font-family: var(--font-light);
+  font-size: 1.4em;
+  line-height: 1.35;
+  color: var(--heading);
+  text-wrap: balance;
+}
+.article-body blockquote.pullquote::before {
+  /* short dark accent on the top rule, echoing the share cards */
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 3.5rem;
+  height: 3px;
+  background: #2b2b2b;
+}
+
+/* `{: .pullquote .right}` floats the quote so the following paragraph
+   wraps around it. Only on wide screens; narrower ones get the full-width
+   pull quote, since the wrapped column gets too narrow. */
+@media (min-width: 1024px) {
+  .article-body blockquote.pullquote.right {
+    float: right;
+    width: 40%;
+    margin: 0.5rem 0 1.25rem 2rem;
+    padding: 1.1rem 0 1.1rem;
+    font-size: 1.2em;
+    line-height: 1.35;
+  }
+  /* keep later blocks from sliding under or beside a float */
+  .article-body :is(h2, h3, h4, h5, h6) {
+    clear: both;
+  }
+  .article-body :is(blockquote.callout, pre, .katex-display) {
+    display: flow-root;
+  }
+}
+
+/* Callout: a tinted card for a takeaway, definition, or aside */
+.article-body blockquote.callout {
+  margin: 2rem 0;
+  padding: 1.15rem 1.4rem;
+  border-left: 3px solid #2b2b2b;
+  background: #f7f6f3;
+  color: var(--ink);
+}
+.article-body blockquote.callout[data-title]::before {
+  content: attr(data-title);
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-bold);
+  font-size: 0.8em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
 /* Asides / disclaimers in posts: add `{: .note}` on the line after a
    paragraph in Markdown to set it smaller and muted, with a left rule */
 .article-body .note {
