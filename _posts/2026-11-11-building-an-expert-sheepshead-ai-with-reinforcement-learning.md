@@ -8,7 +8,19 @@ Since long before the current AI craze I've been fascinated by reinforcement lea
 
 I thought it would be a fun experiment to use reinforcement learning to teach a neural network how to play [Sheepshead](https://www.sheepsheadrules.com), a complex and subtle trick-taking card game popular in Wisconsin but virtually unknown elsewhere. I've been captivated by Sheepshead ever since learning and playing it at my high school lunch table and have always wished more people knew about it. For me, its complexity and dynamic nature keep it compelling hand after hand when compared to most other card games.
 
-Sheepshead is a 5 handed trick-taking game played using a standard deck with all cards below 7s removed, leaving a deck of 32 cards. Trump consists of all Queens, Jacks, and Diamonds. And each card has a point value between 0 and 11. Each player is dealt a 6 card hand with 2 cards dealt to the blind. At the start of the game, players go around the table deciding if their hand is strong enough to pick up the blind and play 2v3 against the other players with a secret partner. Play then proceeds by following suit with standard trick-taking mechanics. The partner is only revealed when a particular card is played (either the Jack of Diamonds or one of the non-trump Aces, depending which game mode is being played). The team that ends the hand with the majority of the points in the deck (more than 60) wins the hand and is assigned a score based on how many points they took. Sheepshead is zero-sum, so the scores added to one team are subtracted from the other, which makes it a great game to play for small sums of money if you're so inclined.
+> Sheepshead is a 5 handed trick-taking game played using a standard deck with all cards below 7s removed, leaving a deck of 32 cards.
+>
+> - **Trump:** all Queens, Jacks, and Diamonds.
+> - **Points:** each card has a point value between 0 and 11.
+> - **The deal:** each player is dealt a 6 card hand with 2 cards dealt to the blind.
+> - **Picking:** players go around the table deciding if their hand is strong enough to pick up the blind and play 2v3 against the other players with a secret partner.
+> - **Play:** following suit with standard trick-taking mechanics.
+> - **The partner:** only revealed when a particular card is played (either the Jack of Diamonds or one of the non-trump Aces, depending which game mode is being played).
+> - **Winning:** the team that ends the hand with the majority of the points in the deck (more than 60) wins the hand and is assigned a score based on how many points they took.
+>
+> Sheepshead is zero-sum, so the scores added to one team are subtracted from the other, which makes it a great game to play for small sums of money if you're so inclined.
+{: .callout data-title="Sheepshead Rules"}
+
 
 A few properties of Sheepshead make it an interesting and challenging testbed: It is an imperfect information game that requires both competition and collaboration across unfixed, asymmetric teams. This means the agent has to learn to work with some players against other players all while operating in an uncertain and highly random environment where the player roles are revealed during the game itself.
 
@@ -17,6 +29,9 @@ None of the famous results in game AI that I'm familiar with have all of these p
 On top of the domain complexity, one additional challenge in my case is that I have access to _significantly_ less compute than the research groups tackling these earlier problems. The entire training pipeline has to run on my 5 year old M1 Max Macbook Pro.
 
 My goal was to train an expert AI agent that is able to play Sheepshead at or above the skill of the best humans with access only to information that humans have at any given point in the game. I didn't want to give the agent any advantage that a human does not have, forcing the neural network to make strategic moves only from the current state of play and its own memory of the game history, just like a human. And my goal was to train this system entirely from self play samples without providing any external examples of good human play behavior, forcing the network to uncover good strategic play on its own.
+
+> The entire training pipeline has to run on my 5 year old M1 Max Macbook Pro.
+{: .pullquote}
 
 After a long journey of discovery, trial, and error I'm pleased to reveal the trained neural network agent. It is available to play against directly and with others online at [Sheepshead.ai](https://sheepshead.ai). Please check it out! I believe it to be the strongest Sheepshead AI available anywhere and should rival expert human play. However, it's difficult to gauge its exact strength against humans without significant human play data. So one of the main goals of the sheepshead.ai site is to gather this data.
 
@@ -41,7 +56,12 @@ On training pipeline, algorithm, and architecture I had only two real requiremen
 ---
 #### Training Pipeline
 
-The final training pipeline combines multiple techniques into four stages that each build on one another. The summary for machine learning practitioners and any large language models in the audience: It starts with self-play policy-gradient PPO using shaped rewards for 400k hands; then pre-trains an oracle critic with access to the full game state, and proceeds to multiple generations of terminal reward league-based PPO with centralized training, decentralized execution (CTDE); and finally refines play via expert iteration (ExIt), with information-set Monte Carlo tree search (ISMCTS) as the expert teacher.
+The final training pipeline combines multiple techniques into four stages that each build on one another. The summary for machine learning practitioners and any large language models in the audience:
+
+> It starts with self-play policy-gradient PPO using shaped rewards for 400k hands; then pre-trains an oracle critic with access to the full game state, and proceeds to multiple generations of terminal reward league-based PPO with centralized training, decentralized execution (CTDE); and finally refines play via expert iteration (ExIt), with information-set Monte Carlo tree search (ISMCTS) as the expert teacher.
+{: .callout data-title="The short version"}
+
+Don't worry if that all sounds like technobabble. The workings of this [Retro Encabulator](https://www.youtube.com/watch?v=RXJKdh1KZ0w) are fully explained in the sections that follow.
 
 --- insert training program flowchart ---
 
@@ -57,17 +77,23 @@ The final score of the game itself is used as the only reward for all stages pas
 
 The league phase (called prioritized fictitious self-play) allows the agent to learn unbiased from the terminal reward and generalize better play without fitting to idiosyncrasies of its own current behavior. This is a common pitfall of pure self play methods where the training agent controls all players. It is possible for an agent to overfit to its own peculiar play tendencies and forget how to handle more diverse strategies. In league play, it avoids this by playing a rotating set of strong copies of itself from the past. When generating play samples, the training agent always takes one seat at the table. Then for each of the 4 additional seats there is a 15% chance the training agent will also take it and an 85% chance that player will be drawn from past snapshots, with greater weight toward those snapshots that are most evenly matched with the "hero" being trained.
 
+> If the player loses, but by less than expected, it was probably a good move even though the reward may be negative.
+{: .pullquote}
+
 As discussed above, PPO and other policy-gradient methods work by iteratively following a gradient toward the actions likely to produce the highest reward. This gradient is extracted from a batch of samples and used by an optimization algorithm (such as [Adam](https://arxiv.org/abs/1412.6980)) to nudge the network weights so the updated agent produces actions slightly more likely to return a higher reward. This process is repeated many thousands of times and slowly the network learns and improves. But each sample generated by play is very noisy. In the case of a card game, the correct move might not yield a positive reward in any given case. It's quite likely that even the right move results in a loss much of the time either because the other agents have better cards, or subsequent bad play behavior results in a loss, etc. Most reinforcement learning algorithms have some method to reduce this variance in each training sample to extract a cleaner gradient for the optimizer to follow. One of the most popular methods is to train a separate "critic" network to predict the expected final reward at each game state. This is _how_ the bootstrap phase described above predicts what the reward will be. With some minor adjustments, this predicted value is then subtracted from the reward actually received. This results in a more accurate estimate of whether the move taken was better or worse than expected in that scenario. For example, conceptually if the player loses, but by less than expected, it was probably a good move even though the reward may be negative. PPO always uses a critic for this, but typically (and in the bootstrap phase) this critic only has access to the private state observation of the training agent. We call this the "limited critic." If we instead give a new critic access to all hidden information in the game (the "oracle critic"), it is able to remove more of this variance and hand the optimizer a cleaner learning signal for each model update. This "oracle" critic is not deployed and does not share hidden information with the network being trained. It only exists at training time to reduce the noisy training signal. This centralized critic with access to the full game state and all privileged information is the other key change in the league phase.[^3]
 
 The bulk of deep strategic learning happens in this oracle critic league phase, as well as roughly half of the training time. By the the time the phase completes, the agent is quite good at playing the game. But there is still more room for improvement.
-
---- Insert panel strength graph for final training run (could go after policy iteration, but it might be better before the complex ISMCTS visualization) ---
 
 ##### Policy Iteration Phase
 
 Many of the best game playing agents at the state of the art use some form of Monte Carlo tree search to achieve the highest possible level of skill. This was the core technique behind the Deepmind's [groundbreaking results in Go](https://www.nature.com/articles/nature16961), which achieved performance higher than the best humans. Conceptually, Monte-Carlo tree search (MCTS) means randomly trying actions at a given decision point and running the game state forward a number of steps for each one to see how it plays out. This set of actions and game states forms a tree that spreads out into the future. This tree can be searched to determine the best action at any state. This mirrors human strategic thinking in games fairly closely, so it's a sensible model to use.
 
-However, complexity hides in the details. In a multi-agent scenario, the tree branches with each decision of the player and each opponent. Additionally, in a hidden information game there is not one game state, but many thousands of hypothetical game states consistent with the information known by the player. This is called an [information set](https://en.wikipedia.org/wiki/Information_set_(game_theory)) and requires a more complex algorithm called Information Set Monte Carlo Tree Search ([ISMCTS](https://eprints.whiterose.ac.uk/id/eprint/75048/)). This algorithm uses a process dubbed determinization to randomly create many "worlds" with different assortments of hidden cards that are all consistent with what the player has observed so far. (For example, if a player is short a particular suit in the public history they can't be given any cards from that suit in the determinization). The algorithm then chooses one world and runs a full Monte-Carlo tree search on it, sampling from the neural network policy for all actions for the player and all opponents. Since the network is already quite good at playing Sheepshead, this produces actions that are reasonable responses to any given scenario. During the search process if the game concludes on a particular path, the actual reward (i.e. score / 12) for that path is recorded. For any leaves of the tree that don't reach the end of the game, the oracle critic's prediction of the reward is used. These values are all fed back up the tree and provide reward estimates for each action at the original decision point. This whole search process is then repeated many times by choosing a different "world" and running the search again. In our case, we do so between 256 and 1024 times per action. In the end, we have an estimate of the reward we expect to receive for choosing any of the actions at a given decision point. And this reward is generally more accurate than what the policy-gradient method of PPO can estimate, plus it is able to better assess branches that the trained policy would be unlikely follow. However, this estimate is still fairly noisy and depends on how the hidden cards were randomized. So the whole process is repeated a total of 3 times to form a small "committee" that can inform the best decision. And the reward for each action is averaged from the 3 committee values. When generating training examples, this _entire process_ has to be repeated for every single decision, which is very computationally expensive. With a fast enough machine (or compute cluster, realistically), this process can be run online during play. That is what was done for AlphaGo. But in my case, doing so was not remotely practical. I also wanted to train a single, unified network to produce actions, not simply use the network as one part of a complex game search algorithm.
+However, complexity hides in the details. In a multi-agent scenario, the tree branches with each decision of the player and each opponent. Additionally, in a hidden information game there is not one game state, but many thousands of hypothetical game states consistent with the information known by the player. This is called an [information set](https://en.wikipedia.org/wiki/Information_set_(game_theory)) and requires a more complex algorithm called Information Set Monte Carlo Tree Search ([ISMCTS](https://eprints.whiterose.ac.uk/id/eprint/75048/)). This algorithm uses a process dubbed determinization to randomly create many "worlds" with different assortments of hidden cards that are all consistent with what the player has observed so far. (For example, if a player is short a particular suit in the public history they can't be given any cards from that suit in the determinization).
+
+> In a hidden information game there is not one game state, but many thousands of hypothetical game states consistent with the information known by the player.
+{: .pullquote}
+
+The algorithm then chooses one world and runs a full Monte-Carlo tree search on it, sampling from the neural network policy for all actions for the player and all opponents. Since the network is already quite good at playing Sheepshead, this produces actions that are reasonable responses to any given scenario. During the search process if the game concludes on a particular path, the actual reward (i.e. score / 12) for that path is recorded. For any leaves of the tree that don't reach the end of the game, the oracle critic's prediction of the reward is used. These values are all fed back up the tree and provide reward estimates for each action at the original decision point. This whole search process is then repeated many times by choosing a different "world" and running the search again. In our case, we do so between 256 and 1024 times per action. In the end, we have an estimate of the reward we expect to receive for choosing any of the actions at a given decision point. And this reward is generally more accurate than what the policy-gradient method of PPO can estimate, plus it is able to better assess branches that the trained policy would be unlikely follow. However, this estimate is still fairly noisy and depends on how the hidden cards were randomized. So the whole process is repeated a total of 3 times to form a small "committee" that can inform the best decision. And the reward for each action is averaged from the 3 committee values. When generating training examples, this _entire process_ has to be repeated for every single decision, which is very computationally expensive. With a fast enough machine (or compute cluster, realistically), this process can be run online during play. That is what was done for AlphaGo. But in my case, doing so was not remotely practical. I also wanted to train a single, unified network to produce actions, not simply use the network as one part of a complex game search algorithm.
 
 --- Insert ISMCTS interactive walkthrough ---
 
@@ -95,14 +121,18 @@ A neural network "head" describes its final set of layers. Having multiple heads
 
 Adding additional output heads was also used as a teaching technique in the case of the Sheepshead AI agent to force the network to keep track of valuable game details that are useful in making strategic play decisions. For example, knowing exactly which trump have already been played and how many points each person has taken are key pieces of data that should inform strong strategic play in the late game. This is all public play information that requires mental bookkeeping, but I wanted to ensure that the network was doing this bookkeeping in a way that could be relied on when choosing which card to play. The solution was to add additional "auxiliary" heads to the critic branch of the network that predict deterministic values of high strategic importance. In particular, those values are:
 
-* _secret_partner_: Probability that the agent is secretly the partner, holding the partner card in their hand
-* _seen_trump_: For each of the 13 trump cards, a probability that the agent has already seen it either in their hand or on the table
-* _unseen_higher_: Probability that there is a trump still unaccounted for that is higher than any in the agent's hand. The inverse of "do I hold the high card?"
-* _points_vector_: Per-seat point predictions (0–120) in relative seat order.
+> * _secret_partner_: Probability that the agent is secretly the partner, holding the partner card in their hand
+> * _seen_trump_: For each of the 13 trump cards, a probability that the agent has already seen it either in their hand or on the table
+> * _unseen_higher_: Probability that there is a trump still unaccounted for that is higher than any in the agent's hand. The inverse of "do I hold the high card?"
+> * _points_vector_: Per-seat point predictions (0–120) in relative seat order.
+{: .callout data-title="Fully Resolvable Aux Heads"}
 
 In the case of the first 3 "probability" heads, ground truth is either 0% or 100% and is fully derivable from play history. They eventually converge to this binary around the end of the league phase.
 
 The _secret_partner_ head was the first of these auxiliary heads added relatively early in the program. Prior to this, when the agent was secretly the partner it was not reliably making partner-like play decisions. By Sheepshead convention, partners, even hidden ones, should lead trump and defenders should lead "fail" (non trump suits). The classic explanation for this behavior is that the picker should have more and higher trump in hand than any of the defenders, so leading trump bleeds the defenders out of their trump and allows the picker to take the trick. The converse is true about defenders. They should lead fail to avoid bleeding their own team out of the rare trump they have, instead allowing teammates to strategically trump in when they can. Later tree search validated these conventional behaviors are correct nearly 100% of the time. However, prior to adding the _secret_partner_ prediction head the agent's behavior was a muddy generalization between the two extremes. Secret partners would often lead fail and defenders would sometimes lead trump. Partner agents who were already publicly revealed (and thus had their role included in game context) would lead trump pretty reliably, but before they were revealed the correct behavior was inconsistent. After this head was added and trained, the behavior shifted almost immediately and the network started leading trump reliably as the secret partner. Adding the auxiliary prediction head forced the network backbone to carry inferred information on the role, which could then easily be used by the play head to select a more optimal card.
+
+> The network's job is just as complicated, but these auxiliary tasks make it easier to learn.
+{: .pullquote .right}
 
 After the success of using an auxiliary head to "teach" the network about the secret partner role, I added the other three deterministic prediction heads to encourage more advanced strategic play at later training phases. Conceptually, the auxiliary heads force the network to focus on certain aspects of the game that are easier to learn. This essentially breaks down the highly complex problem of "What card do I play?" into more manageable pieces that can then build on each other. I preferred this auxiliary head approach over the feature engineering style methods discussed earlier because it is a principled way to force the network to learn how to do a complex task. It is not doing part of the complex task in place of the network. The network's job is just as complicated, but these auxiliary tasks make it easier to learn. I thought it was analogous to a teacher telling the student what to focus on to become a better player. But the student (i.e. the neural network itself) still has to learn how to do everything itself just like a human would.
 
@@ -118,13 +148,17 @@ As a result, after the training pipeline was firmly established, I ran an [ablat
 
 My original plan was for training to end after the league phase reached a skill plateau. However, after training an early agent for 30 million league episodes I was still dissatisfied by its strength and performance. Overall it exhibited competent play behavior that was fairly strong, but there were a few conventional Sheepshead play strategies that it did not always use. And I also suspected that these inconsistent behaviors hinted at some deeper flaws that were harder to enumerate. The particular Sheepshead conventions I expected to see were:
 
-1. As a defender, trump should never be led unless there are no other options
-2. As a partner, trump should almost always be led
-3. In called ace partner mode, the suit of the called ace (i.e. the "called suit") should always be led on the first trick by defenders if given the opportunity
+> 1. As a defender, trump should never be led unless there are no other options
+> 2. As a partner, trump should almost always be led
+> 3. In called ace partner mode, the suit of the called ace (i.e. the "called suit") should always be led on the first trick by defenders if given the opportunity
+{: .callout data-title="Benchmark conventions"}
 
 One possibility of course was that these human conventions aren't actually optimal. No one has fully "solved" the game of Sheepshead. Perhaps the network learned a better strategy? In order to determine whether these conventions _should_ be followed, I built the ISMCTS tree search algorithm outlined earlier. That allowed me to use the very computationally intensive search process to determine more reliably if a particular behavior was actually optimal. For these initial tests I ran searches with 4096 iterations all the way to the terminal reward (to avoid any critic bias) and determined that all three of these conventions are indeed optimal in almost all cases (at least under self-play with the competent agent I had trained thus far). There are a few possible exceptions in some narrow corner cases, but the 30M episode agent referenced above played more sloppily and didn't follow the conventions where they were always correct.
 
 Beyond just a skilled agent, I wanted one that was fun to play against. And if the AI player defied ironclad human play conventions in a way that caused your team to lose that would be incredibly frustrating. Not reliably following convention #1 was the most egregious in this regard. Someone who is not the picker leading trump is a clear signal to the table that they are the partner. If they turn out to instead be a defender and have thrown off everyone's expectations, bled their team out of trump, and caused missed schmear opportunities, that does not make for a fun play experience. Thus I wanted the defender trump lead rate to be as close to 0% as possible. And if it deviated, it should be justified by the game results. Similarly, leading the called suit as a defender on the first trick is expected in human play. The picker and partner are both guaranteed to have that suit, so it is the best opportunity for the defending team to trump a suit and get points. It also reveals to the table who the hidden partner is, which is useful for coordinating defense. If a teammate does not lead the called suit when it could be trumped but waits until later when their teammates are out of trump, that is also quite frustrating.
+
+> Beyond just a skilled agent, I wanted one that was fun to play against.
+{: .pullquote .right}
 
 The agent referenced earlier that had trained for 30 million hands was produced by a self-play bootstrap phase followed by league training using its own limited critic. It did not use the oracle critic or search. It also trained under shaped rewards for the first 15 million hands, followed by 15 million additional hands with terminal-only rewards. Under this scheme, all of the formative training was done when there were hand written rewards specifically tailored to produce the conventions listed above. Only after dropping the shaped rewards was the agent able to learn unbiased play behavior from the final score. But by that time the probability distribution for each action had ossified and it was difficult for the network to unlearn any bias introduced by those hand-tuned rewards. Even so, this "30M" agent was still somewhat inconsistent in following the important play conventions.
 
@@ -149,23 +183,27 @@ The clearest example is the called suit lead convention. On the first trick, lea
 
 Pooling advantages across many similar decisions fixes this and produces a much cleaner signal. When averaged across ~1,100 first trick defender leads, the advantage of leading called suit carries a standard error of only 0.0006 Q (0.0072 game points) against the ~0.3 Q signal— much clearer! To use classic statistical terminology, this is "borrowing strength" from related data to improve our accuracy and precision. But pooling in itself is not a complete solution. This particular example case uses a hand-defined pool of decisions where the agent is a defender and holds the called suit on the first trick. The numbers look different on other tricks and play states. And I did not want to hand-define classes for pooling, but instead build a general method that would use the data itself to define the pools. This was done by building an advantage model (which is itself a neural network) that learns to predict the search committee's advantage value for each node. In addition to this pooled model, we also want to lean on the direct search measurement at each node for cases where it is reliable and more informative than the pooled estimate.
 
-Borrowed-Strength Search Distillation (BSSD) pools over similar situations, as the network itself sees them, and lets each node's own search override the pooled estimate in proportion to the precision of the search measurement. Decision nodes with confident searches learn primarily from the search labels themselves, and nodes with noisy searches or weak signals lean on the model.
+> Borrowed-Strength Search Distillation (BSSD) pools over similar situations, as the network itself sees them, and lets each node's own search override the pooled estimate in proportion to the precision of the search measurement. Decision nodes with confident searches learn primarily from the search labels themselves, and nodes with noisy searches or weak signals lean on the model.
+{: .callout data-title="The core idea"}
 
 BSSD uses the foundational Fay-Herriot method from survey statistics to blend the pooled advantage model with the direct search measurements at each node. This is a seminal technique for small area estimation that combines noisy but direct measurements with a clean but indirect, modeled estimate of the same value. In our case, each decision node is a "small area", with its direct measurements being the relative search Q values for each action. A pooled advantage model trained via supervised learning then provides the cleaner indirect estimate at each decision node. And the two are combined via the following formula:
 
-$$
-\hat{a}_a = \gamma\, y_a + (1 - \gamma)\, m_a​\\
-$$
-
-$$
-\\
-\begin{aligned}
-\hat{a}_a &: \text{blended advantage of action } a\\
-\gamma &= \text{the weight on the node's own search vs the advantage model} \\
-y_a &: \text{search label, the committee's mean Q for } a \text{ centered over the legal actions} \\
-m_a &: \text{model estimate of } a\text{'s centered advantage from } \theta_k\text{'s features}
-\end{aligned}
-$$
+> $$
+> \hat{a}_a = \gamma\, y_a + (1 - \gamma)\, m_a
+> $$
+>
+> $$\hat{a}_a$$
+> : blended advantage of action $$a$$
+>
+> $$\gamma$$
+> : the weight on the node's own search vs the advantage model
+>
+> $$y_a$$
+> : search label, the committee's mean Q for $$a$$ centered over the legal actions
+>
+> $$m_a$$
+> : model estimate of $$a$$'s centered advantage from $$\theta_k$$'s features
+{: .equation}
 
 Here, $$\gamma$$ is the weight of the advantage estimate given to the average of the direct search committee values. A value of 1.0 means search determines the entire advantage at a particular node, and a value of 0.0 means the model does.
 
@@ -179,19 +217,29 @@ $$
 \gamma = \frac{\sigma_u^2}{\sigma_u^2 + s^2}
 $$
 
-Here $$σ²_u$$ is the model error variance and $$s^2$$ is the search noise variance. This allows a confident search result to get more weight relative to a noisy model and vice versa. In the case of the called suit convention, the model was highly confident at those nodes and the search results were noisier. The value for $$\gamma$$ ended up around 0.3 for most of those nodes in the first ExIt iteration, meaning the pooled model got 70% of the weight.
+Here $$\sigma_u^2$$ is the model error variance and $$s^2$$ is the search noise variance. This allows a confident search result to get more weight relative to a noisy model and vice versa. In the case of the called suit convention, the model was highly confident at those nodes and the search results were noisier. The value for $$\gamma$$ ended up around 0.3 for most of those nodes in the first ExIt iteration, meaning the pooled model got 70% of the weight.
 
 ##### The whole step in one line
 
-$$
-t(a) \;\propto\; p_{\theta_k}(a)\,\exp\!\Big(\operatorname{clip}\Big(\tfrac{\gamma\, y_a \;+\; (1-\gamma)\, m_a}{\eta},\;\pm 8\Big)\Big)
-$$
-
-- $$p_{\theta_k}(a)$$: the frozen network's own probability for card $$a$$ at this decision.
-- $$y_a$$: this node's search value for $$a$$, centered over the legal cards.
-- $$m_a$$: the advantage model's estimate, pooled across similar decisions and fit without this game.
-- $$\gamma$$: how much to trust this node's search over the model, from the two error variances.
-- $$\eta = 0.0097$$: one temperature for every row, in reward units (about 0.12 game points per nat).
+> $$
+> t(a) \;\propto\; p_{\theta_k}(a)\,\exp\!\Big(\operatorname{clip}\Big(\tfrac{\gamma\, y_a \;+\; (1-\gamma)\, m_a}{\eta},\;\pm 8\Big)\Big)
+> $$
+>
+> $$p_{\theta_k}(a)$$
+> : the frozen network's own probability for card $$a$$ at this decision.
+>
+> $$y_a$$
+> : this node's search value for $$a$$, centered over the legal cards.
+>
+> $$m_a$$
+> : the advantage model's estimate, pooled across similar decisions and fit without this game.
+>
+> $$\gamma$$
+> : how much to trust this node's search over the model, from the two error variances.
+>
+> $$\eta = 0.0097$$
+> : one temperature for every row, in reward units (about 0.12 game points per nat).
+{: .equation}
 
 The network is then trained with cross-entropy toward $$t$$ on every searched play row. The unsearched decision nodes (all pick/partner/bury decisions, plus play for leasters) are pinned to the values the network already produces with 10x weight in the loss.
 
