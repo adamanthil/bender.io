@@ -1,0 +1,374 @@
+/* ==========================================================================
+   Figures in posts: charts, diagrams and embedded interactives.
+   Loaded only on posts that contain a figure (see _includes/header.html);
+   usage is in the README. Charts are drawn by assets/js/figures.js.
+   ========================================================================== */
+
+.article-body .fig {
+  /* Shared figure palette. The three phase colours are the ones the
+     training flowchart uses, so a colour means the same thing in every
+     figure of a post. */
+  --fig-ink: #555;
+  --fig-heading: #4a4a4a;
+  --fig-soft: #777;
+  --fig-muted: #8a8a85;
+  --fig-grid: #ececec;
+  --fig-axis: #d6d6d2;
+  --fig-surface: #fff;
+  --fig-boot: #a8651a;
+  --fig-league: #0f8f66;
+  --fig-search: #2f63b0;
+  --fig-ref: #5e5e5a;
+  --fig-context: #c4c4be;
+
+  clear: both;
+  margin: 2.5rem 0;
+  font-size: 0.9375rem; /* 15px: figure text is set smaller than body copy */
+  line-height: 1.5;
+  color: var(--fig-ink);
+}
+
+.article-body .fig figcaption {
+  margin-top: 0.9rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--fig-grid);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--fig-soft);
+  text-wrap: pretty;
+}
+.article-body .fig figcaption:empty {
+  display: none;
+}
+
+/* ---------- chart figures ---------- */
+
+.fig-panel + .fig-panel {
+  margin-top: 2rem;
+}
+.fig-title {
+  margin: 0 0 0.2rem;
+  font-family: var(--font-bold);
+  font-size: 1.125rem;
+  line-height: 1.3;
+  color: var(--fig-heading);
+}
+.fig-sub {
+  margin: 0 0 0.9rem;
+  max-width: 68ch;
+  color: var(--fig-soft);
+  text-wrap: pretty;
+}
+
+.fig-chart {
+  position: relative;
+  width: 100%;
+}
+.fig-chart svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+.fig-chart text {
+  font-family: var(--font-body);
+  font-variant-numeric: tabular-nums;
+}
+.fig-chart .tick {
+  fill: var(--fig-muted);
+  font-size: 12px;
+}
+.fig-chart .axis-label {
+  fill: var(--fig-muted);
+  font-size: 12px;
+}
+.fig-chart .phase-label {
+  font-family: var(--font-bold);
+  font-size: 13px;
+  fill: var(--fig-heading);
+}
+.fig-chart .row-label {
+  fill: var(--fig-ink);
+  font-size: 14px;
+}
+.fig-chart .row-label.strong {
+  fill: var(--fig-heading);
+  font-family: var(--font-bold);
+}
+.fig-chart .val {
+  fill: var(--fig-soft);
+  font-size: 13px;
+}
+.fig-chart .val.strong {
+  fill: var(--fig-heading);
+  font-family: var(--font-bold);
+}
+.fig-chart .end-label {
+  fill: var(--fig-soft);
+  font-size: 12px;
+}
+.fig-chart .end-label.on {
+  fill: var(--fig-heading);
+  font-family: var(--font-bold);
+}
+
+.fig-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1.25rem;
+  margin: 0 0 0.6rem;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+}
+.article-body .fig-legend {
+  margin: 0 0 0.6rem;
+  padding: 0;
+  list-style: none;
+}
+.article-body .fig-legend li + li {
+  margin-top: 0;
+}
+.fig-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.fig-legend .fig-note {
+  color: var(--fig-muted);
+}
+.fig-key {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--c);
+}
+.fig-key.ring {
+  background: var(--fig-surface);
+  border: 2px solid var(--c);
+}
+
+/* The ablation ladder: a legend that doubles as the list of rungs.
+   Rows highlight their line in the chart on hover, focus or tap. */
+.article-body .fig-ladder {
+  display: grid;
+  gap: 1px;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+}
+.article-body .fig-ladder li + li {
+  margin-top: 0;
+}
+.fig-ladder button {
+  display: grid;
+  grid-template-columns: 1.4rem 14px minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0 0.5rem;
+  width: 100%;
+  padding: 0.3rem 0.5rem;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.fig-ladder button:hover,
+.fig-ladder button[aria-pressed="true"] {
+  background: #f7f6f3;
+}
+.fig-ladder button:focus-visible {
+  outline: 2px solid #888;
+  outline-offset: 1px;
+}
+.fig-ladder .num {
+  color: var(--fig-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.fig-ladder .swatch {
+  align-self: center;
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--c);
+}
+.fig-ladder .name b {
+  font-family: var(--font-bold);
+  font-weight: normal;
+  color: var(--fig-heading);
+}
+.fig-ladder .name span {
+  color: var(--fig-muted);
+}
+.fig-ladder .end {
+  color: var(--fig-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+@media (max-width: 599px) {
+  .fig-ladder .name span {
+    display: none;
+  }
+}
+
+.fig-tip {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--fig-grid);
+  border-radius: 3px;
+  background: var(--fig-surface);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+  font-size: 13px;
+  line-height: 1.45;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  transition: opacity 80ms;
+}
+.fig-tip b {
+  font-family: var(--font-bold);
+  font-weight: normal;
+  color: var(--fig-heading);
+}
+.fig-tip .k {
+  color: var(--fig-soft);
+}
+.fig-tip .fig-key {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+}
+
+.fig-data {
+  margin-top: 0.6rem;
+  font-size: 0.8125rem;
+}
+.fig-data summary {
+  width: fit-content;
+  cursor: pointer;
+  color: var(--fig-soft);
+}
+.fig-data .scroll {
+  overflow-x: auto;
+}
+.fig-data table {
+  width: 100%;
+  margin-top: 0.5rem;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.fig-data th,
+.fig-data td {
+  padding: 0.35rem 0.6rem;
+  border-bottom: 1px solid var(--fig-grid);
+  text-align: right;
+  white-space: nowrap;
+}
+.fig-data th:first-child,
+.fig-data td:first-child {
+  text-align: left;
+}
+.fig-data th {
+  font-family: var(--font-bold);
+  font-weight: normal;
+  color: var(--fig-heading);
+}
+
+/* ---------- embedded interactive (iframe with a poster) ---------- */
+
+/* The stage runs to the edges of the article card; the caption stays in
+   the text column. */
+.fig-embed .fig-stage {
+  position: relative;
+  display: block;
+  margin: 0 calc(-1 * var(--card-pad-x));
+  aspect-ratio: 16 / 9;
+  background: #17181b;
+  overflow: hidden;
+}
+@media (max-width: 599px) {
+  .fig-embed .fig-stage {
+    aspect-ratio: 4 / 5;
+  }
+}
+.fig-embed .fig-stage img,
+.fig-embed .fig-stage iframe {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.fig-embed .fig-stage img {
+  object-fit: cover;
+}
+.fig-embed .fig-stage iframe {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.fig-embed .fig-stage.live iframe {
+  opacity: 1;
+}
+/* "Explore" pill over the poster; the embedded page draws its own once
+   it is running. */
+.fig-embed .fig-cta {
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  z-index: 1;
+  transform: translateX(-50%);
+  padding: 0.4rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(20, 21, 24, 0.72);
+  color: #f0f0f0;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  text-decoration: none;
+  pointer-events: none;
+}
+.fig-embed .fig-stage.live .fig-cta {
+  display: none;
+}
+
+/* Expanded: the frame covers the window. The article card is its own
+   stacking context, so it is lifted above the wordmark while open. */
+html.fig-open,
+html.fig-open body {
+  overflow: hidden;
+}
+html.fig-open .content .article {
+  z-index: 1000;
+}
+/* overflow: hidden does not clip a fixed descendant, so the stage keeps
+   its place in the page while its frame is expanded */
+.fig-embed .fig-stage.expanded iframe {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fig-embed .fig-stage iframe,
+  .fig-tip {
+    transition: none;
+  }
+}
+
+@media print {
+  .fig-data,
+  .fig-embed .fig-cta {
+    display: none;
+  }
+}

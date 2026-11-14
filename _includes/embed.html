@@ -1,0 +1,23 @@
+{%- comment -%}
+  An interactive page embedded in a post: a poster image that
+  assets/js/figures.js swaps for the live iframe as it nears the viewport.
+  Without JavaScript (and in feed readers) the poster links to the page.
+
+    {% include embed.html src="/assets/sheepshead/network.html#preview"
+       poster="/images/posts/sheepshead-network.jpg"
+       title="..." cta="Explore the network" caption="..." %}
+
+  The framed page can ask to cover the window by posting
+  {type: "sheepshead-viz:expand", expanded: true|false} to its parent.
+{%- endcomment -%}
+<figure class="fig fig-embed" data-fig="embed">
+<div class="fig-stage" data-src="{{ include.src | relative_url }}" data-title="{{ include.title | escape }}">
+<a href="{{ include.src | split: '#' | first | relative_url }}"><img src="{{ include.poster | relative_url }}" alt="{{ include.title | escape }}" loading="lazy" /></a>
+{%- if include.cta %}
+<span class="fig-cta">{{ include.cta }}</span>
+{%- endif %}
+</div>
+{%- if include.caption %}
+<figcaption>{{ include.caption }}</figcaption>
+{%- endif %}
+</figure>

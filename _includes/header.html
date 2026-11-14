@@ -83,6 +83,9 @@
     <link rel="stylesheet" href="{{ '/css/TransatTextWebfonts.css' | relative_url }}" />
     <link rel="stylesheet" href="{{ '/css/site.css' | relative_url }}" />
     <link rel="stylesheet" href="{{ '/css/imgpopup.css' | relative_url }}" />
+    {% if page.layout == 'post' and content contains '<figure class="fig' %}
+      <link rel="stylesheet" href="{{ '/css/figures.css' | relative_url }}" />
+    {% endif %}
     {% if page.content contains 'class="katex' %}
       <link rel="stylesheet" href="{{ '/assets/katex/katex.css' | relative_url }}" />
     {% endif %}
@@ -90,6 +93,9 @@
     <script src="{{ '/assets/js/lightbox.js' | relative_url }}" defer></script>
     {% if page.toc %}
       <script src="{{ '/assets/js/toc.js' | relative_url }}" defer></script>
+    {% endif %}
+    {% if page.layout == 'post' and content contains '<figure class="fig' %}
+      <script src="{{ '/assets/js/figures.js' | relative_url }}" defer></script>
     {% endif %}
     {% if page.content contains 'role="doc-noteref"' %}
       <script src="{{ '/assets/js/footnotes.js' | relative_url }}" defer></script>

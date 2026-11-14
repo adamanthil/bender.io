@@ -1,0 +1,35 @@
+{%- comment -%}
+  A chart figure drawn by assets/js/figures.js from a data file.
+
+    {% include chart.html data=site.data.sheepshead.strength caption="..." %}
+
+  `data` holds one or more panels (their title, subtitle and numbers) and
+  a table of the same numbers, which is rendered here so it is readable
+  without JavaScript and in feed readers. `caption` is optional and may
+  contain HTML. Keep this markup free of blank lines: it is pasted into
+  Markdown, where a blank line would end the HTML block.
+{%- endcomment -%}
+<figure class="fig" data-fig="chart">
+{%- for panel in include.data.panels %}
+<div class="fig-panel">
+<p class="fig-title">{{ panel.title }}</p>
+<p class="fig-sub">{{ panel.sub }}</p>
+<div class="fig-chart"></div>
+</div>
+{%- endfor %}
+<script type="application/json">{{ include.data | jsonify }}</script>
+<details class="fig-data">
+<summary>Show the data as a table</summary>
+<div class="scroll"><table>
+<thead><tr>{% for h in include.data.table.head %}<th>{{ h }}</th>{% endfor %}</tr></thead>
+<tbody>
+{%- for row in include.data.table.rows %}
+<tr>{% for cell in row %}<td>{{ cell }}</td>{% endfor %}</tr>
+{%- endfor %}
+</tbody>
+</table></div>
+</details>
+{%- if include.caption %}
+<figcaption>{{ include.caption }}</figcaption>
+{%- endif %}
+</figure>

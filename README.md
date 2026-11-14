@@ -119,3 +119,38 @@ The network usually escaped the always-pass trap eventually.[^watchdog]
   RSS readers and browsers without JavaScript.
 - Notes can hold links, emphasis, and math; several paragraphs work too
   (indent the continuation lines by four spaces).
+
+# Figures
+
+Charts and embedded interactives are Liquid includes that produce a
+`<figure class="fig">`. Their stylesheet (`css/figures.css`) and script
+(`assets/js/figures.js`) load only on posts that contain one. Put each
+include on a line of its own with a blank line before and after.
+
+**Charts** are drawn in the browser from a data file in `_data/`:
+
+```
+{% include chart.html data=site.data.sheepshead.strength caption="..." %}
+```
+
+- The data file holds the chart's title, subtitle, series names and
+  numbers, plus a table of the same numbers that is rendered into the page
+  (so it reads without JavaScript). Edit wording there; edit the caption
+  in the post.
+- A file has one or more `panels`, each with a `type`: `stages` (one
+  series through ordered stages, grouped into phases), `lines` (several
+  series over a shared x axis, with a list of rows that highlight them)
+  or `dots` (rates with intervals, one row per agent).
+- Colours come from the `--fig-*` variables in `css/figures.css`.
+
+**Embeds** show a poster image that is replaced by the live page in an
+iframe as it nears the viewport; without JavaScript the poster links to
+the page:
+
+```
+{% include embed.html src="/assets/sheepshead/network.html#preview"
+   poster="/images/posts/sheepshead-network.jpg" title="..." caption="..." %}
+```
+
+The framed page asks to cover the window, and to return, by posting
+`{type: "sheepshead-viz:expand", expanded: true|false}` to its parent.
