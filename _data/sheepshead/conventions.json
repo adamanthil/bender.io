@@ -1,0 +1,255 @@
+{
+ "agents": [
+  {
+   "key": "m30",
+   "name": "30M agent",
+   "note": "shaped rewards, limited critic",
+   "style": "ref"
+  },
+  {
+   "key": "t0",
+   "name": "After the league phase",
+   "note": "oracle critic, final score only",
+   "style": "league"
+  },
+  {
+   "key": "t6",
+   "name": "After policy iteration",
+   "note": "the final agent",
+   "style": "search"
+  }
+ ],
+ "panels": [
+  {
+   "type": "dots",
+   "title": "Convention 1: defenders don't lead trump",
+   "sub": "How often a defender with the opening lead plays trump on the first trick. Lower is better.",
+   "domain": [
+    0,
+    6
+   ],
+   "ticks": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "unit": "opening leads",
+   "legend": true,
+   "groups": [
+    {
+     "label": "Both partner modes",
+     "strong": true,
+     "rows": [
+      {
+       "agent": "m30",
+       "v": [
+        0.895,
+        0.837,
+        0.958,
+        832,
+        92915
+       ]
+      },
+      {
+       "agent": "t0",
+       "v": [
+        2.974,
+        2.869,
+        3.083,
+        2876,
+        96706
+       ]
+      },
+      {
+       "agent": "t6",
+       "v": [
+        0.762,
+        0.709,
+        0.819,
+        732,
+        96044
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Jack of diamonds",
+     "strong": false,
+     "rows": [
+      {
+       "agent": "m30",
+       "v": [
+        1.008,
+        0.92,
+        1.105,
+        453,
+        44936
+       ]
+      },
+      {
+       "agent": "t0",
+       "v": [
+        5.366,
+        5.165,
+        5.574,
+        2504,
+        46668
+       ]
+      },
+      {
+       "agent": "t6",
+       "v": [
+        1.216,
+        1.12,
+        1.318,
+        573,
+        47141
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Called ace",
+     "strong": false,
+     "rows": [
+      {
+       "agent": "m30",
+       "v": [
+        0.79,
+        0.715,
+        0.873,
+        379,
+        47979
+       ]
+      },
+      {
+       "agent": "t0",
+       "v": [
+        0.743,
+        0.672,
+        0.823,
+        372,
+        50038
+       ]
+      },
+      {
+       "agent": "t6",
+       "v": [
+        0.325,
+        0.278,
+        0.38,
+        159,
+        48903
+       ]
+      }
+     ]
+    }
+   ],
+   "aria": "Defender trump-lead rate on the first trick. Both partner modes: 30M agent 0.90%, after league 2.97%, after policy iteration 0.76%. Jack of diamonds: 1.01%, 5.37%, 1.22%. Called ace: 0.79%, 0.74%, 0.33%."
+  },
+  {
+   "type": "dots",
+   "title": "Convention 3: defenders lead the called suit",
+   "sub": "In called-ace games, how often a defender with the opening lead who holds the called suit leads it. Higher is better. The axis starts at 94%.",
+   "domain": [
+    94,
+    100
+   ],
+   "ticks": [
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100
+   ],
+   "unit": "opening leads",
+   "legend": false,
+   "groups": [
+    {
+     "label": null,
+     "rows": [
+      {
+       "agent": "m30",
+       "v": [
+        95.23,
+        94.98,
+        95.47,
+        28044,
+        29448
+       ],
+       "label": true
+      },
+      {
+       "agent": "t0",
+       "v": [
+        98.83,
+        98.69,
+        98.95,
+        26505,
+        26820
+       ],
+       "label": true
+      },
+      {
+       "agent": "t6",
+       "v": [
+        99.97,
+        99.94,
+        99.99,
+        27700,
+        27708
+       ],
+       "label": true
+      }
+     ]
+    }
+   ],
+   "aria": "Called-suit lead rate on the first trick: 30M agent 95.23%, after league 98.83%, after policy iteration 99.97%."
+  }
+ ],
+ "table": {
+  "head": [
+   "Convention",
+   "Partner mode",
+   "30M agent",
+   "After the league phase",
+   "After policy iteration"
+  ],
+  "rows": [
+   [
+    "1: defender leads trump",
+    "Both partner modes",
+    "0.90% (832 of 92,915)",
+    "2.97% (2,876 of 96,706)",
+    "0.76% (732 of 96,044)"
+   ],
+   [
+    "1: defender leads trump",
+    "Jack of diamonds",
+    "1.01% (453 of 44,936)",
+    "5.37% (2,504 of 46,668)",
+    "1.22% (573 of 47,141)"
+   ],
+   [
+    "1: defender leads trump",
+    "Called ace",
+    "0.79% (379 of 47,979)",
+    "0.74% (372 of 50,038)",
+    "0.33% (159 of 48,903)"
+   ],
+   [
+    "3: defender leads called suit",
+    "Called ace",
+    "95.23% (28,044 of 29,448)",
+    "98.83% (26,505 of 26,820)",
+    "99.97% (27,700 of 27,708)"
+   ]
+  ]
+ }
+}

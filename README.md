@@ -154,3 +154,9 @@ the page:
 
 The framed page asks to cover the window, and to return, by posting
 `{type: "sheepshead-viz:expand", expanded: true|false}` to its parent.
+
+**Sheepshead post.** `assets/sheepshead/network.html` is a copy of
+`visualizations/ppo_architecture_3d.html` from the sheepsheadai
+repository, and `_includes/sheepshead/training-program.html` is adapted
+from its `visualizations/training_program.html`. Change them there and
+copy them over; see that repository's `visualizations/README.md`.

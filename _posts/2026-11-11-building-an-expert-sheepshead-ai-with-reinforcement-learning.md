@@ -63,7 +63,7 @@ The final training pipeline combines multiple techniques into four stages that e
 
 Don't worry if that all sounds like technobabble. The workings of this [Retro Encabulator](https://www.youtube.com/watch?v=RXJKdh1KZ0w) are fully explained in the sections that follow.
 
---- insert training program flowchart ---
+{% include sheepshead/training-program.html caption="The training pipeline. Click a stage for its method, purpose and stopping rule, or a dotted term for a definition." %}
 
 ##### Bootstrap Phase
 
@@ -101,7 +101,7 @@ The solution to this was to [distill](https://en.wikipedia.org/wiki/Knowledge_di
 
 There's more to say about the specific search implementation, distillation method, and motivations included in the [Borrowed-Strength Search Distillation](#borrowed-strength-search-distillation) section below. It's the most complex and novel part of the program.
 
---- panel strength graph ---
+{% include chart.html data=site.data.sheepshead.strength caption="Each point is the agent at that stage of training, playing the same deals against the same fixed opponents. The scale only means something in relative terms: the gap between two points is how many more points per hand one agent wins than the other against this field." %}
 
 #### Network Architecture
 
@@ -113,7 +113,7 @@ For the neural network then, the observed state is the embedding vectors for eac
 
 These tokens are fed through a small [transformer](https://en.wikipedia.org/wiki/Transformer_(deep_learning)) to allow them to add learned context to each other through the attention mechanism. This learned context might be things like: In the current context the Jack of Spades in hand would take the trick, or this card is in the called suit, etc. The post-attention tokens are then read out via learned queries that feed a linear adapter and different network [heads](https://medium.com/@AILearningHub/neural-network-heads-16ce560c0b10) for each type of possible action and the limited critic.
 
--- Insert architecture visualization --
+{% include embed.html src="/assets/sheepshead/network.html#preview" poster="/images/posts/sheepshead-network.jpg" title="Interactive 3D walkthrough of the Sheepshead network" caption="One real decision passing through the final network. Click to open the full walkthrough, which steps through each part of the network and the oracle critic for five decisions from the same hand." %}
 
 ##### Auxiliary Heads
 
@@ -142,7 +142,7 @@ As more complexity was added to the network architecture in the form of embeddin
 
 As a result, after the training pipeline was firmly established, I ran an [ablation study](https://en.wikipedia.org/wiki/Ablation_(artificial_intelligence)) on increasingly complex architectures over the bootstrap phase to determine the relative impact of each addition to the final network. Each change was largely justified by this data even in the very early bootstrap phase of learning. And the most complex and expressive architectures theoretically unlock more headroom at the high skill levels by their construction.
 
--- graph of architecture ablation --
+{% include chart.html data=site.data.sheepshead.ablation caption="Hover or tap a row to highlight that architecture and show its three training seeds. The number on the right is its score at 400k hands." %}
 
 #### Learning Sheepshead Conventions
 
@@ -166,7 +166,7 @@ Adding the oracle critic to the league phase, while also switching to terminal r
 
 This is finally what motivated adding the ExIt phase and search distillation to the training pipeline. The best way to ensure the agent followed what search determined was the optimal convention was to learn directly from the search algorithm's outputs. It also gave a notable bump in overall skill.
 
--- convention following graphs showing 30M, theta0, and theta6 --
+{% include chart.html data=site.data.sheepshead.conventions caption="Measured over 100,000 hands per partner mode for each agent, on the same deals, with every seat playing its most likely action. Dots are rates and whiskers are 95% intervals." %}
 
 The convention adherence is significantly better after the ExIt phase than after league training alone. There are some deviations in convention #1, but they all follow clear patterns in corner cases where the search algorithm found the convention's value ambiguous or slightly worse than the alternative. And qualitatively, the agent fine tuned through search distillation feels like a strong, strategic opponent or partner.
 

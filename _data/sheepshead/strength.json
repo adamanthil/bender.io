@@ -1,0 +1,293 @@
+{
+ "panels": [
+  {
+   "type": "stages",
+   "title": "Skill through the training pipeline",
+   "sub": "Average score per hand against a fixed panel of earlier agents, on the same 3,996 deals at every stage. Higher is better; whiskers are 95% intervals.",
+   "ylabel": "score per hand",
+   "phases": [
+    {
+     "name": "Bootstrap",
+     "unit": "hands played",
+     "color": "boot",
+     "long": "Bootstrap, {} hands"
+    },
+    {
+     "name": "League",
+     "unit": "hands played",
+     "color": "league",
+     "long": "League, {} hands"
+    },
+    {
+     "name": "Policy iteration",
+     "unit": "iteration",
+     "color": "search",
+     "long": "Policy iteration {}"
+    }
+   ],
+   "points": [
+    {
+     "label": "150k",
+     "phase": 0,
+     "v": -0.5587,
+     "lo": -0.5918,
+     "hi": -0.5251
+    },
+    {
+     "label": "200k",
+     "phase": 0,
+     "v": -0.4649,
+     "lo": -0.4981,
+     "hi": -0.4315
+    },
+    {
+     "label": "250k",
+     "phase": 0,
+     "v": -0.4142,
+     "lo": -0.4478,
+     "hi": -0.381
+    },
+    {
+     "label": "300k",
+     "phase": 0,
+     "v": -0.3077,
+     "lo": -0.3396,
+     "hi": -0.2767
+    },
+    {
+     "label": "350k",
+     "phase": 0,
+     "v": -0.2541,
+     "lo": -0.2832,
+     "hi": -0.225
+    },
+    {
+     "label": "400k",
+     "phase": 0,
+     "v": -0.2329,
+     "lo": -0.2635,
+     "hi": -0.2033
+    },
+    {
+     "label": "1M",
+     "phase": 1,
+     "v": 0.041,
+     "lo": 0.0195,
+     "hi": 0.0625
+    },
+    {
+     "label": "2M",
+     "phase": 1,
+     "v": 0.0857,
+     "lo": 0.0645,
+     "hi": 0.1065
+    },
+    {
+     "label": "3M",
+     "phase": 1,
+     "v": 0.0767,
+     "lo": 0.0547,
+     "hi": 0.0987
+    },
+    {
+     "label": "4M",
+     "phase": 1,
+     "v": 0.0933,
+     "lo": 0.0719,
+     "hi": 0.1144
+    },
+    {
+     "label": "5M",
+     "phase": 1,
+     "v": 0.0925,
+     "lo": 0.0703,
+     "hi": 0.1149
+    },
+    {
+     "label": "6M",
+     "phase": 1,
+     "v": 0.1192,
+     "lo": 0.0972,
+     "hi": 0.1411
+    },
+    {
+     "label": "7M",
+     "phase": 1,
+     "v": 0.109,
+     "lo": 0.088,
+     "hi": 0.1302
+    },
+    {
+     "label": "8M",
+     "phase": 1,
+     "v": 0.116,
+     "lo": 0.0943,
+     "hi": 0.1382
+    },
+    {
+     "label": "1",
+     "phase": 2,
+     "v": 0.1567,
+     "lo": 0.1359,
+     "hi": 0.177
+    },
+    {
+     "label": "2",
+     "phase": 2,
+     "v": 0.1694,
+     "lo": 0.1491,
+     "hi": 0.1898
+    },
+    {
+     "label": "3",
+     "phase": 2,
+     "v": 0.1728,
+     "lo": 0.1526,
+     "hi": 0.193
+    },
+    {
+     "label": "4",
+     "phase": 2,
+     "v": 0.1767,
+     "lo": 0.1564,
+     "hi": 0.1973
+    },
+    {
+     "label": "5",
+     "phase": 2,
+     "v": 0.1766,
+     "lo": 0.1562,
+     "hi": 0.1965
+    },
+    {
+     "label": "6",
+     "phase": 2,
+     "v": 0.1712,
+     "lo": 0.1512,
+     "hi": 0.1912
+    }
+   ],
+   "ref": {
+    "label": "30M agent",
+    "v": 0.0778,
+    "lo": 0.0575,
+    "hi": 0.0978
+   },
+   "aria": "Line chart of agent skill by training stage. Bootstrap rises from −0.56 to −0.23, the league phase from +0.04 to +0.12, and policy iteration from +0.16 to +0.17. The earlier 30M agent scores +0.08."
+  }
+ ],
+ "table": {
+  "head": [
+   "Stage",
+   "Score per hand",
+   "95% interval"
+  ],
+  "rows": [
+   [
+    "Bootstrap, 150k hands",
+    "−0.559",
+    "−0.592 to −0.525"
+   ],
+   [
+    "Bootstrap, 200k hands",
+    "−0.465",
+    "−0.498 to −0.431"
+   ],
+   [
+    "Bootstrap, 250k hands",
+    "−0.414",
+    "−0.448 to −0.381"
+   ],
+   [
+    "Bootstrap, 300k hands",
+    "−0.308",
+    "−0.340 to −0.277"
+   ],
+   [
+    "Bootstrap, 350k hands",
+    "−0.254",
+    "−0.283 to −0.225"
+   ],
+   [
+    "Bootstrap, 400k hands",
+    "−0.233",
+    "−0.264 to −0.203"
+   ],
+   [
+    "League, 1M hands",
+    "+0.041",
+    "+0.019 to +0.062"
+   ],
+   [
+    "League, 2M hands",
+    "+0.086",
+    "+0.065 to +0.106"
+   ],
+   [
+    "League, 3M hands",
+    "+0.077",
+    "+0.055 to +0.099"
+   ],
+   [
+    "League, 4M hands",
+    "+0.093",
+    "+0.072 to +0.114"
+   ],
+   [
+    "League, 5M hands",
+    "+0.092",
+    "+0.070 to +0.115"
+   ],
+   [
+    "League, 6M hands",
+    "+0.119",
+    "+0.097 to +0.141"
+   ],
+   [
+    "League, 7M hands",
+    "+0.109",
+    "+0.088 to +0.130"
+   ],
+   [
+    "League, 8M hands",
+    "+0.116",
+    "+0.094 to +0.138"
+   ],
+   [
+    "Policy iteration 1",
+    "+0.157",
+    "+0.136 to +0.177"
+   ],
+   [
+    "Policy iteration 2",
+    "+0.169",
+    "+0.149 to +0.190"
+   ],
+   [
+    "Policy iteration 3",
+    "+0.173",
+    "+0.153 to +0.193"
+   ],
+   [
+    "Policy iteration 4",
+    "+0.177",
+    "+0.156 to +0.197"
+   ],
+   [
+    "Policy iteration 5",
+    "+0.177",
+    "+0.156 to +0.197"
+   ],
+   [
+    "Policy iteration 6",
+    "+0.171",
+    "+0.151 to +0.191"
+   ],
+   [
+    "30M agent (reference)",
+    "+0.078",
+    "+0.058 to +0.098"
+   ]
+  ]
+ }
+}

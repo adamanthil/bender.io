@@ -1,0 +1,233 @@
+{%- comment -%}
+  The Sheepshead training pipeline flowchart. Copied from
+  visualizations/training_program.html in the sheepsheadai repository
+  (style, markup and script are all scoped under .tp), with the blog's
+  fonts and shared figure colours swapped in. Keep it free of blank lines.
+
+    {% include sheepshead/training-program.html caption="..." %}
+{%- endcomment -%}
+<figure class="fig fig-flow">
+<style>
+  /* Everything is scoped under .tp so the figure can be pasted inline into a
+     post. Light only: it sits on the white article card. */
+  .tp {
+    --panel: #fff; --panel-2: #f4f4f2; --line: #e4e4e0; --line-2: #b9b9b3;
+    --ink: #555; --heading: #4a4a4a; --muted: #8a8a85; --link: #6f6f6f;
+    --p0: #a8651a; --p1: #6b4fb0; --p2: #0f8f66; --p3: #2f63b0; --p4: #a83d62;
+    --p0-soft: #f8eddf; --p1-soft: #efe9f8; --p2-soft: #e2f2eb; --p3-soft: #e5edf8; --p4-soft: #f7e5ec;
+    --gate: #a08238; --gate-soft: #f8f1dc; --stop: #b0443c;
+    --shadow: 0 1px 2px rgba(0,0,0,.05), 0 6px 18px rgba(0,0,0,.06);
+    --sans: var(--font-body);
+    --bold: var(--font-bold);
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --lane: 48px;  /* right-hand gutter the loop-back arrows run in */
+    container-type: inline-size;
+    max-width: 680px; margin: 0 auto; color: var(--ink);
+    font-family: var(--sans); font-size: 16px; line-height: 1.45; color-scheme: light;
+    -webkit-font-smoothing: antialiased; font-synthesis: none;
+  }
+  .tp *, .tp *::before, .tp *::after { box-sizing: border-box; min-width: 0; }
+  .tp p, .tp h3, .tp ul { margin: 0; }
+  .tp a { color: var(--link); text-decoration: underline; text-underline-offset: 2px; }
+  .tp a:hover { color: #444; }
+  /* ---------- flow ---------- */
+  .tp .flow { display: flex; flex-direction: column; align-items: center; padding: 0 var(--lane); }
+  .tp .term { font-family: var(--mono); font-size: 14px; padding: 6px 16px; border-radius: 999px; background: var(--panel-2); border: 1px solid var(--line-2); color: var(--ink); }
+  .tp .term.end { background: var(--p4-soft); border-color: var(--p4); color: var(--heading); font-weight: 600; }
+  /* Straight arrow: the shaft stops at the head's base and the head's tip
+     lands exactly on the next shape's edge, never inside it. */
+  .tp .arrow { --c: var(--line-2); position: relative; width: 14px; height: 34px; flex: none; }
+  .tp .arrow::before { content: ""; position: absolute; left: 6px; top: 0; bottom: 8px; width: 2px; background: var(--c); }
+  .tp .arrow::after { content: ""; position: absolute; left: 0; bottom: 0; border: 7px solid transparent; border-top: 8px solid var(--c); border-bottom: 0; }
+  .tp .arrow .al { position: absolute; left: 20px; top: 50%; transform: translateY(-60%); font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .tp .al b, .tp .gate .side b { color: var(--heading); font-weight: 600; }
+  .tp .stage { --c: var(--p0); --soft: var(--p0-soft); width: 100%; position: relative; }
+  .tp .stage[data-p="1"] { --c: var(--p1); --soft: var(--p1-soft); }
+  .tp .stage[data-p="2"] { --c: var(--p2); --soft: var(--p2-soft); }
+  .tp .stage[data-p="3"] { --c: var(--p3); --soft: var(--p3-soft); }
+  .tp .node {
+    width: 100%; display: grid; grid-template-columns: 76px 1fr; gap: 0 14px; align-items: center;
+    background: var(--panel); border: 1.5px solid var(--c); border-radius: 12px; box-shadow: var(--shadow);
+    padding: 16px 34px 16px 12px; cursor: pointer; text-align: left; color: inherit; font: inherit; position: relative;
+    transition: box-shadow .12s;
+  }
+  .tp .node:hover { box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 22px rgba(0,0,0,.09); }
+  .tp .node:focus-visible { outline: 2px solid var(--c); outline-offset: 3px; }
+  .tp .icon { width: 76px; height: 58px; color: var(--c); }
+  .tp .icon svg { width: 100%; height: 100%; overflow: visible; }
+  .tp .k { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 10px; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: var(--c); font-weight: 700; }
+  /* method shorthand for practitioners: muted so a lay reader skips past it */
+  .tp .k .ml { color: var(--muted); font-weight: 500; letter-spacing: .02em; }
+  .tp abbr { text-decoration: none; cursor: help; }
+  /* The three stages that update the player's own network wear a pi badge
+     in the empty left lane; the supporting stages sit a little quieter. */
+  .tp .pm { position: absolute; right: calc(100% + 10px); top: 50%; width: 27px; height: 18px; transform: translateY(-50%); color: var(--c); }
+  .tp .stage.aux .node { border-width: 1px; box-shadow: none; }
+  .tp .stage.aux .node:hover { box-shadow: var(--shadow); }
+  .tp .key { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 13px; color: var(--muted); }
+  .tp .key svg { width: 24px; height: 16px; flex: none; color: var(--heading); }
+  .tp .key b { color: var(--heading); font-weight: 600; }
+  .tp .node h3 { font-family: var(--bold); font-weight: 600; font-size: 19px; line-height: 1.25; color: var(--heading); margin-top: 1px; }
+  .tp .one { font-size: 15px; margin-top: 3px; }
+  /* two-part pill: a constant "learns from" key, then the stage's signal */
+  .tp .tag { position: absolute; top: -11px; right: 14px; display: flex; font-size: 11.5px; line-height: 17px; font-weight: 700; border: 1px solid var(--c); border-radius: 999px; overflow: hidden; white-space: nowrap; }
+  .tp .tag i { font-style: normal; font-weight: 600; background: var(--panel); color: var(--muted); padding: 1px 7px 1px 9px; border-right: 1px solid var(--c); }
+  .tp .tag b { background: var(--soft); color: var(--c); padding: 1px 9px 1px 8px; text-transform: uppercase; letter-spacing: .07em; }
+  /* expand control: bars are centred geometrically, not by font metrics */
+  .tp .more { position: absolute; right: 10px; bottom: 10px; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--c); }
+  .tp .more::before, .tp .more::after { content: ""; position: absolute; left: 50%; top: 50%; width: 8px; height: 1.5px; background: var(--c); transform: translate(-50%, -50%); }
+  .tp .more::after { transform: translate(-50%, -50%) rotate(90deg); }
+  .tp .stage.open .more { background: var(--c); }
+  .tp .stage.open .more::before { background: var(--panel); }
+  .tp .stage.open .more::after { display: none; }
+  .tp .detail { display: none; margin-top: 8px; padding: 11px 14px; border-left: 3px solid var(--c); background: var(--soft); border-radius: 0 8px 8px 0; font-size: 14.5px; }
+  .tp .stage.open .detail { display: block; }
+  .tp .detail ul { padding-left: 16px; display: grid; gap: 5px; }
+  .tp .detail b { font-family: var(--bold); font-weight: 600; color: var(--heading); }
+  .tp .ref { font-size: 13px; white-space: nowrap; }
+  /* ---------- decision diamond ---------- */
+  .tp .gate { position: relative; width: 100%; height: 84px; display: grid; place-items: center; }
+  .tp .dia { position: relative; width: 200px; height: 84px; }
+  .tp .dia svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .tp .dia span { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; font-size: 13.5px; font-weight: 600; color: var(--heading); line-height: 1.2; padding: 0 34px; }
+  .tp .gate .side { position: absolute; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .tp .gate .side.l { right: calc(50% + 108px); }
+  .tp .gate .side.stop b { color: var(--stop); }
+  /* ---------- loop-back ---------- */
+  /* .back sits wholly in the lane to the right of the card: it leaves the
+     diamond's right vertex, runs up the lane and turns back left, its
+     arrowhead tip stopping on the card's border. */
+  .tp .loop { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .tp .back { position: absolute; left: calc(100% + 3px); width: calc(var(--lane) - 16px); top: 29px; bottom: 41px; border: 2px solid var(--c); border-left: 0; border-radius: 0 12px 12px 0; pointer-events: none; }
+  .tp .back::before { content: ""; position: absolute; left: -3px; top: -8px; border: 7px solid transparent; border-right: 9px solid var(--c); border-left: 0; }
+  .tp .loop .gate::after { content: ""; position: absolute; left: calc(50% + 98px); right: -3px; top: 50%; height: 2px; margin-top: -1px; background: var(--c); }
+  .tp .loop .gate .side.r { left: calc(50% + 108px); transform: translateY(-135%); }
+  /* an upper gate in a two-gate loop joins the lane's vertical run instead */
+  .tp .loop .gate.join::after { right: calc(13px - var(--lane)); }
+  /* clickable terms */
+  .tp .t { position: relative; text-decoration: underline dotted; text-decoration-color: var(--c); text-underline-offset: 3px; cursor: help; }
+  .tp .pop { display: none; position: absolute; left: 0; top: calc(100% + 6px); z-index: 20; width: max-content; max-width: min(300px, 70cqi); padding: 8px 11px; border-radius: 6px; background: #3d3d3d; color: #fff; font-size: 13.5px; line-height: 1.4; font-weight: 400; box-shadow: var(--shadow); text-align: left; white-space: normal; }
+  .tp .t.on .pop { display: block; }
+  @container (max-width: 520px) {
+    .tp .flow { --lane: 28px; }
+    .tp .node { grid-template-columns: 1fr; padding-left: 14px; }
+    .tp .icon { display: none; }
+    .tp .pm { right: calc(100% + 4px); width: 21px; height: 14px; }
+    .tp .gate .side.l, .tp .gate .side.r i { display: none; }
+  }
+</style>
+<div class="tp" id="tp">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="tp-pi" viewBox="0 0 60 40"><rect x="1" y="1" width="58" height="38" rx="11" fill="currentColor"/><text x="30" y="27" text-anchor="middle" font-size="20" font-family="Georgia, serif" font-style="italic" fill="#fff">π</text></symbol>
+  <symbol id="tp-pi-ghost" viewBox="0 0 60 40"><rect x="1" y="1" width="58" height="38" rx="11" fill="currentColor" opacity=".4"/><text x="30" y="27" text-anchor="middle" font-size="20" font-family="Georgia, serif" font-style="italic" fill="#fff">π</text></symbol>
+  <symbol id="tp-oracle" viewBox="0 0 48 34"><rect x="1" y="1" width="46" height="32" rx="8" fill="#f4f4f2" stroke="currentColor" stroke-width="1.8"/><text x="18" y="24" text-anchor="middle" font-size="18" font-family="Georgia, serif" font-style="italic" fill="currentColor">V</text><g transform="translate(30 10)"><path d="M0 6 Q7 -2 14 6 Q7 14 0 6 Z" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="7" cy="6" r="2.4" fill="currentColor"/></g></symbol>
+  <symbol id="tp-tree" viewBox="0 0 80 64"><g stroke="currentColor" stroke-width="1.8" fill="none"><path d="M40 8 L20 30 M40 8 L60 30 M20 30 L8 54 M20 30 L30 54 M60 30 L50 54 M60 30 L72 54"/></g><g fill="currentColor"><circle cx="40" cy="8" r="6"/><circle cx="20" cy="30" r="5"/><circle cx="60" cy="30" r="5"/><circle cx="8" cy="54" r="4"/><circle cx="30" cy="54" r="4"/><circle cx="50" cy="54" r="4"/><circle cx="72" cy="54" r="4"/></g></symbol>
+  <symbol id="tp-diamond" viewBox="0 0 200 84"><path d="M100 1 L199 42 L100 83 L1 42 Z" fill="#f8f1dc" stroke="#a08238" stroke-width="1.5"/></symbol>
+</defs></svg>
+<div class="flow">
+<p class="key"><svg aria-hidden="true"><use href="#tp-pi"/></svg><span><b>π</b> marks the three stages that train the player itself (its <i>policy</i>)</span></p>
+<div class="term">random network</div>
+<div class="arrow"></div>
+<!-- 0 -->
+<div class="stage" data-p="0">
+  <button class="node" type="button" aria-expanded="false" aria-controls="tp-d0">
+    <span class="tag"><i>learns from</i><b>shaped reward</b></span>
+    <svg class="pm" aria-hidden="true"><use href="#tp-pi"/></svg>
+    <span class="icon"><svg viewBox="0 0 100 76"><circle cx="50" cy="40" r="22" fill="#f4f4f2" stroke="#b9b9b3" stroke-width="1.4"/><use href="#tp-pi" x="36" y="2" width="28" height="19"/><use href="#tp-pi" x="70" y="24" width="28" height="19"/><use href="#tp-pi" x="58" y="56" width="28" height="19"/><use href="#tp-pi" x="14" y="56" width="28" height="19"/><use href="#tp-pi" x="2" y="24" width="28" height="19"/></svg></span>
+    <span><span class="k">0 · BOOTSTRAP<span class="ml"><abbr title="Proximal Policy Optimization">PPO</abbr> · self-play</span></span><h3>Learn to play at all</h3><p class="one">One network plays all five seats against itself, rewarded for tricks it wins and nudged by <span class="t" tabindex="0">rough strategy hints<span class="pop">Small bonuses and penalties from common table wisdom: pick with strong hands, bury fail rather than trump, defenders lead fail or the called suit, partners lead trump. Together with per-trick points they give a random network frequent feedback to learn from. All of it is dropped after this stage.</span></span>.</p></span>
+    <span class="more" aria-hidden="true"></span>
+  </button>
+  <div class="detail" id="tp-d0"><ul>
+    <li><b>Method.</b> Policy-gradient self-play (PPO). <a class="ref" href="https://arxiv.org/abs/1707.06347" target="_blank" rel="noopener">Schulman et al., 2017</a></li>
+    <li><b>Why.</b> Escape the early trap where never picking up the blind looks safest.</li>
+    <li><b>Ends when.</b> A fixed 400k hands, then a check that it is really playing.</li>
+  </ul></div>
+</div>
+<div class="gate"><div class="dia"><svg aria-hidden="true"><use href="#tp-diamond"/></svg><span>plays real hands?</span></div><span class="side l stop"><b>no</b> · halt for review</span></div>
+<div class="arrow"><span class="al"><b>yes</b></span></div>
+<!-- 1 -->
+<div class="stage aux" data-p="1">
+  <button class="node" type="button" aria-expanded="false" aria-controls="tp-d1">
+    <span class="tag"><i>learns from</i><b>final score</b></span>
+    <span class="icon"><svg viewBox="0 0 100 76"><g stroke="#b9b9b3" fill="#fff"><rect x="8" y="30" width="18" height="26" rx="3" transform="rotate(-14 17 43)"/><rect x="20" y="24" width="18" height="26" rx="3"/></g><g fill="currentColor"><circle cx="29" cy="31" r="2.2"/><circle cx="16" cy="38" r="2.2"/></g><use href="#tp-oracle" x="46" y="22" width="52" height="36"/></svg></span>
+    <span><span class="k">1 · PRETRAIN ORACLE CRITIC<span class="ml">asymmetric critic · V(s)</span></span><h3>Learn to judge positions</h3><p class="one">A second network that <span class="t" tabindex="0">sees every hand<span class="pop">Training only. It sees all hands, the blind and the bury. It is discarded afterwards; the player never sees hidden cards.</span></span> learns to predict each hand's final score.</p></span>
+    <span class="more" aria-hidden="true"></span>
+  </button>
+  <div class="detail" id="tp-d1"><ul>
+    <li><b>Method.</b> Supervised regression of a state-value function V(s) for an asymmetric critic. <a class="ref" href="https://arxiv.org/abs/1710.06542" target="_blank" rel="noopener">Pinto et al., 2017</a></li>
+    <li><b>Why.</b> Its prediction is subtracted from the real score, filtering the luck of the deal out of the learning signal.</li>
+    <li><b>Ends when.</b> Its accuracy on held-out hands stops improving.</li>
+  </ul></div>
+</div>
+<div class="arrow"></div>
+<!-- 2 (loop) -->
+<div class="loop" style="--c:var(--p2)">
+  <div class="back" aria-hidden="true"></div>
+  <div class="stage" data-p="2">
+    <button class="node" type="button" aria-expanded="false" aria-controls="tp-d2">
+      <span class="tag"><i>learns from</i><b>final score</b></span>
+      <svg class="pm" aria-hidden="true"><use href="#tp-pi"/></svg>
+      <span class="icon"><svg viewBox="0 0 100 76"><use href="#tp-pi" x="2" y="22" width="40" height="27"/><text x="52" y="41" font-size="12" fill="#8a8a85" text-anchor="middle">vs</text><use href="#tp-pi-ghost" x="70" y="6" width="30" height="20"/><use href="#tp-pi-ghost" x="66" y="28" width="30" height="20"/><use href="#tp-pi-ghost" x="62" y="50" width="30" height="20"/></svg></span>
+      <span><span class="k">2 · LEAGUE<span class="ml"><abbr title="Proximal Policy Optimization">PPO</abbr> · <abbr title="centralized training, decentralized execution">CTDE</abbr> · <abbr title="prioritized fictitious self-play">PFSP</abbr></span></span><h3>Get strong against past selves</h3><p class="one">The player trains against earlier snapshots of itself on the <span class="t" tabindex="0">final score alone<span class="pop">No per-trick points and no strategy hints. Any table convention that survives is one that actually wins points.</span></span>, measured against the <span class="t" tabindex="0">all-seeing critic<span class="pop">Centralized training, decentralized execution: the critic from stage 1 sees every card while learning, but the player it grades only ever sees its own.</span></span> from stage 1.</p></span>
+      <span class="more" aria-hidden="true"></span>
+    </button>
+    <div class="detail" id="tp-d2"><ul>
+      <li><b>Method.</b> PPO with centralized training, decentralized execution (CTDE), against past snapshots weighted toward the ones it loses to (prioritized fictitious self-play, PFSP). <a class="ref" href="https://arxiv.org/abs/1706.02275" target="_blank" rel="noopener">Lowe et al., 2017</a>; <a class="ref" href="https://doi.org/10.1038/s41586-019-1724-z" target="_blank" rel="noopener">Vinyals et al., 2019</a></li>
+      <li><b>Why.</b> Varied opponents keep it from overfitting to its own habits. And the oracle critic helps extract more learning signal from each noisy hand.</li>
+      <li><b>Ends when.</b> A generation (1M hands) beats the last by less than search would add for the same compute. Additionally, the network must also have nearly perfect recall of which trump has been played and how many points each person has taken.</li>
+    </ul></div>
+  </div>
+  <div class="arrow"></div>
+  <div class="gate join"><div class="dia"><svg aria-hidden="true"><use href="#tp-diamond"/></svg><span>still gaining more than search would?</span></div><span class="side r"><b>yes</b><i> · next generation</i></span></div>
+  <div class="arrow"><span class="al"><b>no</b></span></div>
+  <div class="gate"><div class="dia"><svg aria-hidden="true"><use href="#tp-diamond"/></svg><span>recalls trump played &amp; points taken?</span></div><span class="side r"><b>no</b><i> · next generation</i></span></div>
+</div>
+<div class="arrow"><span class="al"><b>yes</b> · hand off</span></div>
+<!-- 3 (loop) -->
+<div class="loop" style="--c:var(--p3)">
+  <div class="back" aria-hidden="true"></div>
+  <div class="stage" data-p="3">
+    <button class="node" type="button" aria-expanded="false" aria-controls="tp-d3">
+      <span class="tag"><i>learns from</i><b>search</b></span>
+    <svg class="pm" aria-hidden="true"><use href="#tp-pi"/></svg>
+      <span class="icon"><svg viewBox="0 0 100 76"><use href="#tp-tree" x="2" y="4" width="60" height="48"/><path d="M60 60 H 70" stroke="currentColor" stroke-width="2"/><path d="M66 56 L72 60 L66 64" fill="none" stroke="currentColor" stroke-width="2"/><use href="#tp-pi" x="72" y="46" width="28" height="19"/></svg></span>
+      <span><span class="k">3 · POLICY ITERATION<span class="ml"><abbr title="Expert Iteration">ExIt</abbr> · <abbr title="information-set Monte Carlo tree search">ISMCTS</abbr></span></span><h3>Let search teach the network</h3><p class="one"><span class="t" tabindex="0">Look-ahead search<span class="pop">It deals out many guesses at the hidden cards and plays each line forward, trying moves the network would never have tried.</span></span> re-examines the network's card play, and the network learns to prefer what search preferred.</p></span>
+      <span class="more" aria-hidden="true"></span>
+    </button>
+    <div class="detail" id="tp-d3"><ul>
+      <li><b>Method.</b> Expert iteration (ExIt) with information-set Monte Carlo tree search (IS-MCTS). <a class="ref" href="https://arxiv.org/abs/1705.08439" target="_blank" rel="noopener">Anthony et al., 2017</a>; <a class="ref" href="https://doi.org/10.1109/TCIAIG.2012.2200894" target="_blank" rel="noopener">Cowling et al., 2012</a></li>
+      <li><b>Why.</b> Search finds small play advantages that trial and error cannot easily see by building the tree of future game states and simulating it under many hypothetical deals. This improved play behavior then serves as an expert teacher the neural network learns to imitate.</li>
+      <li><b>Ends when.</b> Two rounds in a row fail to gain clearly above noise.</li>
+    </ul></div>
+  </div>
+  <div class="arrow"></div>
+  <div class="gate"><div class="dia"><svg aria-hidden="true"><use href="#tp-diamond"/></svg><span>gain still above noise?</span></div><span class="side r"><b>yes</b><i> · next round</i></span></div>
+</div>
+<div class="arrow"><span class="al"><b>no</b> · done</span></div>
+<div class="term end">deployable agent</div>
+</div>
+</div>
+<script>
+  (function () {
+    var root = document.getElementById('tp');
+    // Stage click expands its detail; term click toggles its popover without expanding the stage.
+    root.querySelectorAll('.stage > .node').forEach(function (b) {
+      b.addEventListener('click', function (e) {
+        if (e.target.closest('.t')) return;
+        var open = b.parentElement.classList.toggle('open');
+        b.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    });
+    function closeTerms() { root.querySelectorAll('.t.on').forEach(function (o) { o.classList.remove('on'); }); }
+    root.querySelectorAll('.t').forEach(function (t) {
+      function toggle(e) { e.stopPropagation(); e.preventDefault(); var on = t.classList.contains('on'); closeTerms(); if (!on) t.classList.add('on'); }
+      t.addEventListener('click', toggle);
+      t.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') toggle(e); });
+    });
+    document.addEventListener('click', function (e) { if (!e.target.closest('#tp .t')) closeTerms(); });
+  })();
+</script>
+{%- if include.caption %}
+<figcaption>{{ include.caption }}</figcaption>
+{%- endif %}
+</figure>
