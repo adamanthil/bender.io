@@ -122,7 +122,7 @@ A neural network "head" describes its final set of layers. Having multiple heads
 Adding additional output heads was also used as a teaching technique in the case of the Sheepshead AI agent to force the network to keep track of valuable game details that are useful in making strategic play decisions. For example, knowing exactly which trump have already been played and how many points each person has taken are key pieces of data that should inform strong strategic play in the late game. This is all public play information that requires mental bookkeeping, but I wanted to ensure that the network was doing this bookkeeping in a way that could be relied on when choosing which card to play. The solution was to add additional "auxiliary" heads to the critic branch of the network that predict deterministic values of high strategic importance. In particular, those values are:
 
 > * _secret_partner_: Probability that the agent is secretly the partner, holding the partner card in their hand
-> * _seen_trump_: For each of the 13 trump cards, a probability that the agent has already seen it either in their hand or on the table
+> * _seen_trump_: For each of the 14 trump cards, a probability that the agent has already seen it either in their hand or on the table
 > * _unseen_higher_: Probability that there is a trump still unaccounted for that is higher than any in the agent's hand. The inverse of "do I hold the high card?"
 > * _points_vector_: Per-seat point predictions (0–120) in relative seat order.
 {: .callout data-title="Fully Resolvable Aux Heads"}
@@ -138,11 +138,15 @@ After the success of using an auxiliary head to "teach" the network about the se
 
 ##### Architecture Ablation
 
-As more complexity was added to the network architecture in the form of embeddings, auxiliary heads, the transformer layers, etc. the network was able to become a better player faster. However, the success of these architecture changes was conflated with the simultaneous evolution of the training algorithm itself and some persistent bugs in the PPO implementation.
+As more complexity was added to the network architecture in the form of embeddings, auxiliary heads, the transformer layers, etc., the network was able to become a better player faster. However, the success of these architecture changes was confounded with the simultaneous evolution of the training algorithm itself and some persistent bugs in the PPO implementation.
 
-As a result, after the training pipeline was firmly established, I ran an [ablation study](https://en.wikipedia.org/wiki/Ablation_(artificial_intelligence)) on increasingly complex architectures over the bootstrap phase to determine the relative impact of each addition to the final network. Each change was largely justified by this data even in the very early bootstrap phase of learning. And the most complex and expressive architectures theoretically unlock more headroom at the high skill levels by their construction.
+As a result, after the training pipeline was firmly established, I ran an [ablation study](https://en.wikipedia.org/wiki/Ablation_(artificial_intelligence)) on increasingly complex architectures over the bootstrap phase to determine the relative impact of each addition to the final network. It was gratifying to see that the final architecture performed as well as or better than every earlier version, and far better than the baseline in this analysis.
 
 {% include chart.html data=site.data.sheepshead.ablation caption="Hover or tap a row to highlight that architecture and show its three training seeds. The number on the right is its score at 400k hands." %}
+
+It is interesting that initially adding embedding tokens, without seeding them with card data, performed significantly worse than the simple one-hot MLP baseline. And it took informed initialization (adding card point and power data) and adding a transformer to reach the same ending skill level as the basic baseline through the bootstrap phase. On the other hand, adding the auxiliary heads yielded the single biggest boost in performance. And since each change is cumulative, it's quite possible that the performance boost of the auxiliary heads was enhanced by the richer structure of embedding tokens and the transformer. Determining that conclusively would require more ablation runs. Also noteworthy is the slope of each agent's skill level. The baseline MLP is gaining skill more slowly at the 400k episode mark compared with the embedding architectures over the last 100k hands.
+
+The most expressive architectures theoretically unlock more headroom at the high skill levels by their construction. But it is fascinating that the simple MLP baseline is hard to beat through the bootstrap phase without significant additional network complexity.
 
 #### Learning Sheepshead Conventions
 
@@ -168,7 +172,7 @@ This is finally what motivated adding the ExIt phase and search distillation to 
 
 {% include chart.html data=site.data.sheepshead.conventions caption="Measured over 100,000 hands per partner mode for each agent, on the same deals, with every seat playing its most likely action. Dots are rates and whiskers are 95% intervals." %}
 
-The convention adherence is significantly better after the ExIt phase than after league training alone. There are some deviations in convention #1, but they all follow clear patterns in corner cases where the search algorithm found the convention's value ambiguous or slightly worse than the alternative. And qualitatively, the agent fine tuned through search distillation feels like a strong, strategic opponent or partner.
+On the production pipeline, the convention adherence is significantly better after the ExIt phase than after league training alone. There are some deviations in convention #1, but they all follow clear patterns in corner cases where the search algorithm found the convention's value ambiguous or slightly worse than the alternative. And qualitatively, the agent fine-tuned through search distillation feels like a strong, strategic opponent or partner.
 
 #### Borrowed-Strength Search Distillation
 
