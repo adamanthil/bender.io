@@ -100,3 +100,22 @@ paragraph (not a quote):
 This section is heavier on math and terminology.
 {: .note}
 ```
+
+# Footnotes
+
+Use kramdown footnotes; names are only labels, and notes are numbered
+in the order they're referenced:
+
+```
+The network usually escaped the always-pass trap eventually.[^watchdog]
+
+[^watchdog]: The training script has an "entropy watchdog" for this.
+```
+
+- The reference renders as a true superscript numeral. Tapping it opens
+  the note inline, right below that line; tapping again closes it
+  (`assets/js/footnotes.js`, loaded only on posts with footnotes).
+- The numbered list at the end of the post stays as the fallback for
+  RSS readers and browsers without JavaScript.
+- Notes can hold links, emphasis, and math; several paragraphs work too
+  (indent the continuation lines by four spaces).

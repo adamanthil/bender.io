@@ -324,6 +324,69 @@ article {
   margin: 0.4em 0 0;
 }
 
+/* Footnotes. References use Transat Text's true superior figures (the
+   font's sups feature) rather than shrunken, raised digits; reset.css
+   flattens <sup>, so it is set here. assets/js/footnotes.js opens each
+   note inline below its line; the list at the end is the no-JS fallback. */
+.article-body sup {
+  font-feature-settings: "sups" 1;
+  vertical-align: baseline;
+  line-height: 1;
+}
+.article-body a.footnote {
+  position: relative;
+  display: inline-block;
+  margin-left: 0.05em;
+  padding: 0 0.15em;
+  border-radius: 3px;
+  text-decoration: none;
+  color: var(--heading);
+  font-weight: 700;
+  cursor: pointer;
+}
+/* Superior figures are tiny; give them a finger-sized hit area */
+.article-body a.footnote::after {
+  content: "";
+  position: absolute;
+  inset: -0.6em -0.5em -0.3em;
+}
+.article-body a.footnote:hover,
+.article-body a.footnote[aria-expanded="true"] {
+  background: #ebe8e3;
+  color: var(--ink);
+}
+.article-body .fn-inline {
+  display: block;
+  margin: 0.6rem 0 0.9rem;
+  padding: 0.7rem 1rem 0.75rem;
+  border-left: 3px solid #ddd;
+  background: #f7f6f3;
+  font-size: 0.85em;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.article-body .fn-inline[hidden] {
+  display: none;
+}
+.article-body .fn-inline-p {
+  display: block;
+}
+.article-body .fn-inline-p + .fn-inline-p {
+  margin-top: 0.6em;
+}
+.article-body .footnotes {
+  margin-top: 1.5rem;
+  font-size: 0.85em;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.article-body .footnotes p {
+  margin: 0;
+}
+.article-body a.reversefootnote {
+  text-decoration: none;
+}
+
 /* Quotes and callouts (usage in README). All are Markdown blockquotes
    (`> ...`) with a class on the line right after the quote:
    `{: .pullquote}`, `{: .pullquote .right}`, `{: .callout}`, or

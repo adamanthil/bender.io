@@ -48,6 +48,8 @@ kramdown:
   # $$...$$ math is rendered to HTML at build time (kramdown-math-katex);
   # the stylesheet is only loaded on pages that contain math.
   math_engine: katex
+  # U+FE0E keeps iOS from drawing the footnote back-link as an emoji
+  footnote_backlink: "&#8617;&#xfe0e;"
 
 # Files Jekyll should not copy into the build
 exclude:
