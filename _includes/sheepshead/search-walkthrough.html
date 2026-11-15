@@ -1,0 +1,199 @@
+{%- comment -%}
+  A step-through replay of one real ISMCTS committee search from the
+  Sheepshead training pipeline. The trace is assets/sheepshead/search-trace.json
+  (written by visualizations/dump_search_trace.py in the sheepsheadai
+  repository) and the behaviour is assets/sheepshead/search-walkthrough.js.
+  All of the wording lives in this file: the .sw-say blocks are the narration
+  for each step. Style is scoped under .sw. Keep it free of blank lines.
+
+    {% include sheepshead/search-walkthrough.html caption="..." %}
+{%- endcomment -%}
+<figure class="fig fig-walk">
+<style>
+  .sw {
+    --blue: var(--fig-search); --blue-soft: #e5edf8; --green: var(--fig-league); --green-soft: #e2f2eb;
+    --red: #b0443c; --line: #e4e4e0; --line-2: #b9b9b3; --panel-2: #f4f4f2;
+    container-type: inline-size; color: var(--fig-ink); font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums;
+  }
+  .sw *, .sw *::before, .sw *::after { box-sizing: border-box; min-width: 0; }
+  .sw :is(p, ol, ul) { margin: 0; }
+  .sw :is(ol, ul) { padding: 0; list-style: none; }
+  .sw .sw-steps li { margin: 0; }
+  .sw button { font: inherit; color: inherit; cursor: pointer; }
+  .sw b { font-family: var(--font-bold); font-weight: normal; color: var(--fig-heading); }
+  /* ---------- steps ---------- */
+  .sw-steps { display: flex; align-items: stretch; gap: 6px; margin: 0.9rem 0 0.8rem; }
+  .sw-steps button {
+    display: flex; align-items: center; gap: 7px; width: 100%; padding: 6px 10px 6px 6px;
+    background: #fff; border: 1px solid var(--line); border-radius: 999px; font-size: 13.5px; line-height: 1.2;
+    color: var(--fig-soft); text-align: left; white-space: nowrap; transition: border-color .12s, background .12s;
+  }
+  .sw-steps li { flex: 1 1 auto; }
+  .sw-steps button i {
+    flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--panel-2); font-style: normal; font-size: 12px; color: var(--fig-soft);
+  }
+  .sw-steps button:hover { border-color: var(--line-2); }
+  .sw-steps button[aria-current="step"] { border-color: var(--blue); background: var(--blue-soft); color: var(--fig-heading); }
+  .sw-steps button[aria-current="step"] i { background: var(--blue); color: #fff; }
+  .sw-steps button:focus-visible, .sw-btn:focus-visible, .sw-sims button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  @container (max-width: 620px) {
+    .sw-steps button span { display: none; }
+    .sw-steps button { justify-content: center; padding: 6px; }
+    .sw-steps button[aria-current="step"] span { display: inline; }
+    .sw-steps li { flex: 0 0 auto; }
+    .sw-steps li:has([aria-current="step"]) { flex: 1 1 auto; }
+  }
+  .sw-say { display: none; max-width: 68ch; min-height: 6.2em; text-wrap: pretty; }
+  .sw-say.on { display: block; }
+  .sw:not(.ready) p.sw-say { display: block; min-height: 0; margin-bottom: .6rem; }
+  .sw:not(.ready) .sw-steps, .sw:not(.ready) .sw-nav, .sw:not(.ready) .sw-stage { display: none; }
+  .sw.ready .sw-static { display: none; }
+  /* ---------- cards ---------- */
+  .sw-c {
+    display: inline-grid; place-items: center; width: 31px; height: 38px; flex: none;
+    background: #fff; border: 1px solid var(--line-2); border-radius: 5px;
+    font-family: var(--font-bold); font-size: 13.5px; line-height: 1; letter-spacing: -.02em; color: var(--fig-heading); white-space: nowrap;
+  }
+  .sw-c.red { color: var(--red); }
+  .sw-c.back { background: repeating-linear-gradient(45deg, #ededea 0 3px, #f7f7f5 3px 6px); border-color: var(--line); color: transparent; }
+  .sw-c.ace { border-color: var(--fig-boot); box-shadow: 0 0 0 1.5px var(--fig-boot); }
+  .sw-c.tree { border-color: var(--blue); box-shadow: 0 0 0 1.5px var(--blue); }
+  .sw-c.win { background: var(--panel-2); border-color: var(--fig-heading); }
+  .sw-c.todo { border-style: dashed; color: var(--fig-muted); background: none; }
+  .sw-c.none { border-color: transparent; background: none; }
+  .sw-c.flip { animation: sw-flip .35s both; animation-delay: calc(var(--d, 0) * 1ms); }
+  @keyframes sw-flip { from { transform: rotateY(90deg); opacity: .2; } to { transform: none; opacity: 1; } }
+  /* ---------- stage ---------- */
+  .sw-stage { margin-top: .5rem; }
+  .sw-deal { display: grid; gap: 14px 28px; align-items: start; }
+  .sw[data-step="3"] .sw-deal { grid-template-columns: auto auto; justify-content: start; }
+  @container (max-width: 620px) { .sw[data-step="3"] .sw-deal { grid-template-columns: 1fr; } }
+  .sw p.sw-h { margin-bottom: 6px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--fig-muted); }
+  .sw-seat { display: flex; align-items: center; gap: 3px; padding: 2px 0; }
+  .sw-seat .who { width: 96px; flex: none; font-size: 13.5px; line-height: 1.15; color: var(--fig-ink); }
+  .sw-seat .who small { display: block; font-size: 11.5px; color: var(--fig-muted); }
+  .sw-seat .gap { width: 10px; flex: none; }
+  .sw-dealbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 10px; font-size: 13.5px; color: var(--fig-soft); }
+  .sw-btn { flex: none; white-space: nowrap; padding: 5px 13px; background: #fff; border: 1px solid var(--line-2); border-radius: 999px; font-size: 13.5px; color: var(--fig-heading); }
+  .sw-btn:hover { background: var(--panel-2); }
+  .sw-btn[disabled] { opacity: .4; cursor: default; }
+  .sw-btn.go { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .sw-btn.go:hover { background: #2a579b; }
+  /* play-out */
+  .sw-sims { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-bottom: 10px; font-size: 13px; color: var(--fig-soft); }
+  .sw-sims button { padding: 2px 8px; background: #fff; border: 1px solid var(--line); border-radius: 999px; font-size: 12.5px; color: var(--fig-soft); }
+  .sw-sims button[aria-pressed="true"] { border-color: var(--blue); background: var(--blue-soft); color: var(--fig-heading); }
+  .sw-sims .dots { padding: 0 2px; color: var(--fig-muted); }
+  .sw-flow { position: relative; max-width: 300px; margin-left: 5px; padding-left: 17px; border-left: 2px solid var(--line-2); }
+  .sw-flow::after { content: ""; position: absolute; left: -7px; bottom: -8px; border: 6px solid transparent; border-top: 8px solid var(--line-2); border-bottom: 0; }
+  .sw-t { position: relative; padding-bottom: 11px; animation: sw-in .3s both; animation-delay: calc(var(--d, 0) * 1ms); }
+  .sw-t::before { content: ""; position: absolute; left: -22px; top: 4px; width: 8px; height: 8px; border: 2px solid var(--line-2); border-radius: 50%; background: #fff; }
+  .sw-th { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 12.5px; color: var(--fig-muted); }
+  .sw-th b { font-size: 13px; }
+  .sw-tc { display: flex; gap: 5px; margin-top: 4px; }
+  .sw-pc { display: grid; justify-items: center; gap: 2px; width: 40px; flex: none; }
+  .sw-pc small { font-size: 11px; line-height: 1.2; color: var(--fig-muted); white-space: nowrap; }
+  .sw-pc.me small { font-family: var(--font-bold); color: var(--blue); }
+  @keyframes sw-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+  .sw p.sw-out { margin-top: 14px; max-width: 322px; padding: 8px 11px; border-left: 3px solid var(--blue); background: var(--blue-soft); border-radius: 0 6px 6px 0; font-size: 13.5px; line-height: 1.4; animation: sw-in .3s both; animation-delay: calc(var(--d, 0) * 1ms); }
+  .sw-key { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 8px; font-size: 12px; color: var(--fig-muted); }
+  .sw-key span { display: inline-flex; align-items: center; gap: 5px; }
+  .sw-key i { display: inline-block; width: 11px; height: 13px; border: 1px solid var(--line-2); border-radius: 3px; }
+  .sw-key i.tree { border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue); }
+  .sw-key i.win { background: var(--panel-2); border-color: var(--fig-heading); }
+  .sw-key i.ace { border-color: var(--fig-boot); box-shadow: 0 0 0 1px var(--fig-boot); }
+  .sw-key i.rep { width: 9px; height: 9px; border: 1.5px solid var(--blue); border-radius: 50%; }
+  .sw-key i.mean { width: 9px; height: 9px; border: 0; border-radius: 50%; background: var(--blue); }
+  .sw-key i.avg { width: 0; height: 13px; border: 0; border-left: 1.5px dashed var(--fig-ref); border-radius: 0; }
+  /* tree */
+  .sw-tree svg { display: block; width: 100%; overflow: visible; }
+  .sw-tree text { font-family: var(--font-body); font-size: 11.5px; fill: var(--fig-muted); }
+  .sw-tree text.card { font-family: var(--font-bold); font-size: 12.5px; fill: var(--fig-heading); }
+  .sw-tree text.card.red { fill: var(--red); }
+  .sw-run { display: flex; align-items: center; gap: 12px; margin: 4px 0 10px; }
+  .sw-run input { flex: 1 1 auto; accent-color: var(--blue); }
+  .sw-run output { flex: none; width: 13.5ch; font-size: 13.5px; color: var(--fig-soft); text-align: right; }
+  /* scoreboard */
+  .sw-board { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--fig-grid); }
+  .sw-row { display: grid; grid-template-columns: 31px minmax(0, 1fr) minmax(0, 1fr) minmax(0, 2.1fr); gap: 0 18px; align-items: center; padding: 3px 0; }
+  .sw-row.head { align-items: end; padding-bottom: 5px; font-size: 12px; line-height: 1.25; color: var(--fig-muted); }
+  .sw-row.hit .sw-q b { color: var(--blue); }
+  .sw-row.hit .sw-c { border-color: var(--blue); box-shadow: 0 0 0 1.5px var(--blue); }
+  .sw-m { position: relative; display: flex; align-items: center; gap: 6px; height: 22px; }
+  .sw-m i { display: block; height: 10px; min-width: 1px; border-radius: 0 3px 3px 0; background: var(--green); transition: width .25s; }
+  .sw-m.n i { background: var(--blue); }
+  .sw-m span { font-size: 12.5px; color: var(--fig-soft); white-space: nowrap; }
+  .sw-q { display: grid; grid-template-columns: minmax(0, 1fr) 6.2ch; gap: 8px; align-items: center; }
+  .sw-q b { font-size: 13px; text-align: right; white-space: nowrap; }
+  .sw-track { position: relative; height: 22px; }
+  .sw-track::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px solid var(--fig-grid); }
+  .sw-track .zero, .sw-track .avg { position: absolute; top: -3px; bottom: -3px; width: 0; border-left: 1px solid var(--fig-axis); }
+  .sw-track .avg { border-left: 1.5px dashed var(--fig-ref); }
+  .sw-track .pt { position: absolute; top: 50%; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 2px #fff; transition: left .25s; }
+  .sw-track .pt.rep { width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; background: rgba(255,255,255,.55); border: 1.5px solid var(--blue); box-shadow: none; }
+  .sw.running .sw-track .pt, .sw.running .sw-m i { transition: none; }
+  .sw-axis { position: relative; height: 16px; font-size: 11.5px; color: var(--fig-muted); }
+  .sw-axis span { position: absolute; top: 2px; transform: translateX(-50%); white-space: nowrap; }
+  .sw-dim { opacity: .28; }
+  @container (max-width: 520px) {
+    .sw-row { grid-template-columns: 31px minmax(0, .6fr) minmax(0, .7fr) minmax(0, 2fr); gap: 0 10px; }
+    .sw-m span { font-size: 11.5px; }
+    .sw-run { flex-wrap: wrap; justify-content: space-between; }
+    .sw-run input { order: 3; flex-basis: 100%; }
+  }
+  .sw-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+  .sw-nav .where { font-size: 12.5px; color: var(--fig-muted); }
+  .sw [hidden] { display: none !important; }
+  .sw-static table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .sw-static th, .sw-static td { padding: 4px 8px 4px 0; border-bottom: 1px solid var(--fig-grid); text-align: left; }
+  @media (prefers-reduced-motion: reduce) { .sw-c.flip, .sw-t, .sw-out { animation: none; } .sw-m i, .sw-track .pt { transition: none; } }
+  @media print { .sw-steps, .sw-nav { display: none; } }
+</style>
+<div class="sw" data-src="{{ '/assets/sheepshead/search-trace.json' | relative_url }}">
+<p class="fig-title">How one search puts a value on every card</p>
+<p class="fig-sub">A real search from training, replayed. The agent is defending in seat 1 and has to lead the first trick.</p>
+<ol class="sw-steps">
+<li><button type="button" data-go="1"><i>1</i><span>The decision</span></button></li>
+<li><button type="button" data-go="2"><i>2</i><span>Imagine a deal</span></button></li>
+<li><button type="button" data-go="3"><i>3</i><span>Play it out</span></button></li>
+<li><button type="button" data-go="4"><i>4</i><span>Repeat</span></button></li>
+<li><button type="button" data-go="5"><i>5</i><span>Three opinions</span></button></li>
+</ol>
+<p class="sw-say" data-step="1">Seat 3 picked up the blind and called the ace of hearts, so whoever holds that ace is secretly their partner. The agent knows its own six cards. The other 26 are hidden. Before any search the network already has an instinct about what to lead, shown below. Here it leans toward a trump more often than toward the called suit.</p>
+<p class="sw-say" data-step="2">The search can't see the hidden cards, so it deals them out at random in a way that fits everything seen so far: seat 3 can't hold the called ace, and exactly one other seat must. It makes 1,024 of these deals. Deals where seat 3 would rarely have picked are then used rarely, or not at all.</p>
+<p class="sw-say" data-step="3">One simulation takes one imagined deal and plays it forward. The search chooses the agent's cards, and every other seat plays the way the network would with the cards it was dealt. If the hand reaches the end, the real score is recorded. If the search runs into a line of play it hasn't tried before, the oracle critic, which can see every card in the imagined deal, estimates the result instead. That one number is credited to the card that was led.</p>
+<p class="sw-say" data-step="4">Every simulation draws another deal and adds one more result to a card's running average. The effort isn't shared evenly. The search keeps coming back to cards that are scoring well or that the network favours, and looks further ahead along them, so the tree grows deepest where it matters most.</p>
+<p class="sw-say" data-step="5">The whole search is run three times, each with its own set of deals. The three answers don't agree, least of all on the cards that were tried the fewest times. They are averaged, and each card is then measured against the average of all six. That difference is the card's advantage, and it is what the network learns from.</p>
+<div class="sw-stage">
+<div class="sw-deal">
+<div class="sw-table"></div>
+<div class="sw-play" hidden></div>
+</div>
+<div class="sw-grow" hidden>
+<div class="sw-run"><button type="button" class="sw-btn go" data-run>Run the search</button><input type="range" min="1" max="1024" value="1" aria-label="Simulations completed" /><output></output></div>
+<div class="sw-tree"></div>
+</div>
+<div class="sw-board"></div>
+</div>
+<div class="sw-nav"><button type="button" class="sw-btn" data-prev>Back</button><span class="where"></span><button type="button" class="sw-btn go" data-next>Next</button></div>
+<div class="sw-static">
+<table>
+<thead><tr><th>Card led</th><th>Network's instinct</th><th>Simulations (avg. of 3 searches)</th><th>Average result</th><th>Advantage</th></tr></thead>
+<tbody>
+<tr><td>J♦</td><td>23%</td><td>117</td><td>−0.006</td><td>−0.028</td></tr>
+<tr><td>K♦</td><td>33%</td><td>188</td><td>+0.009</td><td>−0.014</td></tr>
+<tr><td>A♠</td><td>2%</td><td>50</td><td>+0.010</td><td>−0.012</td></tr>
+<tr><td>10♠</td><td>3%</td><td>64</td><td>−0.004</td><td>−0.027</td></tr>
+<tr><td>10♥</td><td>31%</td><td>449</td><td>+0.068</td><td>+0.046</td></tr>
+<tr><td>K♥</td><td>10%</td><td>155</td><td>+0.057</td><td>+0.035</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<script src="{{ '/assets/sheepshead/search-walkthrough.js' | relative_url }}" defer></script>
+{%- if include.caption %}
+<figcaption>{{ include.caption }}</figcaption>
+{%- endif %}
+</figure>

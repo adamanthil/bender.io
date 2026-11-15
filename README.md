@@ -164,3 +164,13 @@ The framed page asks to cover the window, and to return, by posting
 repository, and `_includes/sheepshead/training-program.html` is adapted
 from its `visualizations/training_program.html`. Change them there and
 copy them over; see that repository's `visualizations/README.md`.
+
+`_includes/sheepshead/search-walkthrough.html` is the step-through replay
+of one search. Its wording and style live in the include, its behaviour in
+`assets/sheepshead/search-walkthrough.js`, and its data in
+`assets/sheepshead/search-trace.json`, a copy of the file written by
+`visualizations/dump_search_trace.py` in the sheepsheadai repository.
+
+```liquid
+{% include sheepshead/search-walkthrough.html caption="..." %}
+```
