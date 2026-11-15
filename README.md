@@ -142,6 +142,8 @@ include on a line of its own with a blank line before and after.
   series over a shared x axis, with a list of rows that highlight them)
   or `dots` (rates with intervals, one row per agent).
 - Colours come from the `--fig-*` variables in `css/figures.css`.
+- Add `expand=true` for a button that opens the figure over the window
+  with its charts drawn larger (not shown on small screens).
 
 **Embeds** show a poster image that is replaced by the live page in an
 iframe as it nears the viewport; without JavaScript the poster links to

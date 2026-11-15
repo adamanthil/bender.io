@@ -101,7 +101,7 @@ The solution to this was to [distill](https://en.wikipedia.org/wiki/Knowledge_di
 
 There's more to say about the specific search implementation, distillation method, and motivations included in the [Borrowed-Strength Search Distillation](#borrowed-strength-search-distillation) section below. It's the most complex and novel part of the program.
 
-{% include chart.html data=site.data.sheepshead.strength caption="Each point is the agent at that stage of training, playing the same deals against the same fixed opponents. The scale only means something in relative terms: the gap between two points is how many more points per hand one agent wins than the other against this field." %}
+{% include chart.html data=site.data.sheepshead.strength expand=true caption="Each point is the agent at that stage of training, playing the same deals against the same fixed opponents. The scale only means something in relative terms: the gap between two points is how many more points per hand one agent wins than the other against this field." %}
 
 #### Network Architecture
 
@@ -142,7 +142,7 @@ As more complexity was added to the network architecture in the form of embeddin
 
 As a result, after the training pipeline was firmly established, I ran an [ablation study](https://en.wikipedia.org/wiki/Ablation_(artificial_intelligence)) on increasingly complex architectures over the bootstrap phase to determine the relative impact of each addition to the final network. It was gratifying to see that the final architecture performed as well as or better than every earlier version, and far better than the baseline in this analysis.
 
-{% include chart.html data=site.data.sheepshead.ablation caption="Hover or tap a row to highlight that architecture and show its three training seeds. The number on the right is its score at 400k hands." %}
+{% include chart.html data=site.data.sheepshead.ablation expand=true caption="Hover or tap a row to highlight that architecture and show its three training seeds. The number on the right is its score at 400k hands." %}
 
 It is interesting that initially adding embedding tokens, without seeding them with card data, performed significantly worse than the simple one-hot MLP baseline. And it took informed initialization (adding card point and power data) and adding a transformer to reach the same ending skill level as the basic baseline through the bootstrap phase. On the other hand, adding the auxiliary heads yielded the single biggest boost in performance. And since each change is cumulative, it's quite possible that the performance boost of the auxiliary heads was enhanced by the richer structure of embedding tokens and the transformer. Determining that conclusively would require more ablation runs. Also noteworthy is the slope of each agent's skill level. The baseline MLP is gaining skill more slowly at the 400k episode mark compared with the embedding architectures over the last 100k hands.
 
@@ -170,7 +170,7 @@ Adding the oracle critic to the league phase, while also switching to terminal r
 
 This is finally what motivated adding the ExIt phase and search distillation to the training pipeline. The best way to ensure the agent followed what search determined was the optimal convention was to learn directly from the search algorithm's outputs. It also gave a notable bump in overall skill.
 
-{% include chart.html data=site.data.sheepshead.conventions caption="Measured over 100,000 hands per partner mode for each agent, on the same deals, with every seat playing its most likely action. Dots are rates and whiskers are 95% intervals." %}
+{% include chart.html data=site.data.sheepshead.conventions expand=true caption="Measured over 100,000 hands per partner mode for each agent, on the same deals, with every seat playing its most likely action. Dots are rates and whiskers are 95% intervals." %}
 
 On the production pipeline, the convention adherence is significantly better after the ExIt phase than after league training alone. There are some deviations in convention #1, but they all follow clear patterns in corner cases where the search algorithm found the convention's value ambiguous or slightly worse than the alternative. And qualitatively, the agent fine-tuned through search distillation feels like a strong, strategic opponent or partner.
 

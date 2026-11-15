@@ -6,7 +6,8 @@
 // types: "stages" (a series of points with intervals, grouped into
 // phases), "lines" (several series over a shared x axis, with a list of
 // rows that highlight them) and "dots" (rates with intervals, one row per
-// agent).
+// agent). A figure with data-expand gets a button that opens it over
+// the window, where its charts are drawn larger.
 //
 // Embeds: _includes/embed.html shows a poster image that is swapped for
 // the live iframe as it nears the viewport. The framed page asks to be
@@ -45,6 +46,11 @@
     return out;
   }
 
+  // Charts in a figure that has been opened over the window draw larger
+  function isBig(host) {
+    return !!host.closest(".fig.expanded");
+  }
+
   function makeTip(host) {
     var tip = html("div", "fig-tip", host);
     return {
@@ -69,8 +75,9 @@
   function drawStages(host, p) {
     var W = host.clientWidth;
     var narrow = W < 520;
-    var m = { l: 44, r: narrow ? 10 : 14, t: 36, b: 46 };
-    var H = narrow ? 300 : 360;
+    var big = isBig(host);
+    var m = { l: big ? 54 : 44, r: narrow ? 10 : 14, t: big ? 46 : 36, b: big ? 60 : 46 };
+    var H = narrow ? 300 : big ? Math.max(420, Math.min(680, window.innerHeight - 300)) : 360;
     var pts = p.points;
     var vals = pts.reduce(function (a, q) { return a.concat([q.lo, q.hi]); }, []);
     var y0 = Math.floor(Math.min.apply(null, vals) * 10) / 10;
@@ -93,8 +100,8 @@
     p.phases.forEach(function (ph, pi) {
       var idx = pts.map(function (q, i) { return q.phase === pi ? i : -1; }).filter(function (i) { return i >= 0; });
       var a = xs[idx[0]] - step / 2, b = xs[idx[idx.length - 1]] + step / 2;
-      el("text", { x: a + 2, y: 12, class: "phase-label" }, svg, ph.name);
-      el("rect", { x: a + 2, y: H - m.b + 22, width: b - a - 4, height: 2, rx: 1, fill: color(pi), opacity: 0.55 }, svg);
+      el("text", { x: a + 2, y: big ? 15 : 12, class: "phase-label" }, svg, ph.name);
+      el("rect", { x: a + 2, y: H - m.b + (big ? 30 : 22), width: b - a - 4, height: 2, rx: 1, fill: color(pi), opacity: 0.55 }, svg);
       el("text", { x: (a + b) / 2, y: H - 6, "text-anchor": "middle", class: "axis-label" }, svg, ph.unit);
     });
 
@@ -113,19 +120,19 @@
     // Label every stage where there is room, otherwise every 2nd or 3rd
     var every = pts.map(function (q) {
       var widest = pts.reduce(function (w, r) { return r.phase === q.phase ? Math.max(w, r.label.length) : w; }, 0);
-      return Math.max(1, Math.ceil((widest * 7 + 10) / step));
+      return Math.max(1, Math.ceil((widest * (big ? 8.5 : 7) + 10) / step));
     });
     pts.forEach(function (q, i) {
       var c = color(q.phase);
-      el("line", { x1: xs[i], x2: xs[i], y1: y(q.lo), y2: y(q.hi), stroke: c, "stroke-width": 2, "stroke-linecap": "round" }, svg);
-      el("circle", { cx: xs[i], cy: y(q.v), r: narrow ? 4 : 4.5, fill: c, stroke: "var(--fig-surface)", "stroke-width": 2 }, svg);
+      el("line", { x1: xs[i], x2: xs[i], y1: y(q.lo), y2: y(q.hi), stroke: c, "stroke-width": big ? 2.5 : 2, "stroke-linecap": "round" }, svg);
+      el("circle", { cx: xs[i], cy: y(q.v), r: narrow ? 4 : big ? 6 : 4.5, fill: c, stroke: "var(--fig-surface)", "stroke-width": 2 }, svg);
       // Counted from the end of each phase, so its final stage always
       // keeps its label
       var last = i === pts.length - 1 || pts[i + 1].phase !== q.phase;
       var fromEnd = 0;
       for (var j = i; j < pts.length - 1 && pts[j + 1].phase === q.phase; j++) fromEnd++;
       if (last || fromEnd % every[i] === 0)
-        el("text", { x: xs[i], y: H - m.b + 16, "text-anchor": "middle", class: "tick" }, svg, q.label);
+        el("text", { x: xs[i], y: H - m.b + (big ? 21 : 16), "text-anchor": "middle", class: "tick" }, svg, q.label);
     });
     // Direct labels: where the run starts and where it ends
     var first = pts[0], end = pts[pts.length - 1];
@@ -162,8 +169,9 @@
   function drawLines(host, p, state) {
     var W = host.clientWidth;
     var narrow = W < 520;
-    var m = { l: 44, r: 34, t: 10, b: 44 };
-    var H = narrow ? 320 : 400;
+    var big = isBig(host);
+    var m = { l: big ? 54 : 44, r: big ? 42 : 34, t: 10, b: big ? 58 : 44 };
+    var H = narrow ? 320 : big ? Math.max(440, Math.min(660, window.innerHeight - 280)) : 400;
     var all = [];
     p.series.forEach(function (s) { s.seeds.forEach(function (sd) { all = all.concat(sd); }); });
     var y0 = Math.floor(Math.min.apply(null, all) * 10) / 10;
@@ -177,7 +185,7 @@
       el("text", { x: m.l - 8, y: y(t) + 4, "text-anchor": "end", class: "tick" }, svg, signed(t, 1));
     });
     p.x.forEach(function (v, i) {
-      el("text", { x: x(i), y: H - m.b + 18, "text-anchor": "middle", class: "tick" }, svg, v + (p.xsuffix || ""));
+      el("text", { x: x(i), y: H - m.b + (big ? 24 : 18), "text-anchor": "middle", class: "tick" }, svg, v + (p.xsuffix || ""));
     });
     el("text", { x: (m.l + W - m.r) / 2, y: H - 6, "text-anchor": "middle", class: "axis-label" }, svg, p.xlabel);
 
@@ -193,16 +201,17 @@
       marks[s.n] = {
         s: s, g: g,
         line: el("polyline", { points: path(s.mean), fill: "none", "stroke-linejoin": "round", "stroke-linecap": "round" }, g),
-        dot: el("circle", { cx: x(p.x.length - 1), cy: y(s.mean[s.mean.length - 1]), r: 4, stroke: "var(--fig-surface)", "stroke-width": 2 }, g),
+        dot: el("circle", { cx: x(p.x.length - 1), cy: y(s.mean[s.mean.length - 1]), r: big ? 5 : 4, stroke: "var(--fig-surface)", "stroke-width": 2 }, g),
       };
     });
 
     // End labels: the rung numbers, nudged apart where lines finish close
     var ends = p.series.map(function (s) { return { n: s.n, y: y(s.mean[s.mean.length - 1]) }; })
       .sort(function (a, b) { return a.y - b.y; });
-    for (var i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 13) ends[i].y = ends[i - 1].y + 13;
+    var apart = big ? 16 : 13;
+    for (var i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < apart) ends[i].y = ends[i - 1].y + apart;
     ends.forEach(function (e) {
-      marks[e.n].label = el("text", { x: W - m.r + 10, y: e.y + 4, class: "end-label" }, svg, e.n);
+      marks[e.n].label = el("text", { x: W - m.r + (big ? 13 : 10), y: e.y + (big ? 5 : 4), class: "end-label" }, svg, e.n);
     });
 
     function colorOf(n) {
@@ -217,13 +226,13 @@
         var k = marks[s.n], on = state.active === s.n, emph = p.emphasis.indexOf(s.n) >= 0;
         var c = colorOf(s.n);
         k.line.setAttribute("stroke", c);
-        k.line.setAttribute("stroke-width", on ? 3 : emph ? 2.5 : 1.5);
+        k.line.setAttribute("stroke-width", (on ? 3 : emph ? 2.5 : 1.5) * (big ? 1.25 : 1));
         k.dot.setAttribute("fill", c);
         k.label.setAttribute("class", "end-label" + (on || emph ? " on" : ""));
         if (on) {
           svg.appendChild(k.g);
           s.seeds.forEach(function (sd) {
-            el("polyline", { points: path(sd), fill: "none", stroke: c, "stroke-width": 1, opacity: 0.4 }, seedLayer);
+            el("polyline", { points: path(sd), fill: "none", stroke: c, "stroke-width": big ? 1.25 : 1, opacity: 0.4 }, seedLayer);
           });
         }
       });
@@ -302,11 +311,12 @@
     var W = host.clientWidth;
     var narrow = W < 520;
     var labelled = p.groups.some(function (g) { return g.rows.some(function (r) { return r.label; }); });
-    var left = labelled ? (narrow ? 150 : 250) : (narrow ? 96 : 150);
-    var right = 18, top = 4, sub = labelled ? 30 : 22, gap = 10, pad = 8;
+    var big = isBig(host);
+    var left = labelled ? (narrow ? 150 : big ? 310 : 250) : (narrow ? 96 : big ? 190 : 150);
+    var right = 18, top = 4, sub = (labelled ? 30 : 22) * (big ? 1.35 : 1), gap = 10, pad = 8;
     var gh = function (g) { return g.rows.length * sub + pad * 2; };
     var plotH = p.groups.reduce(function (s, g) { return s + gh(g) + gap; }, -gap);
-    var H = top + plotH + 26;
+    var H = top + plotH + (big ? 32 : 26);
     var svg = el("svg", { viewBox: "0 0 " + W + " " + H, height: H, role: "img", "aria-label": p.aria }, host);
     var x = function (v) { return left + (v - p.domain[0]) / (p.domain[1] - p.domain[0]) * (W - left - right); };
     var bottom = top + plotH;
@@ -321,10 +331,10 @@
       el("line", { x1: x(t), x2: x(t), y1: top, y2: bottom, stroke: "var(--fig-grid)", "stroke-width": 1 }, svg);
     });
     // Thin the tick labels where they would touch, keeping the last one
-    var tickStep = Math.ceil(44 / (x(p.ticks[1]) - x(p.ticks[0])));
+    var tickStep = Math.ceil((big ? 54 : 44) / (x(p.ticks[1]) - x(p.ticks[0])));
     p.ticks.forEach(function (t, i) {
       if ((p.ticks.length - 1 - i) % tickStep === 0)
-        el("text", { x: x(t), y: bottom + 17, "text-anchor": "middle", class: "tick" }, svg, t + "%");
+        el("text", { x: x(t), y: bottom + (big ? 22 : 17), "text-anchor": "middle", class: "tick" }, svg, t + "%");
     });
 
     var tip = makeTip(host);
@@ -348,10 +358,10 @@
         var r = row.v[0], lo = row.v[1], hi = row.v[2];
         var cy = gy + pad + ri * sub + sub / 2;
         if (row.label) el("text", { x: 6, y: cy + 5, class: "row-label" }, svg, a.name);
-        el("line", { x1: x(lo), x2: x(hi), y1: cy, y2: cy, stroke: mk.c, "stroke-width": 2, "stroke-linecap": "round" }, svg);
-        if (mk.ring) el("circle", { cx: x(r), cy: cy, r: 4.5, fill: "var(--fig-surface)", stroke: mk.c, "stroke-width": 2 }, svg);
-        else el("circle", { cx: x(r), cy: cy, r: 5.5, fill: mk.c, stroke: "var(--fig-surface)", "stroke-width": 2 }, svg);
-        var room = W - right - x(hi) > 58;
+        el("line", { x1: x(lo), x2: x(hi), y1: cy, y2: cy, stroke: mk.c, "stroke-width": big ? 2.5 : 2, "stroke-linecap": "round" }, svg);
+        if (mk.ring) el("circle", { cx: x(r), cy: cy, r: big ? 5.5 : 4.5, fill: "var(--fig-surface)", stroke: mk.c, "stroke-width": 2 }, svg);
+        else el("circle", { cx: x(r), cy: cy, r: big ? 6.5 : 5.5, fill: mk.c, stroke: "var(--fig-surface)", "stroke-width": 2 }, svg);
+        var room = W - right - x(hi) > (big ? 70 : 58);
         el("text", { x: room ? x(hi) + 10 : x(lo) - 10, y: cy + 4.5, "text-anchor": room ? "start" : "end", class: "val" + (g.strong ? " strong" : "") }, svg, r.toFixed(2) + "%");
         var hit = el("rect", { x: 0, y: cy - sub / 2, width: W, height: sub, fill: "transparent" }, svg);
         var show = function (ev) {
@@ -389,7 +399,10 @@
         });
         panelEl.insertBefore(ul, host);
       }
-      if (p.type === "lines") buildLadder(panelEl, p, state);
+      if (p.type === "lines") {
+        panelEl.classList.add("has-ladder");
+        buildLadder(panelEl, p, state);
+      }
       panels.push(function () {
         host.innerHTML = "";
         if (p.type === "stages") drawStages(host, p);
@@ -410,6 +423,38 @@
     // Web fonts change text widths after the first draw
     if (document.fonts && document.fonts.ready)
       document.fonts.ready.then(function () { width = 0; draw(); });
+    if (fig.hasAttribute("data-expand")) setupExpand(fig, function () { width = 0; draw(); });
+  }
+
+  // A button that opens the figure over the window and closes it again.
+  // A spacer holds the figure's place in the page while it is open.
+  function setupExpand(fig, redraw) {
+    var btn = html("button", "fig-expand", fig,
+      '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">' +
+      '<path d="M10 2h4v4M6 14H2v-4M14 2 9.5 6.5M2 14l4.5-4.5"/></svg><span>Close</span>');
+    btn.type = "button";
+    var spacer = null;
+    function set(on) {
+      if (on) {
+        spacer = html("div", "fig-spacer");
+        spacer.style.height = fig.offsetHeight + "px";
+        fig.parentNode.insertBefore(spacer, fig);
+      } else if (spacer) {
+        spacer.remove();
+        spacer = null;
+      }
+      fig.classList.toggle("expanded", on);
+      document.documentElement.classList.toggle("fig-open", on);
+      btn.setAttribute("aria-label", on ? "Close the larger view" : "Open a larger view of this chart");
+      btn.title = on ? "" : "Larger view";
+      fig.scrollTop = 0;
+      redraw();
+    }
+    set(false);
+    btn.addEventListener("click", function () { set(!fig.classList.contains("expanded")); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && fig.classList.contains("expanded")) set(false);
+    });
   }
 
   // ------------------------------------------------------------------

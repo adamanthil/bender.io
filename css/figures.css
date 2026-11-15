@@ -281,6 +281,121 @@
   color: var(--fig-heading);
 }
 
+/* ---------- a larger view of a chart figure ---------- */
+
+/* Figures with data-expand get a button (added by the script) that opens
+   them over the window; their charts are redrawn larger to match. */
+.article-body .fig[data-expand] {
+  position: relative;
+}
+.fig[data-expand] .fig-panel:first-child .fig-title {
+  padding-right: 2.75rem;
+}
+.fig-expand {
+  position: absolute;
+  top: -2px;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 0.45rem;
+  border: 1px solid var(--fig-axis);
+  border-radius: 3px;
+  background: var(--fig-surface);
+  font: inherit;
+  font-size: 0.8125rem;
+  color: var(--fig-soft);
+  cursor: pointer;
+}
+.fig-expand:hover {
+  border-color: #aaa;
+  color: var(--fig-heading);
+}
+.fig-expand:focus-visible {
+  outline: 2px solid #888;
+  outline-offset: 1px;
+}
+.fig-expand span {
+  display: none;
+}
+/* The column is already the width of a small screen */
+@media (max-width: 759px) {
+  .fig-expand {
+    display: none;
+  }
+}
+.fig-spacer {
+  margin: 2.5rem 0;
+}
+.article-body .fig.expanded {
+  --fig-gutter: max(1.5rem, calc((100vw - 1200px) / 2));
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  margin: 0;
+  padding: 3rem var(--fig-gutter) 2rem;
+  overflow: auto;
+  background: var(--fig-surface);
+  font-size: 1rem;
+}
+.fig.expanded .fig-expand {
+  top: 1.25rem;
+  right: var(--fig-gutter);
+  padding: 0 0.7rem;
+}
+.fig.expanded .fig-expand span {
+  display: inline;
+}
+.fig.expanded .fig-title {
+  font-size: 1.375rem;
+}
+.fig.expanded .fig-legend,
+.article-body .fig.expanded figcaption {
+  font-size: 1rem;
+}
+.fig.expanded .fig-chart .tick,
+.fig.expanded .fig-chart .axis-label {
+  font-size: 14px;
+}
+.fig.expanded .fig-chart .phase-label,
+.fig.expanded .fig-chart .val {
+  font-size: 15px;
+}
+.fig.expanded .fig-chart .row-label {
+  font-size: 16px;
+}
+.fig.expanded .fig-chart .end-label {
+  font-size: 14px;
+}
+.article-body .fig.expanded .fig-ladder {
+  font-size: 1rem;
+}
+.fig.expanded .fig-ladder button {
+  padding: 0.5rem 0.6rem;
+}
+/* With room to spare, the list of rows sits beside its chart */
+@media (min-width: 1000px) {
+  .fig.expanded .fig-panel.has-ladder {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 23rem;
+    column-gap: 2.5rem;
+  }
+  .fig.expanded .has-ladder .fig-title,
+  .fig.expanded .has-ladder .fig-sub {
+    grid-column: 1 / -1;
+  }
+  .article-body .fig.expanded .has-ladder .fig-ladder {
+    align-self: center;
+    margin: 0;
+  }
+  .fig.expanded .has-ladder .fig-ladder .name span {
+    display: block;
+  }
+}
+
 /* ---------- embedded interactive (iframe with a poster) ---------- */
 
 /* The stage runs to the edges of the article card; the caption stays in
@@ -368,6 +483,7 @@ html.fig-open .content .article {
 
 @media print {
   .fig-data,
+  .fig-expand,
   .fig-embed .fig-cta {
     display: none;
   }

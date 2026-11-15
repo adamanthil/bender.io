@@ -6,10 +6,11 @@
   `data` holds one or more panels (their title, subtitle and numbers) and
   a table of the same numbers, which is rendered here so it is readable
   without JavaScript and in feed readers. `caption` is optional and may
-  contain HTML. Keep this markup free of blank lines: it is pasted into
+  contain HTML. `expand=true` adds a button that opens the figure over the
+  window with its charts drawn larger. Keep this markup free of blank lines: it is pasted into
   Markdown, where a blank line would end the HTML block.
 {%- endcomment -%}
-<figure class="fig" data-fig="chart">
+<figure class="fig" data-fig="chart"{% if include.expand %} data-expand{% endif %}>
 {%- for panel in include.data.panels %}
 <div class="fig-panel">
 <p class="fig-title">{{ panel.title }}</p>
