@@ -759,12 +759,6 @@ article {
   .toc-sidebar a[aria-current] {
     color: var(--heading);
   }
-  .toc-top {
-    display: inline-block;
-    margin-top: 1rem;
-    font-size: 0.9375rem;
-    color: var(--ink-soft);
-  }
 }
 
 @media print {

@@ -60,7 +60,12 @@
       }
     });
 
-    if (current) current.textContent = active ? active.textContent : "";
+    // Label the mobile bar from the TOC entry, not the target element:
+    // the "Introduction" entry targets <body>.
+    if (current) {
+      var activeEntry = id && document.querySelector(".toc li > a[href='#" + id + "']");
+      current.textContent = activeEntry ? activeEntry.textContent : "";
+    }
 
     // Keep the highlighted entry visible if the sidebar list scrolls.
     if (sidebarScroll) {

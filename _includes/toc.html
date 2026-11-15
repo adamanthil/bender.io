@@ -3,20 +3,23 @@
   `items` and `variant` as "sidebar" (pinned beside the article on wide
   screens) or "inline" (collapsible bar that sticks to the top of the
   article on narrower screens). CSS shows only one variant at a time.
+  The list opens with an entry for the top of the post, covering the
+  intro text before the first heading.
 {% endcomment %}
+{% capture start_item %}<ol><li><a href="#top">Introduction</a></li>{% endcapture %}
+{% assign items = include.items | replace_first: "<ol>", start_item %}
 {% if include.variant == "sidebar" %}
   <nav class="toc toc-sidebar" aria-label="Contents">
     <div class="toc-sticky">
       <p class="toc-heading">contents</p>
-      {{ include.items }}
-      <a class="toc-top" href="#top">back to top</a>
+      {{ items }}
     </div>
   </nav>
 {% else %}
   <nav class="toc toc-inline" aria-label="Contents">
     <details>
       <summary><span class="toc-label">contents</span><span class="toc-current"></span></summary>
-      {{ include.items }}
+      {{ items }}
     </details>
   </nav>
 {% endif %}
