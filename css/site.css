@@ -470,6 +470,40 @@ article {
   color: var(--ink-soft);
 }
 
+/* A Markdown table inside a callout: label column left, numbers right,
+   no header row. Rows after a `|===` line are the footer: its first row
+   reads as a total, any later rows as separate items set apart below. */
+.article-body blockquote.callout table {
+  width: 100%;
+  max-width: 26rem;
+  border-collapse: collapse;
+  font-size: 0.95em;
+  font-variant-numeric: tabular-nums;
+}
+.article-body blockquote.callout td {
+  padding: 0.35rem 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  vertical-align: top;
+}
+.article-body blockquote.callout td:last-child {
+  padding-left: 1.5rem;
+  text-align: right;
+}
+.article-body blockquote.callout tbody tr:first-child td {
+  padding-top: 0;
+}
+.article-body blockquote.callout tfoot tr:first-child td {
+  border-top: 1px solid #2b2b2b;
+  font-family: var(--font-bold);
+  color: var(--heading);
+}
+.article-body blockquote.callout tfoot tr + tr td {
+  padding-top: 0.9rem;
+  color: var(--ink-soft);
+}
+
 /* Equation box: a key formula set large, with its terms defined
    underneath in a smaller two-column list. Markdown: a blockquote holding
    a $$ display equation and a kramdown definition list, then

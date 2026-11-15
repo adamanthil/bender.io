@@ -90,6 +90,9 @@ the class is silently dropped):
   quotes around it if the title itself contains a double quote.
 - Pull quotes and callouts can hold multiple paragraphs, lists, math, or
   code: continue the `>` on the blank lines between them.
+- A Markdown table in a callout is styled as a compact label/number
+  list with no header row. Rows after a `> |===` line are the footer:
+  the first is set as a total, later ones as muted items apart from it.
 - Use them sparingly: a few pull quotes per long post, a few screens
   apart, so each one still stands out.
 
