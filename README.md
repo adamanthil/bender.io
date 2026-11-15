@@ -139,8 +139,10 @@ include on a line of its own with a blank line before and after.
   in the post.
 - A file has one or more `panels`, each with a `type`: `stages` (one
   series through ordered stages, grouped into phases), `lines` (several
-  series over a shared x axis, with a list of rows that highlight them)
-  or `dots` (rates with intervals, one row per agent).
+  series over a shared x axis, with a list of rows that highlight them),
+  `dots` (rates with intervals, one row per agent) or `pool` (one
+  measurement against the same one pooled, over a histogram of the
+  individual measurements).
 - Colours come from the `--fig-*` variables in `css/figures.css`.
 - Add `expand=true` for a button that opens the figure over the window
   with its charts drawn larger (not shown on small screens).

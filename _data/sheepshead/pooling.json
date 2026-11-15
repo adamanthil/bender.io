@@ -1,0 +1,190 @@
+{
+ "panels": [
+  {
+   "type": "pool",
+   "title": "One search can't resolve the called-suit edge; a thousand pooled can",
+   "sub": "How much better search rates leading the called suit than the best other card, at 1,058 first-trick defender leads played by the agent that came out of the league phase. In Q units (score ÷ 12); intervals are 95%.",
+   "aria": "A single search measures the called-suit lead's advantage as +0.024 Q with a 95% interval of ±0.030, which includes zero. Pooled over 1,058 searches the same advantage is +0.024 ± 0.0014. A histogram shows the 1,058 individual measurements spread from −0.03 to above +0.13, with 9% below zero.",
+   "unit": "Q",
+   "domain": [
+    -0.04,
+    0.14
+   ],
+   "ticks": [
+    -0.04,
+    -0.02,
+    0,
+    0.02,
+    0.04,
+    0.06,
+    0.08,
+    0.1,
+    0.12,
+    0.14
+   ],
+   "xlabel": "measured advantage of leading the called suit (Q)",
+   "xshort": "measured advantage (Q)",
+   "rows": [
+    {
+     "name": "One search",
+     "style": "ref",
+     "v": 0.0239,
+     "half": 0.03,
+     "text": "+0.024 ± 0.030",
+     "tip": [
+      "a committee of three 1,024-iteration searches",
+      "standard error 0.015 Q (0.18 points per hand)"
+     ]
+    },
+    {
+     "name": "1,058 searches pooled",
+     "style": "search",
+     "v": 0.0239,
+     "half": 0.0014,
+     "text": "+0.024 ± 0.0014",
+     "tip": [
+      "the mean over every lead in the pool",
+      "standard error 0.0007 Q (0.008 points per hand)"
+     ]
+    }
+   ],
+   "hist": {
+    "name": "Each search on its own",
+    "note": "1,058 measurements",
+    "start": -0.04,
+    "width": 0.01,
+    "counts": [
+     0,
+     2,
+     16,
+     75,
+     178,
+     251,
+     206,
+     154,
+     77,
+     38,
+     23,
+     16,
+     5,
+     5,
+     4,
+     2,
+     1,
+     5
+    ],
+    "neg": "9% point the wrong way",
+    "negshort": "9% below 0"
+   }
+  }
+ ],
+ "table": {
+  "head": [
+   "Measurement",
+   "Advantage (Q)",
+   "Searches"
+  ],
+  "rows": [
+   [
+    "One search, with its 95% interval",
+    "+0.024 ± 0.030",
+    "1"
+   ],
+   [
+    "All searches pooled, with its 95% interval",
+    "+0.024 ± 0.0014",
+    "1,058"
+   ],
+   [
+    "Individual searches measuring −0.04 to −0.03",
+    "",
+    "0"
+   ],
+   [
+    "Individual searches measuring −0.03 to −0.02",
+    "",
+    "2"
+   ],
+   [
+    "Individual searches measuring −0.02 to −0.01",
+    "",
+    "16"
+   ],
+   [
+    "Individual searches measuring −0.01 to 0",
+    "",
+    "75"
+   ],
+   [
+    "Individual searches measuring 0 to +0.01",
+    "",
+    "178"
+   ],
+   [
+    "Individual searches measuring +0.01 to +0.02",
+    "",
+    "251"
+   ],
+   [
+    "Individual searches measuring +0.02 to +0.03",
+    "",
+    "206"
+   ],
+   [
+    "Individual searches measuring +0.03 to +0.04",
+    "",
+    "154"
+   ],
+   [
+    "Individual searches measuring +0.04 to +0.05",
+    "",
+    "77"
+   ],
+   [
+    "Individual searches measuring +0.05 to +0.06",
+    "",
+    "38"
+   ],
+   [
+    "Individual searches measuring +0.06 to +0.07",
+    "",
+    "23"
+   ],
+   [
+    "Individual searches measuring +0.07 to +0.08",
+    "",
+    "16"
+   ],
+   [
+    "Individual searches measuring +0.08 to +0.09",
+    "",
+    "5"
+   ],
+   [
+    "Individual searches measuring +0.09 to +0.10",
+    "",
+    "5"
+   ],
+   [
+    "Individual searches measuring +0.10 to +0.11",
+    "",
+    "4"
+   ],
+   [
+    "Individual searches measuring +0.11 to +0.12",
+    "",
+    "2"
+   ],
+   [
+    "Individual searches measuring +0.12 to +0.13",
+    "",
+    "1"
+   ],
+   [
+    "Individual searches measuring +0.13 or more",
+    "",
+    "5"
+   ]
+  ]
+ }
+}

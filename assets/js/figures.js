@@ -2,11 +2,12 @@
 //
 // Charts: each <figure class="fig"> made by _includes/chart.html carries
 // its data as JSON; every panel in it is drawn here as an inline SVG sized
-// to the column, and redrawn when the column changes width. Three panel
+// to the column, and redrawn when the column changes width. Four panel
 // types: "stages" (a series of points with intervals, grouped into
 // phases), "lines" (several series over a shared x axis, with a list of
-// rows that highlight them) and "dots" (rates with intervals, one row per
-// agent). A figure with data-expand gets a button that opens it over
+// rows that highlight them), "dots" (rates with intervals, one row per
+// agent) and "pool" (one measurement against the same one pooled, over a
+// histogram of the individual measurements). A figure with data-expand gets a button that opens it over
 // the window, where its charts are drawn larger.
 //
 // Embeds: _includes/embed.html shows a poster image that is swapped for
@@ -379,6 +380,91 @@
     });
   }
 
+  // ------------------------------------------------------------------
+  // pool: one noisy measurement against the same measurement pooled over
+  // many cases. Rows with intervals on top; beneath them, on the same
+  // axis, a histogram of the individual measurements.
+  // ------------------------------------------------------------------
+  function drawPool(host, p) {
+    var W = host.clientWidth;
+    var narrow = W < 520;
+    var big = isBig(host);
+    var left = narrow ? 8 : big ? 250 : 190;
+    var right = narrow ? 12 : 18, top = 6;
+    var rowH = narrow ? 48 : big ? 48 : 36;
+    var histTop = top + p.rows.length * rowH + (narrow ? 22 : 16);
+    var histH = narrow ? 130 : big ? Math.max(220, Math.min(380, window.innerHeight - 470)) : 170;
+    var base = histTop + histH;
+    var H = base + (big ? 52 : 44);
+    var svg = el("svg", { viewBox: "0 0 " + W + " " + H, height: H, role: "img", "aria-label": p.aria }, host);
+    var d0 = p.domain[0], d1 = p.domain[1];
+    var x = function (v) { return left + (v - d0) / (d1 - d0) * (W - left - right); };
+    var fmt = function (v) { return v === 0 ? "0" : signed(v, 2); };
+
+    var tickStep = Math.ceil((big ? 58 : 48) / (x(p.ticks[1]) - x(p.ticks[0])));
+    var zeroAt = p.ticks.indexOf(0);
+    p.ticks.forEach(function (t, i) {
+      el("line", { x1: x(t), x2: x(t), y1: top, y2: base, stroke: t === 0 ? "var(--fig-axis)" : "var(--fig-grid)", "stroke-width": t === 0 ? 1.5 : 1 }, svg);
+      if ((i - zeroAt) % tickStep === 0)
+        el("text", { x: x(t), y: base + (big ? 22 : 17), "text-anchor": "middle", class: "tick" }, svg, fmt(t));
+    });
+    el("line", { x1: left, x2: W - right, y1: base, y2: base, stroke: "var(--fig-axis)", "stroke-width": 1 }, svg);
+    el("text", { x: (left + W - right) / 2, y: H - 5, "text-anchor": "middle", class: "axis-label" }, svg, narrow ? p.xshort : p.xlabel);
+
+    var tip = makeTip(host);
+    p.rows.forEach(function (row, i) {
+      var c = "var(--fig-" + row.style + ")";
+      var cy = top + i * rowH + (narrow ? rowH - 14 : rowH / 2);
+      if (narrow) el("text", { x: left, y: cy - 16, class: "row-label" }, svg, row.name + "  " + row.text);
+      else el("text", { x: 6, y: cy + 5, class: "row-label" }, svg, row.name);
+      el("line", { x1: x(row.v - row.half), x2: x(row.v + row.half), y1: cy, y2: cy, stroke: c, "stroke-width": big ? 2.5 : 2, "stroke-linecap": "round" }, svg);
+      if (row.style === "ref") el("circle", { cx: x(row.v), cy: cy, r: big ? 5.5 : 4.5, fill: "var(--fig-surface)", stroke: c, "stroke-width": 2 }, svg);
+      else el("circle", { cx: x(row.v), cy: cy, r: big ? 6.5 : 5.5, fill: c, stroke: "var(--fig-surface)", "stroke-width": 2 }, svg);
+      if (!narrow) el("text", { x: x(row.v + row.half) + 12, y: cy + 4.5, class: "val strong" }, svg, row.text);
+      var hit = el("rect", { x: 0, y: top + i * rowH, width: W, height: rowH, fill: "transparent" }, svg);
+      var show = function (ev) {
+        tip.show('<div><span class="fig-key' + (row.style === "ref" ? " ring" : "") + '" style="--c:' + c + '"></span><b>' + row.name + "</b></div>" +
+          "<div><b>" + row.text + '</b> <span class="k">' + p.unit + "</span></div>" +
+          row.tip.map(function (t) { return '<div class="k">' + t + "</div>"; }).join(""), ev);
+      };
+      hit.addEventListener("pointermove", show);
+      hit.addEventListener("pointerdown", show);
+      hit.addEventListener("pointerleave", tip.hide);
+    });
+
+    // Histogram of the individual measurements
+    var h = p.hist, total = h.counts.reduce(function (s, n) { return s + n; }, 0);
+    var peak = Math.max.apply(null, h.counts);
+    var bh = function (n) { return n / peak * (histH - (narrow ? 34 : 14)); };
+    var negTop = base;
+    h.counts.forEach(function (n, i) {
+      var lo = h.start + i * h.width, hi = lo + h.width;
+      var neg = hi <= 1e-9;
+      var x0 = x(lo) + 1, x1 = x(hi) - 1;
+      if (n) {
+        el("rect", { x: x0, y: base - bh(n), width: Math.max(1, x1 - x0), height: bh(n), fill: neg ? "var(--fig-ref)" : "var(--fig-context)" }, svg);
+        if (neg) negTop = Math.min(negTop, base - bh(n));
+      }
+      var last = i === h.counts.length - 1;
+      var hit = el("rect", { x: x(lo), y: histTop, width: x(hi) - x(lo), height: histH, fill: "transparent" }, svg);
+      var show = function (ev) {
+        tip.show("<div><b>" + fmt(Math.round(lo * 100) / 100) + (last ? " or more" : " to " + fmt(Math.round(hi * 100) / 100)) + '</b> <span class="k">' + p.unit + "</span></div>" +
+          "<div><b>" + int(n) + '</b> <span class="k">of ' + int(total) + " searches (" + (100 * n / total).toFixed(1) + "%)</span></div>", ev);
+      };
+      hit.addEventListener("pointermove", show);
+      hit.addEventListener("pointerdown", show);
+      hit.addEventListener("pointerleave", tip.hide);
+    });
+    if (narrow) {
+      el("text", { x: left, y: histTop + 12, class: "row-label" }, svg, h.name);
+    } else {
+      el("text", { x: 6, y: histTop + 20, class: "row-label" }, svg, h.name);
+      el("text", { x: 6, y: histTop + (big ? 44 : 39), class: "val" }, svg, h.note);
+    }
+    if (narrow) el("text", { x: left, y: negTop - 8, class: "val" }, svg, h.negshort);
+    else el("text", { x: x(0) - 8, y: negTop - 8, "text-anchor": "end", class: "val" }, svg, h.neg);
+  }
+
   function setupChart(fig) {
     var src = fig.querySelector('script[type="application/json"]');
     if (!src) return;
@@ -406,6 +492,7 @@
       panels.push(function () {
         host.innerHTML = "";
         if (p.type === "stages") drawStages(host, p);
+        else if (p.type === "pool") drawPool(host, p);
         else if (p.type === "lines") drawLines(host, p, state);
         else drawDots(host, p, data.agents);
       });
