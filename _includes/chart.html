@@ -3,7 +3,8 @@
 
     {% include chart.html data=site.data.sheepshead.strength caption="..." %}
 
-  `data` holds one or more panels (their title, subtitle and numbers) and
+  `data` holds one or more panels (their title, subtitle and numbers; the
+  subtitle may use inline Markdown) and
   a table of the same numbers, which is rendered here so it is readable
   without JavaScript and in feed readers. `caption` is optional and may
   contain HTML. `expand=true` adds a button that opens the figure over the
@@ -14,7 +15,7 @@
 {%- for panel in include.data.panels %}
 <div class="fig-panel">
 <p class="fig-title">{{ panel.title }}</p>
-<p class="fig-sub">{{ panel.sub }}</p>
+<p class="fig-sub">{{ panel.sub | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>
 <div class="fig-chart"></div>
 </div>
 {%- endfor %}

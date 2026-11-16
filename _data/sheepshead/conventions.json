@@ -23,7 +23,7 @@
   {
    "type": "dots",
    "title": "Convention 1: defenders don't lead trump",
-   "sub": "How often a defender with the opening lead plays trump on the first trick. Lower is better.",
+   "sub": "How often a defender with the opening lead plays trump on the first trick. **Lower is better.**",
    "domain": [
     0,
     6
@@ -154,7 +154,7 @@
   {
    "type": "dots",
    "title": "Convention 3: defenders lead the called suit",
-   "sub": "In called-ace games, how often a defender with the opening lead who holds the called suit leads it. Higher is better. The axis starts at 94%.",
+   "sub": "In called-ace games, how often a defender with the opening lead who holds the called suit leads it. **Higher is better.** The axis starts at 94%.",
    "domain": [
     94,
     100
