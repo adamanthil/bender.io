@@ -37,6 +37,10 @@
   color: var(--fig-soft);
   text-wrap: pretty;
 }
+.article-body .fig figcaption .fig-note {
+  display: block;
+  margin-top: 0.6rem;
+}
 .article-body .fig figcaption:empty {
   display: none;
 }
