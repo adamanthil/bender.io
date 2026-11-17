@@ -170,6 +170,12 @@ repository, and `_includes/sheepshead/training-program.html` is adapted
 from its `visualizations/training_program.html`. Change them there and
 copy them over; see that repository's `visualizations/README.md`.
 
+`_includes/sheepshead/reward-table.html` is the table of bootstrap-phase
+rewards, transcribed from `sheepshead/rewards.py` and `Player.get_score`
+in the sheepsheadai repository. It is a `<dialog class="fig-dialog">`:
+any link to its id (`[here](#reward-table)`) opens it over the page, and
+without JavaScript the link shows it in the page instead.
+
 `_includes/sheepshead/search-walkthrough.html` is the step-through replay
 of one search. Its wording and style live in the include, its behaviour in
 `assets/sheepshead/search-walkthrough.js`, and its data in

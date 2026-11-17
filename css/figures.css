@@ -492,3 +492,134 @@ html.fig-open .content .article {
     display: none;
   }
 }
+
+/* ---------- a table that opens as a dialog ---------- */
+
+/* A <dialog class="fig-dialog" id="..."> is opened by any link to its id
+   (the script calls showModal). Without the script, following the link
+   shows it in the page through :target. */
+.fig-dialog {
+  width: min(46rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  padding: 1.5rem clamp(1rem, 4vw, 2rem) 1.75rem;
+  overflow: auto;
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  background: var(--card);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.22);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.fig-dialog::backdrop {
+  background: rgba(40, 40, 40, 0.45);
+}
+.fig-dialog:target:not([open]) {
+  display: block;
+  position: static;
+  width: auto;
+  max-height: none;
+  margin: 2.5rem 0;
+  box-shadow: none;
+}
+.fig-dialog:target:not([open]) form {
+  display: none;
+}
+.fig-dialog-close {
+  float: right;
+  margin: -0.25rem 0 0.5rem 1rem;
+  padding: 0.2rem 0.7rem;
+  border: 1px solid #d6d6d2;
+  border-radius: 3px;
+  background: var(--card);
+  font: inherit;
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.fig-dialog-close:hover {
+  border-color: #aaa;
+  color: var(--heading);
+}
+.article-body .fig-dialog p {
+  margin: 0 0 0.6rem;
+}
+.article-body .fig-dialog .fig-title {
+  margin-bottom: 0.3rem;
+  font-size: 1.25rem;
+}
+.fig-dialog-lede {
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+.fig-dialog section {
+  margin-top: 1.5rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--card-border);
+}
+.article-body .fig-dialog .fig-dialog-head {
+  margin-bottom: 0.3rem;
+  font-family: var(--font-bold);
+  font-size: 1.0625rem;
+  color: var(--heading);
+}
+.fig-dialog .tag {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  vertical-align: 0.1em;
+}
+.fig-dialog .tag.keep {
+  background: #e3f3ed;
+  color: #0b6b4c;
+}
+.fig-dialog .tag.boot {
+  background: #f6ead9;
+  color: #7d4a10;
+}
+.fig-dialog .scroll {
+  overflow-x: auto;
+}
+.fig-dialog table {
+  width: 100%;
+  margin: 0.4rem 0 0.9rem;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.fig-dialog th,
+.fig-dialog td {
+  padding: 0.35rem 0 0.35rem 1rem;
+  border-bottom: 1px solid var(--card-border);
+  text-align: right;
+  vertical-align: top;
+}
+.fig-dialog th:first-child,
+.fig-dialog td:first-child {
+  padding-left: 0;
+  text-align: left;
+}
+.fig-dialog th {
+  font-family: var(--font-bold);
+  font-weight: normal;
+  font-size: 0.8125rem;
+  color: var(--heading);
+  vertical-align: bottom;
+}
+.fig-dialog td:not(:first-child) {
+  white-space: nowrap;
+}
+/* A reward given in words wraps instead of forcing the table wide */
+.fig-dialog td:last-child:not(:first-child) {
+  max-width: 13rem;
+  white-space: normal;
+}
+.article-body .fig-dialog .fine {
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}

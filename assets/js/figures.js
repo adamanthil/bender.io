@@ -586,9 +586,32 @@
     } else load();
   }
 
+  // ------------------------------------------------------------------
+  // Dialogs
+  // ------------------------------------------------------------------
+  // A link to the id of a <dialog class="fig-dialog"> opens it over the
+  // page. A click on the backdrop closes it, as Escape and its button do.
+  function setupDialog(dialog) {
+    if (!dialog.showModal || !dialog.id) return;
+    document.addEventListener("click", function (e) {
+      var link = e.target.closest && e.target.closest('a[href="#' + dialog.id + '"]');
+      if (!link) return;
+      e.preventDefault();
+      dialog.showModal();
+      dialog.scrollTop = 0;
+    });
+    dialog.addEventListener("click", function (e) {
+      if (e.target !== dialog) return;
+      var box = dialog.getBoundingClientRect();
+      if (e.clientX < box.left || e.clientX > box.right ||
+          e.clientY < box.top || e.clientY > box.bottom) dialog.close();
+    });
+  }
+
   function init() {
     document.querySelectorAll("figure.fig[data-fig='chart']").forEach(setupChart);
     document.querySelectorAll("figure.fig[data-fig='embed']").forEach(setupEmbed);
+    document.querySelectorAll("dialog.fig-dialog").forEach(setupDialog);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();

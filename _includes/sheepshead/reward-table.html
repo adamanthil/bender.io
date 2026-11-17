@@ -1,0 +1,95 @@
+{%- comment -%}
+  The rewards of the bootstrap phase, opened as a dialog by a link to
+  #reward-table (assets/js/figures.js; without JavaScript the link shows it
+  in the page).
+
+    {% include sheepshead/reward-table.html %}
+
+  The numbers are transcribed from the sheepsheadai repository:
+  sheepshead/rewards.py (trick rewards, shaping, the leaster bonus) and
+  Player.get_score in sheepshead/game.py (the score). Keep this markup free
+  of blank lines: it is pasted into Markdown, where a blank line would end
+  the HTML block.
+{%- endcomment -%}
+<dialog class="fig-dialog" id="reward-table" aria-labelledby="reward-table-title">
+<form method="dialog"><button class="fig-dialog-close" aria-label="Close the reward table">Close</button></form>
+<p class="fig-title" id="reward-table-title">Rewards in the bootstrap phase</p>
+<p class="fig-dialog-lede">Every reward is in units of game score ÷ 12, so one game point is 0.083. A decision's reward is the sum of everything below that applies to it.</p>
+<section>
+<p class="fig-dialog-head">1. Final score <span class="tag keep">every phase</span></p>
+<p>The player's score for the hand ÷ 12, given on their last action. This is the only reward after the bootstrap phase.</p>
+<div class="scroll"><table>
+<thead><tr><th>Points taken by the picker's team</th><th>Picker</th><th>Partner</th><th>Each defender</th><th>Picker alone</th></tr></thead>
+<tbody>
+<tr><td>All 120 (no tricker)</td><td>+0.50</td><td>+0.25</td><td>−0.25</td><td>+1.00</td></tr>
+<tr><td>91 to 119 (no schneider)</td><td>+0.33</td><td>+0.17</td><td>−0.17</td><td>+0.67</td></tr>
+<tr><td>61 to 90</td><td>+0.17</td><td>+0.08</td><td>−0.08</td><td>+0.33</td></tr>
+<tr><td>31 to 60</td><td>−0.33</td><td>−0.17</td><td>+0.17</td><td>−0.67</td></tr>
+<tr><td>1 to 30 (denied schneider)</td><td>−0.67</td><td>−0.33</td><td>+0.33</td><td>−1.33</td></tr>
+<tr><td>None (no tricker)</td><td>−1.00</td><td>−0.50</td><td>+0.50</td><td>−2.00</td></tr>
+</tbody>
+</table></div>
+<p class="fine">In game points the rows are 3, 2 and 1 for a win and −2, −4 and −6 for a loss (a loss counts double), times 2 for the picker, 1 for the partner, −1 for each defender and 4 for a picker playing alone.</p>
+<div class="scroll"><table>
+<thead><tr><th>Leaster (everyone passed)</th><th>Reward</th></tr></thead>
+<tbody>
+<tr><td>Winner</td><td>+0.33</td></tr>
+<tr><td>Everyone else</td><td>−0.08</td></tr>
+<tr><td>Added for every player <span class="tag boot">bootstrap only</span></td><td>+0.08</td></tr>
+</tbody>
+</table></div>
+</section>
+<section>
+<p class="fig-dialog-head">2. Points taken <span class="tag boot">bootstrap only</span></p>
+<p>Given when each trick ends, to every player for the card they played in it.</p>
+<div class="scroll"><table>
+<thead><tr><th>The trick was won by</th><th>Reward</th></tr></thead>
+<tbody>
+<tr><td>The player's own side</td><td>+ trick points ÷ 360</td></tr>
+<tr><td>The other side</td><td>− trick points ÷ 360</td></tr>
+<tr><td>The player, in a leaster</td><td>− trick points ÷ 360</td></tr>
+</tbody>
+</table></div>
+<p class="fine">A 30-point trick is worth 0.083, the same as one game point. All six tricks add up to at most 0.33.</p>
+</section>
+<section>
+<p class="fig-dialog-head">3. Strategy hints <span class="tag boot">bootstrap only</span></p>
+<p>Given on the decision itself. Hand strength counts 3 for each queen, 2 for each jack and 1 for each other trump.</p>
+<div class="scroll"><table>
+<thead><tr><th>Picking, by hand strength</th><th>Pick</th><th>Pass</th></tr></thead>
+<tbody>
+<tr><td>4 or less</td><td>−0.10</td><td>+0.10</td></tr>
+<tr><td>5 or 6</td><td>0</td><td>0</td></tr>
+<tr><td>7</td><td>+0.02</td><td>−0.02</td></tr>
+<tr><td>8 or more</td><td>+0.15</td><td>−0.15</td></tr>
+</tbody>
+</table></div>
+<div class="scroll"><table>
+<thead><tr><th>Going alone</th><th>Reward</th></tr></thead>
+<tbody>
+<tr><td>With a hand strength of 8 or less</td><td>−0.10</td></tr>
+</tbody>
+</table></div>
+<div class="scroll"><table>
+<thead><tr><th>Burying</th><th>Reward</th></tr></thead>
+<tbody>
+<tr><td>A trump, when a fail card could be buried</td><td>−0.10</td></tr>
+<tr><td>A fail card, when a trump could be buried</td><td>+0.02</td></tr>
+<tr><td>A queen, when only trump can be buried</td><td>−0.10</td></tr>
+<tr><td>A jack, when only trump can be buried</td><td>−0.02</td></tr>
+</tbody>
+</table></div>
+<div class="scroll"><table>
+<thead><tr><th>Leading a trick (the first row that fits)</th><th>Reward</th></tr></thead>
+<tbody>
+<tr><td>Defender leads trump while holding a fail card</td><td>−0.06</td></tr>
+<tr><td>Defender leads the called suit before it has been played</td><td>+0.10 on the first trick, 0.02 less on each later one</td></tr>
+<tr><td>Defender holds the called suit, not yet played, and leads another fail suit</td><td>−0.01</td></tr>
+<tr><td>Defender leads any other fail card</td><td>+0.03</td></tr>
+<tr><td>Partner leads trump</td><td>+0.08</td></tr>
+<tr><td>Picker leads trump</td><td>+0.03</td></tr>
+</tbody>
+</table></div>
+<p class="fine">There are no hints for following in a trick, or for leading in a leaster.</p>
+</section>
+</dialog>
