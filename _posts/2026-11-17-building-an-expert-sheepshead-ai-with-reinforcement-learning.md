@@ -254,7 +254,7 @@ $$
 \gamma = \frac{\sigma_u^2}{\sigma_u^2 + s_n^2}
 $$
 
-Here $$\sigma_u^2$$ is the model error variance[^model-error-variance] and $$s_n^2$$ is the search noise variance at one node. This allows a confident search result to get more weight relative to a noisy model and vice versa. In the case of the called suit convention, the model was highly confident at those nodes and the search results were noisier. The value for $$\gamma$$ ended up around 0.3 for most of those nodes in the first ExIt iteration, meaning the pooled model got 70% of the weight. Exactly what we hoped for! For late trick decisions on the other hand, especially for the picker, $$\gamma$$ is as high as 0.9 or above. There is not much determinization noise left and search has a clear answer for what the right play is at those nodes.
+Here $$\sigma_u^2$$ is the model error variance[^model-error-variance] and $$s_n^2$$ is the search noise variance at one node[^search-noise-variance]. This allows a confident search result to get more weight relative to a noisy model and vice versa. In the case of the called suit convention, the model was highly confident at those nodes and the search results were noisier. The value for $$\gamma$$ ended up around 0.3 for most of those nodes in the first ExIt iteration, meaning the pooled model got 70% of the weight. Exactly what we hoped for! For late trick decisions on the other hand, especially for the picker, $$\gamma$$ is as high as 0.9 or above. There is not much determinization noise left and search has a clear answer for what the right play is at those nodes.
 
 > ##### The whole step in one line
 >
@@ -331,7 +331,7 @@ I already have a series of optimizations planned for a 2.0 training run that sho
 **Borrowed-Strength Search Distillation**
 
 - Fay and Herriot, [Estimates of Income for Small Places: An Application of James-Stein Procedures to Census Data](https://doi.org/10.1080/01621459.1979.10482505), Journal of the American Statistical Association, 1979. The method for blending a noisy direct measurement with a model's prediction according to how precise each one is.
-- Efron and Morris, [Data Analysis Using Stein's Estimator and Its Generalizations](https://doi.org/10.1080/01621459.1975.10479864), Journal of the American Statistical Association, 1975. An accessible treatment of shrinkage estimation, the statistical idea underneath "borrowing strength".
+- Efron and Morris, [Data Analysis Using Stein's Estimator and Its Generalizations](https://doi.org/10.1080/01621459.1975.10479864), Journal of the American Statistical Association, 1975 ([free RAND report version](https://www.rand.org/pubs/reports/R1394.html)). A somewhat accessible treatment of shrinkage estimation, the statistical idea underneath "borrowing strength".
 - Peng, Kumar, Zhang and Levine, [Advantage-Weighted Regression: Simple and Scalable Off-Policy Reinforcement Learning](https://arxiv.org/abs/1910.00177), 2019. The form of the training target: the current policy reweighted by an exponential of each action's advantage, with a temperature and a clip.
 - Grill et al., [Monte-Carlo Tree Search as Regularized Policy Optimization](https://arxiv.org/abs/2007.12509), 2020. The theory for why tilting the network's own policy toward higher-valued actions is a principled, bounded improvement step.
 - Li and Hoiem, [Learning without Forgetting](https://arxiv.org/abs/1606.09282), 2016. The technique of pinning a network's existing outputs while it trains on something new, used here to hold the decisions that search does not cover.
@@ -355,3 +355,5 @@ I already have a series of optimizations planned for a 2.0 training run that sho
 [^30M-agent]: This is the "30M agent" referenced earlier in the "Skill through the training pipeline" chart.
 
 [^model-error-variance]: Technically, $$u$$ is the gap between a node's true advantage and the model's prediction, and $$\sigma_u^2$$ is the variance of that gap.
+
+[^search-noise-variance]: With only 3 searches per node, a node's own measurement of this variance is itself very noisy. So before it is used, each measured variance is pulled toward the average variance for similar decisions (the same trick number, role, lead or follow, and whether the picker is playing alone). The average gets two thirds of the weight and the node's own measurement gets one third. This is "borrowing strength" a second time, and it is the kind of shrinkage Efron and Morris describe in the [references](#references), applied here to a variance.
