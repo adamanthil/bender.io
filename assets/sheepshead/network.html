@@ -4029,7 +4029,7 @@ function buildOracleStages() {
     badge: "critic",
     cam: { pos: [30, 34, 70], target: [0, 5, 0] },
     body: () => `<p>The <b>oracle critic</b> on the same decision: it sees every hand, the true blind/bury, the under card, and the secret partner — and predicts the final reward. League training measures each result against that prediction. It exists only at training time; the deployed agent never runs it.</p>
-      ${DATA.oracle.untrained ? `<p><span class="badge b-critic">untrained</span> This is a <b>random init</b> (seed ${DATA.oracle.init_seed}) — an architecture smoke test. Values and attention are meaningless; the structure is the point.</p>` : `<p>Loaded from <code>${DATA.oracle.checkpoint}</code>.</p>`}
+      ${DATA.oracle.untrained ? `<p><span class="badge b-critic">untrained</span> This is a <b>random init</b> (seed ${DATA.oracle.init_seed}) — an architecture smoke test. Values and attention are meaningless; the structure is the point.</p>` : ""}
       <p><b>${S.label}:</b> ${S.description}</p>
       <p>${DATA.oracle.n_params.toLocaleString()} parameters, zero shared with the policy stack${ORACLE_AUX ? ", including two deterministic auxiliary heads of its own" : ""}. Switch back with <b>Policy</b> above.</p>`,
   },
