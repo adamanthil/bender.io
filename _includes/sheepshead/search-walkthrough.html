@@ -23,7 +23,7 @@
   .sw button { font: inherit; color: inherit; cursor: pointer; }
   .sw b { font-family: var(--font-bold); font-weight: normal; color: var(--fig-heading); }
   /* ---------- steps ---------- */
-  .sw-steps { display: flex; align-items: stretch; gap: 6px; margin: 0.9rem 0 0.8rem; }
+  .sw .sw-steps { display: flex; align-items: stretch; gap: 6px; margin: 0.9rem 0 1rem; }
   .sw-steps button {
     display: flex; align-items: center; gap: 7px; width: 100%; padding: 6px 10px 6px 6px;
     background: #fff; border: 1px solid var(--line); border-radius: 999px; font-size: 13.5px; line-height: 1.2;
@@ -153,7 +153,7 @@
 </style>
 <div class="sw" data-src="{{ '/assets/sheepshead/search-trace.json' | relative_url }}">
 <p class="fig-title">How one search puts a value on every card</p>
-<p class="fig-sub">A real search from training, replayed. The agent is defending in seat 1 and has to lead the first trick.</p>
+<p class="fig-sub">A real search from training. The agent is defending in seat 1 and has to lead the first trick.</p>
 <ol class="sw-steps">
 <li><button type="button" data-go="1"><i>1</i><span>The decision</span></button></li>
 <li><button type="button" data-go="2"><i>2</i><span>Imagine a deal</span></button></li>
@@ -163,7 +163,7 @@
 </ol>
 <p class="sw-say" data-step="1">Seat 3 picked up the blind and called the ace of hearts, so whoever holds that ace is secretly their partner. The agent knows its own six cards. The other 26 are hidden. Before any search the network already has an instinct about what to lead, shown below. Here it leans toward a trump more often than toward the called suit.</p>
 <p class="sw-say" data-step="2">The search can't see the hidden cards, so it deals them out at random in a way that fits everything seen so far: seat 3 can't hold the called ace, and exactly one other seat must. It makes 1,024 of these deals. Deals where seat 3 would rarely have picked are then used rarely, or not at all.</p>
-<p class="sw-say" data-step="3">One simulation takes one imagined deal and plays it forward. The search chooses the agent's cards, and every other seat plays the way the network would with the cards it was dealt. If the hand reaches the end, the real score is recorded. If the search runs into a line of play it hasn't tried before, the oracle critic, which can see every card in the imagined deal, estimates the result instead. That one number is credited to the card that was led.</p>
+<p class="sw-say" data-step="3">One simulation takes one imagined deal and plays it forward. The search chooses the agent's cards, and every other seat plays the way the network would with the cards it was dealt. If the hand reaches the end, the real score is recorded. If the search runs into a line of play it hasn't tried before, the oracle critic estimates the result instead. That one number is credited to the card that was led.</p>
 <p class="sw-say" data-step="4">Every simulation draws another deal and adds one more result to a card's running average. The effort isn't shared evenly. The search keeps coming back to cards that are scoring well or that the network favours, and looks further ahead along them, so the tree grows deepest where it matters most.</p>
 <p class="sw-say" data-step="5">The whole search is run three times, each with its own set of deals. The three answers don't agree, least of all on the cards that were tried the fewest times. They are averaged, and each card is then measured against the average of all six. That difference is the card's advantage, and it is what the network learns from.</p>
 <div class="sw-stage">

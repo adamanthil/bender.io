@@ -43,6 +43,17 @@
     }
     return n;
   }
+  // Hands are shown in the order of DECK in the sheepsheadai game engine:
+  // trump from the queen of clubs down, then clubs, spades and hearts.
+  var DECK = (
+    "QC QS QH QD JC JS JH JD AD 10D KD 9D 8D 7D " +
+    "AC 10C KC 9C 8C 7C AS 10S KS 9S 8S 7S AH 10H KH 9H 8H 7H"
+  ).split(" ");
+  function sorted(hand) {
+    return hand.slice().sort(function (a, b) {
+      return DECK.indexOf(a) - DECK.indexOf(b);
+    });
+  }
   function signed(x, d) {
     var s = Math.abs(x).toFixed(d == null ? 3 : d);
     return (x < 0 ? "−" : "+") + s;
@@ -137,7 +148,10 @@
     function drawTable(world, flip) {
       table.textContent = "";
       table.appendChild(el("p", "sw-h", world ? "One imagined deal" : "What the agent can see"));
+      var mine = sorted(cards);
+      var buried = world ? sorted(world.bury) : [];
       for (var s = 1; s <= 5; s++) {
+        var hand = world ? sorted(world.h[s - 1]) : [];
         var row = el("div", "sw-seat");
         var who = el("span", "who", seatName(s)[0]);
         var sub = seatName(s)[1];
@@ -146,10 +160,10 @@
         row.appendChild(who);
         for (var k = 0; k < 6; k++) {
           var n;
-          if (s === D.seat) n = card(cards[k]);
+          if (s === D.seat) n = card(mine[k]);
           else if (!world) n = card("", "back");
           else {
-            n = card(world.h[s - 1][k], world.h[s - 1][k] === D.called ? "ace" : "");
+            n = card(hand[k], hand[k] === D.called ? "ace" : "");
             if (flip) {
               n.classList.add("flip");
               n.style.setProperty("--d", (s - 2) * 60 + k * 25);
@@ -164,7 +178,7 @@
       bw.appendChild(el("small", "", "by seat " + D.picker));
       bury.appendChild(bw);
       for (k = 0; k < 2; k++) {
-        var b = world ? card(world.bury[k]) : card("", "back");
+        var b = world ? card(buried[k]) : card("", "back");
         if (world && flip) {
           b.classList.add("flip");
           b.style.setProperty("--d", 260 + k * 25);
@@ -291,6 +305,8 @@
         o.innerHTML =
           "The search hasn't been down this line before, so it stops here. The oracle critic, seeing every card, estimates <b>" +
           signed(d.v) +
+          "</b>, a score of about <b>" +
+          signed(d.v * 12, 1) +
           "</b>. Credited to <b>" +
           led +
           "</b>.";
