@@ -167,13 +167,21 @@
      "hi": 0.1912
     }
    ],
-   "ref": {
-    "label": "30M agent",
-    "v": 0.0778,
-    "lo": 0.0575,
-    "hi": 0.0978
-   },
-   "aria": "Line chart of agent skill by training stage. Bootstrap rises from −0.56 to −0.23, the league phase from +0.04 to +0.12, and policy iteration from +0.16 to +0.17. The earlier 30M agent scores +0.08."
+   "refs": [
+    {
+     "label": "30M agent",
+     "v": 0.0778,
+     "lo": 0.0575,
+     "hi": 0.0978
+    },
+    {
+     "label": "Scripted agent",
+     "v": -0.1984,
+     "lo": -0.2237,
+     "hi": -0.1736
+    }
+   ],
+   "aria": "Line chart of agent skill by training stage. Bootstrap rises from −0.56 to −0.23, the league phase from +0.04 to +0.12, and policy iteration from +0.16 to +0.17. The earlier 30M agent scores +0.08. A scripted agent that plays by fixed rules scores −0.20."
   }
  ],
  "table": {
@@ -287,6 +295,11 @@
     "30M agent (reference)",
     "+0.078",
     "+0.058 to +0.098"
+   ],
+   [
+    "Scripted agent (reference)",
+    "−0.198",
+    "−0.224 to −0.174"
    ]
   ]
  }

@@ -80,7 +80,8 @@
     var m = { l: big ? 54 : 44, r: narrow ? 10 : 14, t: big ? 46 : 36, b: big ? 60 : 46 };
     var H = narrow ? 300 : big ? Math.max(420, Math.min(680, window.innerHeight - 300)) : 360;
     var pts = p.points;
-    var vals = pts.reduce(function (a, q) { return a.concat([q.lo, q.hi]); }, []);
+    var refs = p.refs || (p.ref ? [p.ref] : []);
+    var vals = pts.concat(refs).reduce(function (a, q) { return a.concat([q.lo, q.hi]); }, []);
     var y0 = Math.floor(Math.min.apply(null, vals) * 10) / 10;
     var y1 = Math.ceil(Math.max.apply(null, vals) * 10) / 10;
     var svg = el("svg", { viewBox: "0 0 " + W + " " + H, height: H, role: "img", "aria-label": p.aria }, host);
@@ -106,17 +107,23 @@
       el("text", { x: (a + b) / 2, y: H - 6, "text-anchor": "middle", class: "axis-label" }, svg, ph.unit);
     });
 
-    // Reference agent: a band for its interval and a line for its mean
-    if (p.ref) {
-      el("rect", { x: m.l, y: y(p.ref.hi), width: W - m.l - m.r, height: y(p.ref.lo) - y(p.ref.hi), fill: "var(--fig-ref)", opacity: 0.08 }, svg);
-      el("line", { x1: m.l, x2: W - m.r, y1: y(p.ref.v), y2: y(p.ref.v), stroke: "var(--fig-ref)", "stroke-width": 1.25 }, svg);
-      el("text", { x: m.l + 6, y: y(p.ref.hi) - 6, class: "val" }, svg, p.ref.label + " " + signed(p.ref.v));
-    }
+    // Reference agents: a band for each one's interval and a line for its mean
+    refs.forEach(function (r) {
+      el("rect", { x: m.l, y: y(r.hi), width: W - m.l - m.r, height: y(r.lo) - y(r.hi), fill: "var(--fig-ref)", opacity: 0.08 }, svg);
+      el("line", { x1: m.l, x2: W - m.r, y1: y(r.v), y2: y(r.v), stroke: "var(--fig-ref)", "stroke-width": 1.25 }, svg);
+    });
 
     el("polyline", {
       points: pts.map(function (q, i) { return xs[i] + "," + y(q.v); }).join(" "),
       fill: "none", stroke: "var(--fig-axis)", "stroke-width": 1.5, "stroke-linejoin": "round",
     }, svg);
+    // Reference labels sit over the line, with a halo where it crosses them
+    refs.forEach(function (r) {
+      el("text", {
+        x: m.l + 6, y: y(r.hi) - 6, class: "val",
+        stroke: "var(--fig-surface)", "stroke-width": 4, "stroke-linejoin": "round", "paint-order": "stroke",
+      }, svg, r.label + " " + signed(r.v));
+    });
 
     // Label every stage where there is room, otherwise every 2nd or 3rd
     var every = pts.map(function (q) {
@@ -152,7 +159,9 @@
       guide.setAttribute("x1", xs[best]);
       guide.setAttribute("x2", xs[best]);
       guide.setAttribute("visibility", "visible");
-      var vsRef = p.ref ? '<div class="k">' + signed(q.v - p.ref.v) + " vs the " + p.ref.label + "</div>" : "";
+      var vsRef = refs.map(function (r) {
+        return '<div class="k">' + signed(q.v - r.v) + " vs the " + r.label.charAt(0).toLowerCase() + r.label.slice(1) + "</div>";
+      }).join("");
       tip.show(
         '<div><span class="fig-key" style="--c:' + color(q.phase) + '"></span><b>' + ph.long.replace("{}", q.label) + "</b></div>" +
         "<div><b>" + signed(q.v, 3) + '</b> <span class="k">per hand, 95% interval ' + signed(q.lo, 3) + " to " + signed(q.hi, 3) + "</span></div>" + vsRef, ev);

@@ -7,7 +7,7 @@
   subtitle may use inline Markdown) and
   a table of the same numbers, which is rendered here so it is readable
   without JavaScript and in feed readers. `caption` is optional and may
-  contain HTML; `note` adds a second caption paragraph. `expand=true` adds a button that opens the figure over the
+  contain HTML; `note` and `note2` each add a caption paragraph. `expand=true` adds a button that opens the figure over the
   window with its charts drawn larger. Keep this markup free of blank lines: it is pasted into
   Markdown, where a blank line would end the HTML block.
 {%- endcomment -%}
@@ -32,6 +32,6 @@
 </table></div>
 </details>
 {%- if include.caption %}
-<figcaption>{{ include.caption }}{% if include.note %}<span class="fig-note">{{ include.note }}</span>{% endif %}</figcaption>
+<figcaption>{{ include.caption }}{% if include.note %}<span class="fig-note">{{ include.note }}</span>{% endif %}{% if include.note2 %}<span class="fig-note">{{ include.note2 }}</span>{% endif %}</figcaption>
 {%- endif %}
 </figure>

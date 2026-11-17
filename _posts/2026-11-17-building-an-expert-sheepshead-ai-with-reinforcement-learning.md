@@ -112,7 +112,7 @@ The solution to this was to [distill](https://en.wikipedia.org/wiki/Knowledge_di
 
 There's more to say about the specific search implementation, distillation method, and motivations included in the [Borrowed-Strength Search Distillation](#borrowed-strength-search-distillation) section below. It's the most complex and novel part of the program.
 
-{% include chart.html data=site.data.sheepshead.strength expand=true caption="Each point is the agent at that stage of training, playing the same deals against the same fixed opponents. The scale only means something in relative terms: the gap between two points is how many more points per hand one agent wins than the other against this field." note="The “30M agent” is a network trained for 30 million hands using a simpler, early version of the training pipeline that used shaped rewards for much longer, did not use an oracle critic, and did not use search." %}
+{% include chart.html data=site.data.sheepshead.strength expand=true caption="Each point is the agent at that stage of training, playing the same deals against the same fixed opponents." note="The “30M agent” is a network trained for 30 million hands using a simpler, early version of the training pipeline that used shaped rewards for much longer, did not use an oracle critic, and did not use search." note2="The “Scripted agent” is a hand-written program that follows Sheepshead conventions (pick on strong hands, lead trump on the picker's team, lead fail or called suit as a defender, schmear to your own team) but does not count cards or remember earlier tricks." %}
 
 #### Network Architecture
 

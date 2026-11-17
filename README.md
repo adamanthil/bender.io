@@ -148,7 +148,8 @@ include on a line of its own with a blank line before and after.
   individual measurements).
 - Colours come from the `--fig-*` variables in `css/figures.css`.
 - A panel's `sub` (subtitle) may use inline Markdown, such as `**bold**`.
-- Add `note="..."` for a second paragraph under the caption.
+- Add `note="..."` for a second paragraph under the caption, and
+  `note2="..."` for a third.
 - Add `expand=true` for a button that opens the figure over the window
   with its charts drawn larger (not shown on small screens).
 
