@@ -219,12 +219,22 @@
       });
     });
     function closeTerms() { root.querySelectorAll('.t.on').forEach(function (o) { o.classList.remove('on'); }); }
+    // A definition opens under its term, then slides sideways to stay inside the stage's card.
+    function place(t) {
+      var pop = t.querySelector('.pop'), card = t.closest('.node');
+      pop.style.left = '0px';
+      var p = pop.getBoundingClientRect(), c = card.getBoundingClientRect(), dx = 0;
+      if (p.right > c.right - 8) dx = c.right - 8 - p.right;
+      if (p.left + dx < c.left + 8) dx = c.left + 8 - p.left;
+      pop.style.left = dx + 'px';
+    }
     root.querySelectorAll('.t').forEach(function (t) {
-      function toggle(e) { e.stopPropagation(); e.preventDefault(); var on = t.classList.contains('on'); closeTerms(); if (!on) t.classList.add('on'); }
+      function toggle(e) { e.stopPropagation(); e.preventDefault(); var on = t.classList.contains('on'); closeTerms(); if (!on) { t.classList.add('on'); place(t); } }
       t.addEventListener('click', toggle);
       t.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') toggle(e); });
     });
     document.addEventListener('click', function (e) { if (!e.target.closest('#tp .t')) closeTerms(); });
+    window.addEventListener('resize', function () { root.querySelectorAll('.t.on').forEach(place); });
   })();
 </script>
 {%- if include.caption %}
