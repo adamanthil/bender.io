@@ -62,7 +62,7 @@ The final training pipeline combines multiple techniques into four stages that e
 
 Don't worry if that all sounds like technobabble. The workings of this [Retro Encabulator](https://www.youtube.com/watch?v=RXJKdh1KZ0w) are fully explained in the sections that follow.
 
-{% include sheepshead/training-program.html caption="The training pipeline. Click a stage for its method, purpose and stopping rule, or a dotted term for a definition." %}
+{% include sheepshead/training-program.html caption="The training pipeline." %}
 
 ##### Bootstrap Phase
 
