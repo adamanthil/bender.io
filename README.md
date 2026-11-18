@@ -14,6 +14,26 @@ bundle exec jekyll serve
 
 This builds and serves the assets locally at http://localhost:4000.
 
+# Share Images
+
+`ruby script/generate-og-images.rb` writes a 1200×630 card for each post
+to `images/og/<slug>.jpg` (git-ignored; the deploy workflow runs it
+before the build). It needs Chrome and ImageMagick. By default a card is
+the post title on the site's paper background.
+
+To put a picture behind the title, add `og_art` to the post's front
+matter:
+
+```
+og_art: /images/posts/sheepshead-network-share.jpg
+```
+
+- The art fills the card and fades to black under the title, so use a
+  dark picture with its subject in the upper two thirds.
+- Make it 2400×1260 (the card is rendered at twice its size).
+- With `og_art`, a post can also set `og_mark` to a small picture that
+  is shown to the right of the title, centred on it.
+
 # Math (KaTeX)
 
 Math in posts is rendered to HTML at build time by KaTeX (via the

@@ -2,9 +2,16 @@
 # frozen_string_literal: true
 #
 # Generates per-post Open Graph share images (1200x630) from the post title,
-# the site wordmark, and the author's Gravatar. One PNG per post is written to
-# images/og/<slug>.png, matching `page.slug` so _includes/header.html can pick
+# the site wordmark, and the author's Gravatar. One JPEG per post is written to
+# images/og/<slug>.jpg, matching `page.slug` so _includes/header.html can pick
 # it up automatically. Output is git-ignored and regenerated at build time.
+#
+# A post that sets `og_art: /images/...` in its front matter gets that picture
+# full-bleed behind the title (art_card_html). The art should be dark, 1200x630
+# in shape (2400x1260 for a crisp card), with its subject in the upper two
+# thirds: the title and byline cover the bottom third. Such a post may also set
+# `og_mark: /images/...`, a small picture (an SVG, say) shown to the right of
+# the title and centred on it.
 #
 # Usage:  ruby script/generate-og-images.rb
 # Requires: a Chrome/Chromium binary (auto-detected, or set CHROME_BIN).
@@ -72,6 +79,80 @@ def title_size(title)
   return 60 if n <= 42
   return 52 if n <= 52
   46
+end
+
+# The card for a post with `og_art`: the picture fills the card and fades to
+# black under the title. Longer titles step down, as in title_size.
+def art_title_size(title)
+  n = title.length
+  return 76 if n <= 30
+  return 66 if n <= 46
+  return 58 if n <= 64
+  50
+end
+
+def art_card_html(title, art, mark)
+  <<~HTML
+    <!DOCTYPE html><html><head><meta charset="utf-8">
+    <link rel="stylesheet" href="#{file_uri(File.join(ROOT, 'css', 'MyFontsWebfontsKit.css'))}">
+    <link rel="stylesheet" href="#{file_uri(File.join(ROOT, 'css', 'TransatTextWebfonts.css'))}">
+    <style>
+      * { margin:0; padding:0; box-sizing:border-box; }
+      html, body { width:1200px; height:630px; }
+      body {
+        position:relative; overflow:hidden; background:#090a0c;
+        font-family:TransatText, -apple-system, sans-serif; color:#f3f1ec;
+      }
+      .art { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+      /* Darken behind the wordmark, and fade the art out under the title. */
+      .scrim {
+        position:absolute; inset:0;
+        background:
+          radial-gradient(ellipse 330px 150px at 126px 62px, rgba(9,10,12,.7), rgba(9,10,12,0)),
+          linear-gradient(to bottom, rgba(9,10,12,0) 345px, rgba(9,10,12,.88) 460px, #090a0c 560px);
+      }
+      /* The wordmark's ink is dark: flatten it to white. */
+      .wordmark {
+        position:absolute; left:64px; top:34px; height:62px; width:auto;
+        filter:brightness(0) invert(1); opacity:.88;
+      }
+      .foot { position:absolute; left:64px; right:64px; bottom:46px; }
+      /* The mark is taller than a two-line title: negative margins let it
+         overhang the row instead of pushing the title up. */
+      .head { display:flex; align-items:center; gap:24px; }
+      .mark { flex:none; height:190px; width:auto; margin:-60px -10px -60px 0; }
+      .title {
+        flex:1;
+        font-family:TransatBold, -apple-system, sans-serif;
+        font-size:#{art_title_size(title)}px; line-height:1.12; letter-spacing:-0.4px;
+        text-wrap:balance; text-shadow:0 2px 18px rgba(0,0,0,.7);
+        display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+        overflow:hidden;
+      }
+      .byline { display:flex; align-items:center; gap:16px; margin-top:22px; font-size:27px; color:#b9b5ad; }
+      .avatar {
+        width:52px; height:52px; border-radius:50%; object-fit:cover;
+        border:2px solid rgba(255,255,255,.85); flex:none;
+      }
+      .byline .name { font-family:TransatBold, sans-serif; color:#f3f1ec; }
+      .byline .dot { opacity:.5; }
+    </style></head>
+    <body>
+      <img class="art" src="#{file_uri(art)}" alt="">
+      <div class="scrim"></div>
+      <img class="wordmark" src="#{file_uri(File.join(ROOT, 'images', 'the-gradual-steep.svg'))}" alt="The Gradual Steep">
+      <div class="foot">
+        <div class="head">
+          <h1 class="title">#{CGI.escapeHTML(title)}</h1>
+          #{mark && %(<img class="mark" src="#{file_uri(mark)}" alt="">)}
+        </div>
+        <div class="byline">
+          <img class="avatar" src="#{file_uri(AVATAR_FILE)}" alt="">
+          <span class="name">Andrew Bender</span><span class="dot">·</span><span>bender.io</span>
+        </div>
+      </div>
+    </body></html>
+  HTML
 end
 
 def card_html(title)
@@ -145,7 +226,8 @@ def card_html(title)
   HTML
 end
 
-# Collect posts: parse YAML front matter for the title; slug = filename minus date.
+# Collect posts: parse YAML front matter for the title and any art or mark;
+# slug = filename minus date.
 posts = Dir[File.join(POSTS_DIR, '*.{md,markdown,html}')].sort.map do |path|
   raw = File.read(path)
   fm  = raw[/\A---\s*\n(.*?)\n---\s*\n/m, 1]
@@ -153,7 +235,13 @@ posts = Dir[File.join(POSTS_DIR, '*.{md,markdown,html}')].sort.map do |path|
   data = YAML.safe_load(fm) || {}
   base = File.basename(path).sub(/\.\w+\z/, '')
   slug = base.sub(/\A\d{4}-\d{2}-\d{2}-/, '')
-  { slug: slug, title: data['title'].to_s }
+  art, mark = %w[og_art og_mark].map do |key|
+    next nil unless data[key]
+    file = File.join(ROOT, data[key].to_s)
+    abort "#{File.basename(path)}: #{key} #{data[key]} not found" unless File.file?(file)
+    file
+  end
+  { slug: slug, title: data['title'].to_s, art: art, mark: mark }
 end.compact
 
 puts "Generating #{posts.size} OG images -> images/og/"
@@ -161,7 +249,7 @@ posts.each do |post|
   html_path = File.join(TMP_DIR, "#{post[:slug]}.html")
   hi_path   = File.join(TMP_DIR, "#{post[:slug]}@2x.png")
   out_path  = File.join(OUT_DIR, "#{post[:slug]}.jpg")
-  File.write(html_path, card_html(post[:title]))
+  File.write(html_path, post[:art] ? art_card_html(post[:title], post[:art], post[:mark]) : card_html(post[:title]))
   rendered = system(
     CHROME, '--headless=new', '--disable-gpu', '--hide-scrollbars',
     '--force-device-scale-factor=2',           # render 2x for crisp text
