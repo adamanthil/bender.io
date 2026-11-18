@@ -69,7 +69,7 @@
     var step = 1;
     var sample = 0;
     var shown = 0; // index into D.detail
-    var count = N; // simulations completed, for step 4
+    var count = 1; // simulations completed, for step 4
     var raf = 0;
 
     var table = root.querySelector(".sw-table");
