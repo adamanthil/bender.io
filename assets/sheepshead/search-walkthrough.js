@@ -598,19 +598,26 @@
       else drawBoard(N, -1);
     }
 
+    // Show a step. Back and Next sit under the stage, so when the step's text
+    // has scrolled off the top (or under the sticky contents bar, which the
+    // figure's scroll margin allows for), bring the figure's top back.
+    function go(n) {
+      step = Math.max(1, Math.min(5, n));
+      render(true);
+      var fig = root.closest("figure") || root;
+      var edge = parseFloat(getComputedStyle(fig).scrollMarginTop) || 0;
+      if (root.querySelector(".sw-say.on").getBoundingClientRect().top < edge) fig.scrollIntoView();
+    }
     root.querySelectorAll("[data-go]").forEach(function (b) {
       b.addEventListener("click", function () {
-        step = +b.dataset.go;
-        render(true);
+        go(+b.dataset.go);
       });
     });
     root.querySelector("[data-prev]").addEventListener("click", function () {
-      step = Math.max(1, step - 1);
-      render(true);
+      go(step - 1);
     });
     root.querySelector("[data-next]").addEventListener("click", function () {
-      step = Math.min(5, step + 1);
-      render(true);
+      go(step + 1);
     });
     slider.max = N;
     slider.addEventListener("input", function () {

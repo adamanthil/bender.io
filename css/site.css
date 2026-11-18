@@ -679,8 +679,9 @@ article {
   border-left-color: var(--ink);
 }
 
-/* Leave room above headings for the sticky bar when jumping to them */
-.has-toc .article-body :is(h2, h3, h4, h5, h6) {
+/* Leave room above headings and figures for the sticky bar when jumping
+   to them */
+.has-toc .article-body :is(h2, h3, h4, h5, h6, .fig) {
   scroll-margin-top: 4.5rem;
 }
 
@@ -751,7 +752,7 @@ article {
   .toc-inline {
     display: none;
   }
-  .has-toc .article-body :is(h2, h3, h4, h5, h6) {
+  .has-toc .article-body :is(h2, h3, h4, h5, h6, .fig) {
     scroll-margin-top: 1.5rem;
   }
   /* A full-height column in the left margin, so the card inside can stay
