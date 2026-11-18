@@ -2,6 +2,8 @@
 layout: post
 title: Building an Expert Sheepshead AI with Reinforcement Learning
 toc: true
+og_art: /images/posts/sheepshead-network-share.jpg
+og_mark: /images/posts/sheepshead-hand.svg
 ---
 Since long before the current AI craze I've been fascinated by reinforcement learning, the practice of building systems that teach themselves complex behaviors through trial and error without direct guidance. These techniques have been key to most of the headline-grabbing AI results in game playing in recent years including computers beating the best humans at Go, Dota 2, Starcraft, etc. They also happen to be an integral part of the LLM post-training process. Conceptually, by giving the computer agent rewards for desirable actions (and negative rewards for undesirable actions) it learns complex strategy for itself, without the human operator even having to know _how_ to teach it. It's the kind of emergent behavior that feels almost magical.
 

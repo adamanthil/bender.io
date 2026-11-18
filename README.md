@@ -33,6 +33,14 @@ og_art: /images/posts/sheepshead-network-share.jpg
 - Make it 2400×1260 (the card is rendered at twice its size).
 - With `og_art`, a post can also set `og_mark` to a small picture that
   is shown to the right of the title, centred on it.
+- The Sheepshead mark, `images/posts/sheepshead-hand.svg`, is the
+  sheepshead.ai brand hand (Q♣, J♦, A♥), laid out like that site's
+  `PlayingCard` component. Its glyphs are outlines, so it needs no font:
+  the ranks are Instrument Serif and the suits Liberation Serif (the
+  open twin of the Times New Roman the site's cards fall back to).
+- The Sheepshead art is a capture of `assets/sheepshead/network.html`
+  with its small labels hidden: camera at (−39.8, 13.7, 50.6) looking at
+  (2, 6, 0), with the scene moved 128px up the 1200×630 window.
 
 # Math (KaTeX)
 
