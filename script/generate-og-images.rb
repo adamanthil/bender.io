@@ -171,10 +171,11 @@ posts.each do |post|
     file_uri(html_path),
     %i[out err] => File::NULL
   )
-  # Downscale 2400x1260 -> the standard 1200x630 and encode as JPEG.
+  # Downscale 2400x1260 -> the standard 1200x630 and encode as JPEG. Colour
+  # is kept at full resolution (4:4:4): halving it smears small red detail.
   scaled = rendered && system(
     MAGICK, hi_path, '-resize', '1200x630', '-strip',
-    '-quality', '88', '-sampling-factor', '4:2:0', out_path,
+    '-quality', '88', '-sampling-factor', '4:4:4', out_path,
     %i[out err] => File::NULL
   )
   puts(scaled ? "  ok  #{post[:slug]}" : "  FAIL #{post[:slug]}")
